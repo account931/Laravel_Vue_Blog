@@ -11,13 +11,23 @@
 
 ## Brief overview of the application
 
-## Shop front page
+## Blog front page
 
 ![Screenshot](public/images/Screenshots/1.png)
 
+## View in modal
 
+![Screenshot](public/images/Screenshots/2.png)
 
-[Watch video presentation on Youtube]( https://youtu.be/TiHNEgZ1uAM )
+## View in router
+
+![Screenshot](public/images/Screenshots/3.png)
+
+## Create new article
+
+![Screenshot](public/images/Screenshots/4.png)
+
+[Watch video presentation on Youtube](  )
  
  
 
