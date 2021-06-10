@@ -3,7 +3,8 @@
 
 <template>
     <div id="appDemo">
-  
+        
+        <p> Current token(passed from view) {{this.currentUser.api_token}} </p> <!-- //passed from php in view as <vue-router-menu-with-link-content-display v-bind:current-user='{!! Auth::user()->toJson() !!}'>  -->
         <!-- navbar menu -->
         <div class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
 	  
@@ -118,9 +119,21 @@
 
 <script>
     export default {
-        name: 'App'
+        name: 'App',
+        props: ['currentUser'],
+        
+        
+        
+        //before mount
+        beforeMount() { 
+            var dataTest = this.currentUser.api_token; //passed from php in view as <vue-router-menu-with-link-content-display v-bind:current-user='{!! Auth::user()->toJson() !!}'> 
+            this.$store.dispatch('changeVuexStoreTokenFromChild', dataTest); //working example how to change Vuex store from child component  
+        },
     }
 </script>
+
+
+
 
 <style>
 /* mine */

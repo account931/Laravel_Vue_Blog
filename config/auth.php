@@ -37,13 +37,14 @@ return [
 
     'guards' => [
         'web' => [
-            'driver' => 'session',
+            'driver'   => 'session',
             'provider' => 'users',
         ],
 
         'api' => [
-            'driver' => 'token',
-            'provider' => 'users',
+            'driver'   => 'token', //'jwt', //'api-token',//'token', //session
+            'provider' => 'users', //'api_clients', //'users',
+            'hash' => false, // was false //  means that we're going to store the token hashed (i.e. not in plain text)
         ],
     ],
 
@@ -70,6 +71,12 @@ return [
             'model' => App\User::class,
 			'table' => 'users', //added by me
         ],
+        
+        //my Rest api token auth implementation (without Passport). NOT USED ????
+        'api_clients' => [ // <- Add the api_clients that was configured in our `api` guard
+            'driver' => 'database', // We don't need eloquent
+            'table' => 'api_clients', // Change to be our table name, which happens to be the same as our provider name
+         ],
 
         // 'users' => [
         //     'driver' => 'database',

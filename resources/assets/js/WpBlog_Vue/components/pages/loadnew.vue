@@ -150,10 +150,9 @@ export default {
           headers: { 'Content-Type': 'multipart/form-data' }
         }) 
 		*/
-		
 		$.ajax({
                           
-		    url: 'post/create_post_vue', 
+		    url: 'api/post/create_post_vue', 
             type: 'POST', //POST is to create a new user
 			//crossDomain: true,
 			
@@ -186,8 +185,8 @@ export default {
 		    return false;
 		
 		
-		//my fix instead of api.post
-		fetch('post/create_post_vue', formData, { 
+		//my fix instead of api.post. NOT ENGAGED, reassigned to ajax
+		fetch('api/post/create_post_vue', formData, { 
               method: 'POST',
 		      
 			  //headers: { 'Content-Type': 'application/x-www-form-urlencoded'},

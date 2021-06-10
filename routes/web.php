@@ -20,16 +20,21 @@ Route::get('/home', 'HomeController@index');
 
 Auth::routes();
 
-//Route::get('createNewWpressImg',    'WpBlogImagesContoller@create') ->name('createNewWpressImg');  //WpPress with Images route for displaying form to create new entry
-
-
 //Wpress Blog on Vue Framework
 Route::get('/wpBlogVueFrameWork',   'WpBlog_VueContoller@index')  ->name('wpBlogVueFrameWork')->middleware('auth');  //WpPress on Vue Framework Blog index route
+
+//Get Token Section
+Route::get('/getToken',       'GetTokenContoller@index')   ->name('getToken')     ->middleware('auth');  //Displays current token or button to generate
+Route::get('/generateToken',  'GetTokenContoller@generate')->name('generateToken')->middleware('auth');  //Generates token
+
+
+
+/*
 Route::group(['middleware' => 'auth', 'prefix' => 'post'], function () { //url must contain /post/, i.e /post/get_all
-    Route::get ('get_all',         'WpBlog_VueContoller@getAllPosts')->name('fetch_all');  //REST API to /GET all posts
-    Route::post('create_post_vue', 'WpBlog_VueContoller@createPost')->name('create_post_vue'); //REST API to /POST (create) a new blog
+    Route::get ('get_all',         'WpBlog_Rest_API_Contoller@getAllPosts')->name('fetch_all');       //REST API endpoint to /GET all posts
+    Route::post('create_post_vue', 'WpBlog_Rest_API_Contoller@createPost') ->name('create_post_vue'); //REST API endpoint to /POST (create) a new blog
 });
- 
+*/
 
 Route::get('/404', function () {
     return abort(404);

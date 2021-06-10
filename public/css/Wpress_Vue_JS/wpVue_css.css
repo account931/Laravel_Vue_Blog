@@ -3,7 +3,7 @@
 
 /* Fix => Class with z-index is a fix for non-working click in mobile  */
 .fix-for-non-working-click-in-mobile {
-	position:relative; z-index:9999;
+	position:relative; z-index:9;
 }
 	
 

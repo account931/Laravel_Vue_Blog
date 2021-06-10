@@ -19,7 +19,14 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         //\App\Http\Middleware\RbacMiddle::class, //my Rbac middelware
+ 
+        \App\Http\Middleware\AccessTokenMiddleware::class, //my Rest middelware
+
     ];
+
+
+
+
 
     /**
      * The application's route middleware groups.
@@ -35,12 +42,16 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            
         ],
 
         'api' => [
+            //\Illuminate\Session\Middleware\StartSession::class,
             'throttle:60,1',
             'bindings',
         ],
+        
+        
     ];
 
     /**
@@ -61,5 +72,14 @@ class Kernel extends HttpKernel
 		'role' => \Zizaco\Entrust\Middleware\EntrustRole::class,  //my
         'permission' => \Zizaco\Entrust\Middleware\EntrustPermission::class, //my
         'ability' => \Zizaco\Entrust\Middleware\EntrustAbility::class, //my
+        'client_credentials' => \Laravel\Passport\Http\Middleware\CheckClientCredentials::class, //my for REST API
+        'sendTokenMy' => \App\Http\Middleware\AccessTokenMiddleware::class
+    ];
+    
+    
+    
+     protected $commands = [
+        \App\Console\Commands\GenerateAuthToken::class,
+        //
     ];
 }

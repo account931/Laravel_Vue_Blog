@@ -1,7 +1,7 @@
 
-## Laravel Blog on Vue + Vuex Store.
+## Laravel Rest Api Blog on Vue + Vuex Store + token auth.
 - <p>To run the application on <b>http://localhost</b>, copy the repository code and run <b>composer install</b> to load all dependencies. </p>
-- <p>Create root file <b>.env</b> with your DB seetings based on  <b>.env.example</b>. Add <b>LIQPAY_PUBLIC_KEY</b>, <b>LIQPAY_PRIVATE_KEY</b> and <b>LIQPAY_RETURN_URL</b> credentials to enable Liqpay on-line payment. In order to enable PayPal payment, additionally add <b>PAYPAL_PAYNOW_BUTTON_URL</b>, <b>PAYPAL_RECEIVER_EMAIL</b> and <b>PAYPAL_RETURN_URL</b> </p>
+- <p>Create root file <b>.env</b> with your DB seetings based on  <b>.env.example</b>.</p>
 - <p>Run <b> php artisan key:generate </b> </p>
 - <p>Use <b> php artisan migrate </b> to migrate databases</p>
 - <p>If Entrust migration did not run automatically, run additional command  <b> php artisan entrust:migration </b> to generate the Entrust migration</p>

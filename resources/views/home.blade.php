@@ -51,9 +51,9 @@
                 
                     <div class="panel-body">
                         <p> <i class="fa fa-check-circle-o" style="font-size:24px"></i> Blog with images </p>
-                        <p> <i class="fa fa-check-circle-o" style="font-size:24px"></i> Loaded via ajax </p>
+                        <p> <i class="fa fa-check-circle-o" style="font-size:24px"></i> Loaded via ajax, Rest Api Endpoints </p>
                         <p> <i class="fa fa-check-circle-o" style="font-size:24px"></i> Uses Vuex Store </p>
-                        <p> <i class="fa fa-check-circle-o" style="font-size:24px"></i> Text.</p>
+                        <p> <i class="fa fa-check-circle-o" style="font-size:24px"></i> Auth via token.</p>
                         <p> <i class="fa fa-check-circle-o" style="font-size:24px"></i> <a href="{{ route('wpBlogVueFrameWork')}}"> Go to Blog </a></p>
                     </div>
                 

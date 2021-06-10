@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Http\Controllers\WpBlog_Rest_API_Contoller;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,16 +18,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+//$v = "mm";
 
-
-//Wpress Rest Api
-Route::get('/articles', 'Rest@index');       //http://localhost/laravel+Yii2_widgets/blog_Laravel/public/articles
-Route::get('articles/{id}', 'Rest@show');  //http://localhost/laravel+Yii2_widgets/blog_Laravel/public/articles/8
-Route::post('articles', 'Rest@store');
-Route::put('articles/{id}', 'Rest@update');
-Route::delete('articles/{id}', 'Rest@delete');
-
-
-//AppointmentRoom List Rest Api
-Route::get('/rooms',       'AppointmentRest@index');      // http://localhost/laravel+Yii2_widgets/blog_Laravel/public/rooms
-Route::get('/getCalendar', 'AppointmentRest@getCalendar');      // http://localhost/laravel+Yii2_widgets/blog_Laravel/public/rooms
+//middleware' => ['sendTokenMy', 'auth:api'] // middleware' => 'auth', 'auth:api' //By default auth:api middleware requires each user to have a field in the database called api_token,
+Route::group(['middleware' => [ 'auth:api', 'sendTokenMy'],  'prefix' => 'post'], function () { //url must contain /post/, i.e /post/get_all
+    Route::get ('get_all',         'WpBlog_Rest_API_Contoller@getAllPosts')->name('fetch_all');  //REST API to /GET all posts
+    Route::post('create_post_vue', 'WpBlog_Rest_API_Contoller@createPost') ->name('create_post_vue'); //REST API to /POST (create) a new blog
+});  

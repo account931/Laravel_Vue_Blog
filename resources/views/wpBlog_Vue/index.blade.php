@@ -32,7 +32,7 @@
 				 
 				 
 				 
-				 
+				<?php echo "My token is " .$myDBToken;  ?>
 					
 			<!----------- Vue.js Components + VUEX Store + VUE ROUTER ------------>	 
 			<div class="col-sm-12 col-xs-12" >
@@ -41,7 +41,9 @@
 					<!-- Vue route menu -->
 					<div  id="vue-menu" class="col-sm-12 col-xs-12"> <!--  id="vue-menu" --> 
 					    <h3><b>Menu with Vue-Router</b></h3>
-					    <vue-router-menu-with-link-content-display/> <!-- My Vue component with Menu Links -->
+                        <!-- My Vue component with Menu Links -->
+					    <vue-router-menu-with-link-content-display v-bind:current-user='{!! Auth::user()->toJson() !!}'> 
+                        </vue-router-menu-with-link-content-display/>
                     </div>
 					
 					<!-- Show blogs quantity component -->

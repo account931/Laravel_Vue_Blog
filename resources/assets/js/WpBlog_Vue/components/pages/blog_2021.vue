@@ -3,7 +3,7 @@
 		<h1> {{title}} </h1>
 		
 		<div class="contact">
-		    <h3> Blog Vue </h3>
+		    <h3> Blog Vue  {{tokenZZ}} STORE: {{this.$store.state.api_tokenY}} </h3>
             <p>{{this.ifMakeAjax}}</p>
 		</div>
         
@@ -83,6 +83,7 @@
     import { mapState } from 'vuex';
 	export default{
 		name:'new_2021',
+        props: ['tokenZZ'],
 		data (){
 			return{
 				title:'Blog_931_2021',
@@ -120,7 +121,7 @@
 	        } else{
                 alert("BeforeMount: Alreday loaded");
             }
- 
+            
         },
   
   

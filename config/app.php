@@ -177,6 +177,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         
+        Tymon\JWTAuth\Providers\LaravelServiceProvider::class, // JWT web token
+        
         
     ],
 
@@ -227,6 +229,9 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 		'Entrust'   => Zizaco\Entrust\EntrustFacade::class,  // Entrust RBAC package
+        
+        'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class, //jwt
+        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class, //jwt
     ],
 
 ];

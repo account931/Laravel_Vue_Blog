@@ -1280,68 +1280,6 @@ if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
 
 /***/ }),
 /* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-function _broadcast(componentName, eventName, params) {
-  this.$children.forEach(function (child) {
-    var name = child.$options.componentName;
-
-    if (name === componentName) {
-      child.$emit.apply(child, [eventName].concat(params));
-    } else {
-      _broadcast.apply(child, [componentName, eventName].concat([params]));
-    }
-  });
-}
-exports.default = {
-  methods: {
-    dispatch: function dispatch(componentName, eventName, params) {
-      var parent = this.$parent || this.$root;
-      var name = parent.$options.componentName;
-
-      while (parent && (!name || name !== componentName)) {
-        parent = parent.$parent;
-
-        if (parent) {
-          name = parent.$options.componentName;
-        }
-      }
-      if (parent) {
-        parent.$emit.apply(parent, [eventName].concat(params));
-      }
-    },
-    broadcast: function broadcast(componentName, eventName, params) {
-      _broadcast.call(this, componentName, eventName, params);
-    }
-  }
-};
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// Thank's IE8 for his funny defineProperty
-module.exports = !__webpack_require__(20)(function () {
-  return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
-});
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports) {
-
-var hasOwnProperty = {}.hasOwnProperty;
-module.exports = function (it, key) {
-  return hasOwnProperty.call(it, key);
-};
-
-
-/***/ }),
-/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2600,12 +2538,74 @@ var index = {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(7)))
 
 /***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+function _broadcast(componentName, eventName, params) {
+  this.$children.forEach(function (child) {
+    var name = child.$options.componentName;
+
+    if (name === componentName) {
+      child.$emit.apply(child, [eventName].concat(params));
+    } else {
+      _broadcast.apply(child, [componentName, eventName].concat([params]));
+    }
+  });
+}
+exports.default = {
+  methods: {
+    dispatch: function dispatch(componentName, eventName, params) {
+      var parent = this.$parent || this.$root;
+      var name = parent.$options.componentName;
+
+      while (parent && (!name || name !== componentName)) {
+        parent = parent.$parent;
+
+        if (parent) {
+          name = parent.$options.componentName;
+        }
+      }
+      if (parent) {
+        parent.$emit.apply(parent, [eventName].concat(params));
+      }
+    },
+    broadcast: function broadcast(componentName, eventName, params) {
+      _broadcast.call(this, componentName, eventName, params);
+    }
+  }
+};
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Thank's IE8 for his funny defineProperty
+module.exports = !__webpack_require__(20)(function () {
+  return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
+});
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports) {
+
+var hasOwnProperty = {}.hasOwnProperty;
+module.exports = function (it, key) {
+  return hasOwnProperty.call(it, key);
+};
+
+
+/***/ }),
 /* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var dP = __webpack_require__(15);
 var createDesc = __webpack_require__(26);
-module.exports = __webpack_require__(11) ? function (object, key, value) {
+module.exports = __webpack_require__(12) ? function (object, key, value) {
   return dP.f(object, key, createDesc(1, value));
 } : function (object, key, value) {
   object[key] = value;
@@ -2622,7 +2622,7 @@ var IE8_DOM_DEFINE = __webpack_require__(68);
 var toPrimitive = __webpack_require__(47);
 var dP = Object.defineProperty;
 
-exports.f = __webpack_require__(11) ? Object.defineProperty : function defineProperty(O, P, Attributes) {
+exports.f = __webpack_require__(12) ? Object.defineProperty : function defineProperty(O, P, Attributes) {
   anObject(O);
   P = toPrimitive(P, true);
   anObject(Attributes);
@@ -15833,7 +15833,7 @@ module.exports = __webpack_require__(23);
 /***/ 4:
 /***/ (function(module, exports) {
 
-module.exports = __webpack_require__(10);
+module.exports = __webpack_require__(11);
 
 /***/ }),
 
@@ -17408,7 +17408,7 @@ var global = __webpack_require__(9);
 var core = __webpack_require__(18);
 var ctx = __webpack_require__(162);
 var hide = __webpack_require__(14);
-var has = __webpack_require__(12);
+var has = __webpack_require__(13);
 var PROTOTYPE = 'prototype';
 
 var $export = function (type, name, source) {
@@ -17578,7 +17578,7 @@ module.exports = {};
 /***/ (function(module, exports, __webpack_require__) {
 
 var def = __webpack_require__(15).f;
-var has = __webpack_require__(12);
+var has = __webpack_require__(13);
 var TAG = __webpack_require__(17)('toStringTag');
 
 module.exports = function (it, tag, stat) {
@@ -18617,7 +18617,7 @@ function normalizeComponent (
 /***/ 4:
 /***/ (function(module, exports) {
 
-module.exports = __webpack_require__(10);
+module.exports = __webpack_require__(11);
 
 /***/ }),
 
@@ -19447,7 +19447,7 @@ exports.default = _assign2.default || function (target) {
 /* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = !__webpack_require__(11) && !__webpack_require__(20)(function () {
+module.exports = !__webpack_require__(12) && !__webpack_require__(20)(function () {
   return Object.defineProperty(__webpack_require__(69)('div'), 'a', { get: function () { return 7; } }).a != 7;
 });
 
@@ -19469,7 +19469,7 @@ module.exports = function (it) {
 /* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var has = __webpack_require__(12);
+var has = __webpack_require__(13);
 var toIObject = __webpack_require__(16);
 var arrayIndexOf = __webpack_require__(165)(false);
 var IE_PROTO = __webpack_require__(50)('IE_PROTO');
@@ -20174,7 +20174,7 @@ src_radio.install = function (Vue) {
 /***/ 4:
 /***/ (function(module, exports) {
 
-module.exports = __webpack_require__(10);
+module.exports = __webpack_require__(11);
 
 /***/ })
 
@@ -20340,7 +20340,8 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_
   }, {
     path: '/New_2021',
     name: 'new_2021', //same as in component return section
-    component: __WEBPACK_IMPORTED_MODULE_7__components_pages_blog_2021___default.a //component itself
+    component: __WEBPACK_IMPORTED_MODULE_7__components_pages_blog_2021___default.a, //component itself
+    props: { tokenZZ: 'i am set in router/index.js' }
   },
 
   //Blog 2021 Routing
@@ -24422,7 +24423,7 @@ exports.push([module.i, "\n.contact form[data-v-091e05ee]{\r\n\tmax-width: 40em;
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(10);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 //
@@ -24657,7 +24658,7 @@ exports.push([module.i, "\n.contact form[data-v-379cdafe]{\r\n\tmax-width: 40em;
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(10);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 //
@@ -24745,6 +24746,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'new_2021',
+    props: ['tokenZZ'],
     data: function data() {
         return {
             title: 'Blog_931_2021',
@@ -24862,7 +24864,15 @@ var render = function() {
       _c("h1", [_vm._v(" " + _vm._s(_vm.title) + " ")]),
       _vm._v(" "),
       _c("div", { staticClass: "contact" }, [
-        _c("h3", [_vm._v(" Blog Vue ")]),
+        _c("h3", [
+          _vm._v(
+            " Blog Vue  " +
+              _vm._s(_vm.tokenZZ) +
+              " STORE: " +
+              _vm._s(this.$store.state.api_tokenY) +
+              " "
+          )
+        ]),
         _vm._v(" "),
         _c("p", [_vm._v(_vm._s(this.ifMakeAjax))])
       ]),
@@ -25155,7 +25165,7 @@ exports.push([module.i, "\n.contact form[data-v-2ee927a2]{\r\n\tmax-width: 40em;
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(10);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 //
@@ -25372,13 +25382,13 @@ if (false) {
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(240)
+  __webpack_require__(128)
 }
 var normalizeComponent = __webpack_require__(2)
 /* script */
 var __vue_script__ = __webpack_require__(130)
 /* template */
-var __vue_template__ = __webpack_require__(242)
+var __vue_template__ = __webpack_require__(131)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -25417,14 +25427,52 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 128 */,
-/* 129 */,
+/* 128 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(129);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(5)("79e42f39", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-60c9e1c1\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./loadnew.vue", function() {
+     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-60c9e1c1\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./loadnew.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 129 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(4)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.avatar-uploader .el-upload {\r\n  border: 1px dashed #d9d9d9;\r\n  border-radius: 6px;\r\n  cursor: pointer;\r\n  position: relative;\r\n  overflow: hidden;\n}\n.avatar-uploader .el-upload:hover {\r\n  border-color: #409eff;\n}\n.avatar-uploader-icon {\r\n  font-size: 28px;\r\n  color: #8c939d;\r\n  width: 178px;\r\n  height: 178px;\r\n  line-height: 178px;\r\n  text-align: center;\n}\n.avatar {\r\n  width: 178px;\r\n  height: 178px;\r\n  display: block;\n}\r\n", ""]);
+
+// exports
+
+
+/***/ }),
 /* 130 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(10);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -25583,10 +25631,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           headers: { 'Content-Type': 'multipart/form-data' }
         }) 
       */
-
       $.ajax((_$$ajax = {
 
-        url: 'post/create_post_vue',
+        url: 'api/post/create_post_vue',
         type: 'POST', //POST is to create a new user
         //crossDomain: true,
 
@@ -25607,8 +25654,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       //END AJAXed  part 
       return false;
 
-      //my fix instead of api.post
-      fetch('post/create_post_vue', formData, {
+      //my fix instead of api.post. NOT ENGAGED, reassigned to ajax
+      fetch('api/post/create_post_vue', formData, {
         method: 'POST'
 
         //headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
@@ -25658,14 +25705,178 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 });
 
 /***/ }),
-/* 131 */,
+/* 131 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { key: _vm.componentKey, staticClass: "card mt-4" }, [
+    _c("div", { staticClass: "card-header" }, [
+      _vm._v("\n      New Post\n    ")
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "card-body" }, [
+      _vm.status_msg
+        ? _c(
+            "div",
+            {
+              staticClass: "alert",
+              class: {
+                "alert-success": _vm.status,
+                "alert-danger": !_vm.status
+              },
+              attrs: { role: "alert" }
+            },
+            [_vm._v("\n        " + _vm._s(_vm.status_msg) + "\n\t\t\n      ")]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _c("form", [
+        _c("input", {
+          attrs: { type: "hidden", name: "_token" },
+          domProps: { value: _vm.tokenXX }
+        }),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", { attrs: { for: "exampleFormControlInput1" } }, [
+            _vm._v("Title")
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.title,
+                expression: "title"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: {
+              id: "title",
+              type: "text",
+              placeholder: "Post Title",
+              required: ""
+            },
+            domProps: { value: _vm.title },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.title = $event.target.value
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", { attrs: { for: "exampleFormControlTextarea1" } }, [
+            _vm._v("Post Content")
+          ]),
+          _vm._v(" "),
+          _c("textarea", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.body,
+                expression: "body"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { id: "post-content", rows: "3", required: "" },
+            domProps: { value: _vm.body },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.body = $event.target.value
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          {},
+          [
+            _c(
+              "el-upload",
+              {
+                attrs: {
+                  action: "https://jsonplaceholder.typicode.com/posts/",
+                  "list-type": "picture-card",
+                  "on-preview": _vm.handlePictureCardPreview,
+                  "on-change": _vm.updateImageList,
+                  "auto-upload": false
+                }
+              },
+              [_c("i", { staticClass: "el-icon-plus" })]
+            ),
+            _vm._v(" "),
+            _c(
+              "el-dialog",
+              {
+                attrs: { visible: _vm.dialogVisible },
+                on: {
+                  "update:visible": function($event) {
+                    _vm.dialogVisible = $event
+                  }
+                }
+              },
+              [
+                _c("img", {
+                  attrs: { width: "100%", src: _vm.dialogImageUrl, alt: "" }
+                })
+              ]
+            )
+          ],
+          1
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "card-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-success",
+          attrs: { type: "button" },
+          on: { click: _vm.createPost }
+        },
+        [
+          _vm._v(
+            "\n        " +
+              _vm._s(_vm.isCreatingPost ? "Posting..." : "Create Post") +
+              "\n      "
+          )
+        ]
+      )
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-60c9e1c1", module.exports)
+  }
+}
+
+/***/ }),
 /* 132 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(10);
 //Vuex store
 
 
@@ -25682,8 +25893,16 @@ var debug = "development" !== 'production';
     //posts: [{"wpBlog_id":1,"wpBlog_title":"Guadalupe Runolfsdottir", "wpBlog_text":"Store text 1", ,"wpBlog_category":4,"wpBlog_status":"1", "get_images":[{"wpImStock_id":16,"wpImStock_name":"product6.png","wpImStock_postID":1,"created_at":null,"updated_at":null}],"author_name":{"id":1,"name":"Admin","email":"admin@ukr.net","created_at":null,"updated_at":null},"category_names":{"wpCategory_id":4,"wpCategory_name":"Geeks","created_at":null,"updated_at":null}}, 
     //{"wpBlog_id":2,"wpBlog_title":"New", "wpBlog_text":"Store text 2"}],
 
+    api_tokenY: 'huyn',
+
     //products are used in Router example
     products: [{ productTitle: "ABCN", image: 'product1.png', productId: 1 }, { productTitle: "KARMA", image: 'product2.png', productId: 2 }, { productTitle: "Tino", image: 'product3.png', productId: 3 }, { productTitle: "EFG", image: 'product4.png', productId: 4 }, { productTitle: "MLI", image: 'product5.png', productId: 5 }, { productTitle: "Banan", image: 'product6.png', productId: 6 }]
+  },
+
+  computed: {
+    BASE_URL: function BASE_URL() {
+      return this.$store.state.api_tokenY;
+    }
   },
 
   actions: {
@@ -25693,34 +25912,63 @@ var debug = "development" !== 'production';
             //return commit('setPosts', await api.get('/post/get_all'))
         }, */
 
-    //ajax request, get REST API located at => WpBlog_VueContoller/ function getAllPosts()
-    getAllPosts: function getAllPosts(_ref) {
+    //working example how to change Vuex store from child component
+    changeVuexStoreTokenFromChild: function changeVuexStoreTokenFromChild(_ref, dataTestX) {
       var commit = _ref.commit;
 
+      //var dataTest = {"error":false,"data":[{"wpBlog_id":1,"wpBlog_title":"Dima", "wpBlog_text":"Store 1", "get_images":[]}, {"wpBlog_id":2,"wpBlog_title":"Dima 2", "wpBlog_text":"Store 2", "get_images":[]}]};
+      console.log('store token ' + dataTestX);
+      return commit('setApiToken', dataTestX); //sets dataTestX to store via mutation
+    },
+
+
+    //ajax request, get REST API located at => WpBlog_VueContoller/ function getAllPosts()
+    getAllPosts: function getAllPosts(_ref2) {
+      var commit = _ref2.commit,
+          state = _ref2.state;
+      //state is a fix
       $('.loader-x').fadeIn(800); //show loader
 
-      fetch('post/get_all', { //http://localhost/Laravel+Yii2_comment_widget/blog_Laravel/public/post/get_all
-        method: 'get',
-        headers: { 'Content-Type': 'application/json' }
-      }).then(function (response) {
-        setTimeout(function () {
-          $('.loader-x').fadeOut(800);
-        }, 1000); //hide loader
-        return response.json();
-      }).then(function (dataZ) {
-        //console.log(dataZ);
-        //core rewritten async getAllPosts, trigger mutation setPosts()
-        return commit('setPosts', dataZ); //sets ajax results to store via mutation
-      }).catch(function (err) {
-        return alert("Getting articles failed ( in store/index.js). Check if ure logged =>  " + err);
-      }); // catch any error
+      setTimeout(function () {
+        alert('start');
+        alert("store1 " + state.api_tokenY);
+        //alert( "store2 "  + this.BASE_URL() );
+        fetch('api/post/get_all?token=' + state.api_tokenY, { //http://localhost/Laravel+Yii2_comment_widget/blog_Laravel/public/post/get_all
+          method: 'get',
+          headers: { 'Content-Type': 'application/json' }
+        }).then(function (response) {
+          setTimeout(function () {
+            $('.loader-x').fadeOut(800);
+          }, 1000); //hide loader
+          return response.json();
+        }).then(function (dataZ) {
+          console.log("Here STORE => " + dataZ);
+          //core rewritten async getAllPosts, trigger mutation setPosts()
+
+          if (dataZ.error == true) {
+            //if Rest endpoint returns any predefined error
+            alert(dataZ.data);
+          } else if (dataZ.error == false) {
+
+            return commit('setPosts', dataZ); //sets ajax results to store via mutation
+          }
+        }).catch(function (err) {
+          return alert("Getting articles failed ( in store/index.js). Check if ure logged =>  " + err);
+        }); // catch any error
+      }, 4000);
     }
   },
 
   mutations: {
     setPosts: function setPosts(state, response) {
+      alert('set posts mutation');
       state.posts = response.data /*.data*/;
       console.log('setPosts executed in store' + response);
+    },
+    setApiToken: function setApiToken(state, response) {
+      state.api_tokenY = response;
+      console.log('setApiToken executed in store' + response + ' Store => ' + state.api_tokenY);
+      alert('set apiToken mutation is done');
     }
   },
   strict: debug
@@ -25839,7 +26087,7 @@ module.exports = __webpack_require__(6);
 /* 3 */
 /***/ (function(module, exports) {
 
-module.exports = __webpack_require__(10);
+module.exports = __webpack_require__(11);
 
 /***/ }),
 /* 4 */
@@ -71793,7 +72041,7 @@ function normalizeComponent (
 /***/ 4:
 /***/ (function(module, exports) {
 
-module.exports = __webpack_require__(10);
+module.exports = __webpack_require__(11);
 
 /***/ }),
 
@@ -73065,7 +73313,7 @@ module.exports = __webpack_require__(66);
 /***/ 4:
 /***/ (function(module, exports) {
 
-module.exports = __webpack_require__(10);
+module.exports = __webpack_require__(11);
 
 /***/ }),
 
@@ -75170,7 +75418,7 @@ component.options.__file = "packages/select/src/option.vue"
 /***/ 4:
 /***/ (function(module, exports) {
 
-module.exports = __webpack_require__(10);
+module.exports = __webpack_require__(11);
 
 /***/ }),
 
@@ -76249,7 +76497,7 @@ module.exports = function (it) {
 "use strict";
 
 // 19.1.2.1 Object.assign(target, source, ...)
-var DESCRIPTORS = __webpack_require__(11);
+var DESCRIPTORS = __webpack_require__(12);
 var getKeys = __webpack_require__(27);
 var gOPS = __webpack_require__(53);
 var pIE = __webpack_require__(30);
@@ -76431,7 +76679,7 @@ var dP = __webpack_require__(15);
 var anObject = __webpack_require__(25);
 var getKeys = __webpack_require__(27);
 
-module.exports = __webpack_require__(11) ? Object.defineProperties : function defineProperties(O, Properties) {
+module.exports = __webpack_require__(12) ? Object.defineProperties : function defineProperties(O, Properties) {
   anObject(O);
   var keys = getKeys(Properties);
   var length = keys.length;
@@ -76455,7 +76703,7 @@ module.exports = document && document.documentElement;
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
-var has = __webpack_require__(12);
+var has = __webpack_require__(13);
 var toObject = __webpack_require__(54);
 var IE_PROTO = __webpack_require__(50)('IE_PROTO');
 var ObjectProto = Object.prototype;
@@ -76576,8 +76824,8 @@ module.exports = __webpack_require__(18).Symbol;
 
 // ECMAScript 6 symbols shim
 var global = __webpack_require__(9);
-var has = __webpack_require__(12);
-var DESCRIPTORS = __webpack_require__(11);
+var has = __webpack_require__(13);
+var DESCRIPTORS = __webpack_require__(12);
 var $export = __webpack_require__(46);
 var redefine = __webpack_require__(74);
 var META = __webpack_require__(183).KEY;
@@ -76827,7 +77075,7 @@ setToStringTag(global.JSON, 'JSON', true);
 
 var META = __webpack_require__(29)('meta');
 var isObject = __webpack_require__(19);
-var has = __webpack_require__(12);
+var has = __webpack_require__(13);
 var setDesc = __webpack_require__(15).f;
 var id = 0;
 var isExtensible = Object.isExtensible || function () {
@@ -76945,11 +77193,11 @@ var pIE = __webpack_require__(30);
 var createDesc = __webpack_require__(26);
 var toIObject = __webpack_require__(16);
 var toPrimitive = __webpack_require__(47);
-var has = __webpack_require__(12);
+var has = __webpack_require__(13);
 var IE8_DOM_DEFINE = __webpack_require__(68);
 var gOPD = Object.getOwnPropertyDescriptor;
 
-exports.f = __webpack_require__(11) ? gOPD : function getOwnPropertyDescriptor(O, P) {
+exports.f = __webpack_require__(12) ? gOPD : function getOwnPropertyDescriptor(O, P) {
   O = toIObject(O);
   P = toPrimitive(P, true);
   if (IE8_DOM_DEFINE) try {
@@ -80994,7 +81242,7 @@ exports.push([module.i, "\n.avatar-uploader .el-upload {\r\n  border: 1px dashed
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(10);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -81444,7 +81692,7 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(10);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 //
@@ -81848,7 +82096,7 @@ exports = module.exports = __webpack_require__(4)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/* mine */\n.nav-item   {margin-left:2em;\n}\n.nav-item a {color:black;\n}\n.navbar-brand {color:black\n}\n#appDemo {\r\n  font-family: 'Avenir', Helvetica, Arial, sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n  text-align: center;\r\n  color: #2c3e50;\r\n  margin-top: 20px;\n}\n.moveInUp-enter-active{\r\n  -webkit-animation: fadeIn 2s ease-in;\r\n          animation: fadeIn 2s ease-in;\n}\n@-webkit-keyframes fadeIn{\n0%{\r\n    opacity: 0;\n}\n50%{\r\n    opacity: 0.5;\n}\n100%{\r\n    opacity: 1;\n}\n}\n@keyframes fadeIn{\n0%{\r\n    opacity: 0;\n}\n50%{\r\n    opacity: 0.5;\n}\n100%{\r\n    opacity: 1;\n}\n}\n.moveInUp-leave-active{\r\n  -webkit-animation: moveInUp .3s ease-in;\r\n          animation: moveInUp .3s ease-in;\n}\n@-webkit-keyframes moveInUp{\n0%{\r\n  -webkit-transform: translateY(0);\r\n          transform: translateY(0);\n}\n100%{\r\n  -webkit-transform: translateY(-400px);\r\n          transform: translateY(-400px);\n}\n}\n@keyframes moveInUp{\n0%{\r\n  -webkit-transform: translateY(0);\r\n          transform: translateY(0);\n}\n100%{\r\n  -webkit-transform: translateY(-400px);\r\n          transform: translateY(-400px);\n}\n}\r\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/* mine */\n.nav-item   {margin-left:2em;\n}\n.nav-item a {color:black;\n}\n.navbar-brand {color:black\n}\n#appDemo {\r\n  font-family: 'Avenir', Helvetica, Arial, sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n  text-align: center;\r\n  color: #2c3e50;\r\n  margin-top: 20px;\n}\n.moveInUp-enter-active{\r\n  -webkit-animation: fadeIn 2s ease-in;\r\n          animation: fadeIn 2s ease-in;\n}\n@-webkit-keyframes fadeIn{\n0%{\r\n    opacity: 0;\n}\n50%{\r\n    opacity: 0.5;\n}\n100%{\r\n    opacity: 1;\n}\n}\n@keyframes fadeIn{\n0%{\r\n    opacity: 0;\n}\n50%{\r\n    opacity: 0.5;\n}\n100%{\r\n    opacity: 1;\n}\n}\n.moveInUp-leave-active{\r\n  -webkit-animation: moveInUp .3s ease-in;\r\n          animation: moveInUp .3s ease-in;\n}\n@-webkit-keyframes moveInUp{\n0%{\r\n  -webkit-transform: translateY(0);\r\n          transform: translateY(0);\n}\n100%{\r\n  -webkit-transform: translateY(-400px);\r\n          transform: translateY(-400px);\n}\n}\n@keyframes moveInUp{\n0%{\r\n  -webkit-transform: translateY(0);\r\n          transform: translateY(0);\n}\n100%{\r\n  -webkit-transform: translateY(-400px);\r\n          transform: translateY(-400px);\n}\n}\r\n", ""]);
 
 // exports
 
@@ -81977,9 +82225,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    name: 'App'
+    name: 'App',
+    props: ['currentUser'],
+
+    //before mount
+    beforeMount: function beforeMount() {
+        var dataTest = this.currentUser.api_token; //passed from php in view as <vue-router-menu-with-link-content-display v-bind:current-user='{!! Auth::user()->toJson() !!}'> 
+        this.$store.dispatch('changeVuexStoreTokenFromChild', dataTest); //working example how to change Vuex store from child component  
+    }
 });
 
 /***/ }),
@@ -81991,6 +82247,14 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { attrs: { id: "appDemo" } }, [
+    _c("p", [
+      _vm._v(
+        " Current token(passed from view) " +
+          _vm._s(this.currentUser.api_token) +
+          " "
+      )
+    ]),
+    _vm._v(" "),
     _c(
       "div",
       {
@@ -82348,220 +82612,6 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-e9f04e40", module.exports)
-  }
-}
-
-/***/ }),
-/* 231 */,
-/* 232 */,
-/* 233 */,
-/* 234 */,
-/* 235 */,
-/* 236 */,
-/* 237 */,
-/* 238 */,
-/* 239 */,
-/* 240 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(241);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(5)("79e42f39", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-60c9e1c1\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./loadnew.vue", function() {
-     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-60c9e1c1\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./loadnew.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 241 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(4)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n.avatar-uploader .el-upload {\r\n  border: 1px dashed #d9d9d9;\r\n  border-radius: 6px;\r\n  cursor: pointer;\r\n  position: relative;\r\n  overflow: hidden;\n}\n.avatar-uploader .el-upload:hover {\r\n  border-color: #409eff;\n}\n.avatar-uploader-icon {\r\n  font-size: 28px;\r\n  color: #8c939d;\r\n  width: 178px;\r\n  height: 178px;\r\n  line-height: 178px;\r\n  text-align: center;\n}\n.avatar {\r\n  width: 178px;\r\n  height: 178px;\r\n  display: block;\n}\r\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 242 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", { key: _vm.componentKey, staticClass: "card mt-4" }, [
-    _c("div", { staticClass: "card-header" }, [
-      _vm._v("\n      New Post\n    ")
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "card-body" }, [
-      _vm.status_msg
-        ? _c(
-            "div",
-            {
-              staticClass: "alert",
-              class: {
-                "alert-success": _vm.status,
-                "alert-danger": !_vm.status
-              },
-              attrs: { role: "alert" }
-            },
-            [_vm._v("\n        " + _vm._s(_vm.status_msg) + "\n\t\t\n      ")]
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _c("form", [
-        _c("input", {
-          attrs: { type: "hidden", name: "_token" },
-          domProps: { value: _vm.tokenXX }
-        }),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "exampleFormControlInput1" } }, [
-            _vm._v("Title")
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.title,
-                expression: "title"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: {
-              id: "title",
-              type: "text",
-              placeholder: "Post Title",
-              required: ""
-            },
-            domProps: { value: _vm.title },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.title = $event.target.value
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "exampleFormControlTextarea1" } }, [
-            _vm._v("Post Content")
-          ]),
-          _vm._v(" "),
-          _c("textarea", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.body,
-                expression: "body"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { id: "post-content", rows: "3", required: "" },
-            domProps: { value: _vm.body },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.body = $event.target.value
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c(
-          "div",
-          {},
-          [
-            _c(
-              "el-upload",
-              {
-                attrs: {
-                  action: "https://jsonplaceholder.typicode.com/posts/",
-                  "list-type": "picture-card",
-                  "on-preview": _vm.handlePictureCardPreview,
-                  "on-change": _vm.updateImageList,
-                  "auto-upload": false
-                }
-              },
-              [_c("i", { staticClass: "el-icon-plus" })]
-            ),
-            _vm._v(" "),
-            _c(
-              "el-dialog",
-              {
-                attrs: { visible: _vm.dialogVisible },
-                on: {
-                  "update:visible": function($event) {
-                    _vm.dialogVisible = $event
-                  }
-                }
-              },
-              [
-                _c("img", {
-                  attrs: { width: "100%", src: _vm.dialogImageUrl, alt: "" }
-                })
-              ]
-            )
-          ],
-          1
-        )
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "card-footer" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-success",
-          attrs: { type: "button" },
-          on: { click: _vm.createPost }
-        },
-        [
-          _vm._v(
-            "\n        " +
-              _vm._s(_vm.isCreatingPost ? "Posting..." : "Create Post") +
-              "\n      "
-          )
-        ]
-      )
-    ])
-  ])
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-60c9e1c1", module.exports)
   }
 }
 

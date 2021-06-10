@@ -49,7 +49,8 @@ export default new Router({
     {
       path: '/New_2021', 
       name: 'new_2021', //same as in component return section
-      component: blog_2021 //component itself
+      component: blog_2021,  //component itself
+      props: { tokenZZ: 'i am set in router/index.js' },
     },
     
     //Blog 2021 Routing

@@ -61,8 +61,10 @@
 					
 					    <!-- Common links (make link highlighted )-->
 						<li class="{{ Request::is('wpBlogVueFrameWork*') ? 'active' : '' }}"> <a href="{{ route('wpBlogVueFrameWork') }}" > WPress Vue.js + Vuex Store     </a> </li> <!-- NOTE: name vs route -->
-						<li class="{{ Request::is('wpBlogVueFrameWork*') ? 'active' : '' }}"> <a href="{{ route('wpBlogVueFrameWork') }}" > Vue AdminP</a></li>
-                            
+						<li class="{{ Request::is('wpBlogVueFrameWork*') ? 'active' : '' }}"> <a href="{{ route('wpBlogVueFrameWork') }}" > Vue AdminP(N/A)</a></li>
+                        <li class="{{ Request::is('getToken*') ? 'active' : '' }}"> <a href="{{ route('getToken') }}" > Get token</a></li>
+
+   
                         <!-- Authentication Links -->
                         @if (Auth::guest())
                             <li class="{{ Request::is('login*') ? 'active' : '' }}">  <a href="{{ route('login') }}">Login </a> </li>
