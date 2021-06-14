@@ -15,7 +15,7 @@ export default new Vuex.Store({
       //posts: [{"wpBlog_id":1,"wpBlog_title":"Guadalupe Runolfsdottir", "wpBlog_text":"Store text 1", ,"wpBlog_category":4,"wpBlog_status":"1", "get_images":[{"wpImStock_id":16,"wpImStock_name":"product6.png","wpImStock_postID":1,"created_at":null,"updated_at":null}],"author_name":{"id":1,"name":"Admin","email":"admin@ukr.net","created_at":null,"updated_at":null},"category_names":{"wpCategory_id":4,"wpCategory_name":"Geeks","created_at":null,"updated_at":null}}, 
        //{"wpBlog_id":2,"wpBlog_title":"New", "wpBlog_text":"Store text 2"}],
       
-      api_tokenY: 'huyn',
+      api_tokenY: '', //api_token is passed from php in view as <vue-router-menu-with-link-content-display v-bind:current-user='{!! Auth::user()->toJson() !!}'>  and uplifted here to this store in VueRouterMenu in beforeMount() Section
       
 	  //products are used in Router example
 	  products:[
@@ -43,7 +43,7 @@ export default new Vuex.Store({
       }, */
 	  
           
-       //working example how to change Vuex store from child component
+       //working example how to change Vuex store from child component //Catch a passed api token from VueRouterMenu, triggered in beforeMount()
 	    changeVuexStoreTokenFromChild({ commit }, dataTestX) { 
 	      //var dataTest = {"error":false,"data":[{"wpBlog_id":1,"wpBlog_title":"Dima", "wpBlog_text":"Store 1", "get_images":[]}, {"wpBlog_id":2,"wpBlog_title":"Dima 2", "wpBlog_text":"Store 2", "get_images":[]}]};
 	      console.log('store token ' + dataTestX);
@@ -55,12 +55,17 @@ export default new Vuex.Store({
 	      $('.loader-x').fadeIn(800); //show loader
           
           setTimeout(function(){ 
-          alert('start');
+          alert('start (True) Disable 2nd alert in AllPosts beforeMount');
           alert( "store1 " + state.api_tokenY);
 		  //alert( "store2 "  + this.BASE_URL() );
-          fetch('api/post/get_all?token=' + state.api_tokenY, { //http://localhost/Laravel+Yii2_comment_widget/blog_Laravel/public/post/get_all
+          fetch('api/post/get_all'/*?token=' + state.api_tokenY*/, { //http://localhost/Laravel+Yii2_comment_widget/blog_Laravel/public/post/get_all
               method: 'get',
-              headers: { 'Content-Type': 'application/json' },
+              //pass Bearer token in headers ()
+              headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + state.api_tokenY },
+              //contentType: 'application/json',
+
+   
+   
           }).then(response => {
 			  setTimeout(function(){ $('.loader-x').fadeOut(800); }, 1000); //hide loader
               return response.json();
@@ -68,16 +73,22 @@ export default new Vuex.Store({
               console.log("Here STORE => " + dataZ);
 		      //core rewritten async getAllPosts, trigger mutation setPosts()
               
-              if(dataZ.error == true){ //if Rest endpoint returns any predefined error
+              if(dataZ.error == true|| dataZ.error == "Unauthenticated."){ //if Rest endpoint returns any predefined error
                   alert(dataZ.data);
+                  swal("Unauthenticated", "Check Bearer Token", "error");
+                  
               } else if(dataZ.error == false){
               
-	             return commit('setPosts', dataZ ); //sets ajax results to store via mutation
+                swal("Done", "Articles are loaded.", "success");
+	            return commit('setPosts', dataZ ); //sets ajax results to store via mutation
               }
           })
-	      .catch(err => alert("Getting articles failed ( in store/index.js). Check if ure logged =>  " + err)); // catch any error
+	      .catch(/*err => */ function(err){
+              alert("Getting articles failed ( in store/index.js). Check if ure logged =>  " + err);
+              swal("Crashed", "You are in catch", "error");
+          }); // catch any error
       
-        }, 4000);
+        }, 40);
       
       },
 	  

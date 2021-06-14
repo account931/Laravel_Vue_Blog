@@ -1,12 +1,13 @@
 <?php
-//my middelware to send acces token in headers
+//my middelware to send acces token in headers, works only with manual Token input
 namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth; 
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
 
 class AccessTokenMiddleware
 {
@@ -20,7 +21,7 @@ class AccessTokenMiddleware
     * @return mixed
     */
    public function handle(Request $request, Closure $next)
-   {
+   {    
         //dd($request->user());
         //dd(\Auth::user());
         //dd(auth('api')->user());
@@ -74,12 +75,19 @@ class AccessTokenMiddleware
         dd($response);
     }
     */
-
-
+        
+        /*$c = Cache::get('myGlobalApiToken');
+        $d = session('myGlobalApiToken');
+        dd('vv ' . config('myGlobalApiToken'));*/
+        
+        //session_start();
+        //dd("middle " .session('myGlobalApiToken'));
+        //dd(Config('myGlobalApiToken'));
         
         $tokenMine = 'YHEt7CNf1SBmQs6JbTPf7qMK8FgnynI5SiPmyJELrbAO61heKy0eKuiXrxBJ'; //auth()->user()->api_token;
         //$tokenMine = isset($request->user()->api_token) ? $request->user()->api_token : 'missing token' ;
         //dd($tokenMine);
+        //$tokenMine = $request->bearerToken(); dd($tokenMine); //NW
         $request->headers->add(['Authorization' => "Bearer {$tokenMine}"]);
        
         return $next($request);

@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use App\Http\Middleware\AccessTokenMiddleware;
 
 class Kernel extends HttpKernel
 {
@@ -20,7 +21,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         //\App\Http\Middleware\RbacMiddle::class, //my Rbac middelware
  
-        \App\Http\Middleware\AccessTokenMiddleware::class, //my Rest middelware
+        //\App\Http\Middleware\AccessTokenMiddleware::class, //my Rest middelware
 
     ];
 
@@ -47,6 +48,7 @@ class Kernel extends HttpKernel
 
         'api' => [
             //\Illuminate\Session\Middleware\StartSession::class,
+            \App\Http\Middleware\MyForceJsonResponse::class, //Force json response on every api request (as result when token is incorrect, it returns {"error":"Unauthenticated."} not redirect to /home)
             'throttle:60,1',
             'bindings',
         ],
@@ -69,11 +71,14 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
 		
-		'role' => \Zizaco\Entrust\Middleware\EntrustRole::class,  //my
+		'role'       => \Zizaco\Entrust\Middleware\EntrustRole::class,  //my
         'permission' => \Zizaco\Entrust\Middleware\EntrustPermission::class, //my
-        'ability' => \Zizaco\Entrust\Middleware\EntrustAbility::class, //my
+        'ability'    => \Zizaco\Entrust\Middleware\EntrustAbility::class, //my
         'client_credentials' => \Laravel\Passport\Http\Middleware\CheckClientCredentials::class, //my for REST API
-        'sendTokenMy' => \App\Http\Middleware\AccessTokenMiddleware::class
+        'sendTokenMyX'       => \App\Http\Middleware\AccessTokenMiddleware::class,
+        'checkX'             => \App\Http\Middleware\CheckAge::class, //just test, Delete later
+        'myJsonForce'        => \App\Http\Middleware\MyForceJsonResponse::class, //Force json response on every api request
+
     ];
     
     

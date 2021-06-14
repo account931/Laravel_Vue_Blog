@@ -5,20 +5,20 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
-
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-
-
 use Storage;
 use Illuminate\Support\Facades\DB;
 use App\models\wpBlogImages\Wpress_images_Posts; //model for all posts
 use App\models\wpBlogImages\Wpress_images_Category; //model for all Wpress_images_Category
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
+use Cookie;
 
 class WpBlog_VueContoller extends Controller
 {
     public function __construct(){
-		   //$this->middleware('auth');
+		//$this->middleware('checkX');
 		   
 	}
 	
@@ -38,6 +38,24 @@ class WpBlog_VueContoller extends Controller
         
         //gets current user Db table field {api_token}
 		$myDBToken = auth()->user()->api_token;
+        
+        //set global var
+        /*        
+        session_start();
+        session(['myGlobalApiToken' => $myDBToken]);
+        //dd(session('myGlobalApiToken'));
+        
+        Config(['myGlobalApiToken' => $myDBToken]);
+        //dd(Config('myGlobalApiToken'));
+        */
+  
+        /*
+        Config(['myGlobalApiToken' => $myDBToken]);
+        Cache::put('myGlobalApiToken', $myDBToken, 60); 
+        session(['myGlobalApiToken' => $myDBToken]);*/
+        
+        //$data = ['admin_color' => $myDBToken]; // your input];
+        //Config::write('admin-settings', $data);
     
         return view('wpBlog_Vue.index')->with(compact('myDBToken'));
     }

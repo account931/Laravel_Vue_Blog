@@ -48,31 +48,34 @@ class WpBlog_Rest_API_Contoller extends Controller
         
         
         
-        //VERSION_2 when u pass token headers via middleware /AccsessToken Middleware
+        //VERSION_2(MAIN) when u pass Bearer token in Headers via (either in ajax or php middleware/AccsessToken Middleware)(in final version pass it in ajax in /store/index.js)
+        //When use in /routes/api Route::group(['middleware' => ['auth:api'] + middleware/MyForceJsonResponse below checking won't work(except for positive one) as it is done automatically
+        //When use in /routes/api Route::group(['middleware' => ['api'] below checking will work (will be no automatical check)
         //gets the Bearer token
-        //$token = ($request->bearerToken() != null) ? $request->bearerToken() : "no tokennnn";//works
+        
+        /*
+        $token = ($request->bearerToken() != null) ? $request->bearerToken() : "no tokennnn";//works
         //dd($token);
         
         
-        /*
-        if($token = ''){
-            return response()->json(['error' => true, 'data' =>  ' Token is  missing' ]);
+        if($token == ''){
+            return response()->json(['error' => true, 'data' =>  'Bearer Token is  missing' ]);
         }
-        */
         
         
-        //verfify if Bearer token is correct. Works
-        /*if(!Auth::guard('api')->check()){
-            return response()->json(['error' => true, 'data' => $token . ' is  wrong' ]);
-        } */
         
+        //verify if Bearer token is correct. Works
+        if(!Auth::guard('api')->check()){
+            return response()->json(['error' => true, 'data' => 'Bearer ' .$token . ' is  wrong' ]);
+        } 
         
-        /*
+       
+        
         if(Auth::guard('api')->check()){
             //dd($token . " is  correct");
-            return response()->json(['error' => true, 'data' => $token . ' is  correct' ]);
+            return response()->json(['error' => true, 'data' => 'Bearer ' . $token . ' is  correct' ]);
         } else {
-            return response()->json(['error' => true, 'data' => $token . ' is  wrong' ]);
+            return response()->json(['error' => true, 'data' => 'Bearer ' . $token . ' is  wrong' ]);
             //dd($token . " is  wrong"); //works only if 'auth:api' middleware is off
         }
         */

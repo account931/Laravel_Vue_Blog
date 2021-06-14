@@ -105,7 +105,7 @@ export default {
   //before mount
   beforeMount() {
     ////run ajax in Vuex store
-    this.$store.dispatch('getAllPosts'); //trigger ajax function getAllPosts(), which is executed in Vuex store
+    //this.$store.dispatch('getAllPosts'); //trigger ajax function getAllPosts(), which is executed in Vuex store
 	
    /*
     //working example how to change Vuex store from child component   

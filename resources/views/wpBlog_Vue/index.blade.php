@@ -8,12 +8,36 @@
             <div class="panel panel-default">
 			
 			
-			    <!-- Flash message -->
-				@if(session()->has('flashMessage'))
-                    <div class="alert alert-danger">
-                        {{ session()->get('flashMessage') }}
+			    <!-- Flash message if Success -->
+				@if(session()->has('flashMessageX'))
+                    <div class="alert alert-success">
+                        {!! session()->get('flashMessageX') !!} <!--Displays content without html escaping -->
                     </div>
                 @endif
+				<!-- Flash message -->
+				
+
+                <!-- Flash message if Failed -->
+				@if(session()->has('flashMessageFailX'))
+                    <div class="alert alert-danger">
+                        {!! session()->get('flashMessageFailX') !!} <!--Displays content without html escaping -->
+                    </div>
+                @endif
+				<!-- Flash message if Failed -->				
+				
+
+                <!-- Display form validation errors var 2 -->
+				@if (count($errors) > 0)
+                    <div class="alert alert-danger">
+                        <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                        </ul>
+                    </div>
+                @endif
+                <!-- End Display form validation errors var 2 -->				
+					
 						
 						
 						
@@ -25,7 +49,12 @@
 				    WpBlog with Images on Vue.js framework + Vuex Store <span class="small text-danger">(It is a Vue.js version of Wpress Images (blog article with one or more images). 
 					Images are LightBox-ed. This WpRess Vue.js Blog uses 3-table DB (same as Wpress Image Blog). Pagination is set by $_GET['page'], i.e if there is NO $_GET['page'] in URL, it displays first n articles)</span> 
 				</div>
-
+                
+                <div class="alert alert-danger">
+                   <p>100% works only with String Query, when u send token ({User} table field {api_token}) in ajax as url?token=xxxxx (in Vuex store)</p>
+                   <p>Middleware seem to work, but have to pass api_token manually, cant get the user</p>
+                </div>
+                
                 <div class="panel-body">
 		        </div>
 		    </div>
