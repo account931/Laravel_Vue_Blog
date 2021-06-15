@@ -1,20 +1,34 @@
 <template>
   <div :key="componentKey" class="card mt-4">
-    <div class="card-header">
-      New Post
+    <div class="card-header row">
+    
+        <div class="col-sm-5 col-xs-5">
+            <p style="float:right;"><i class="fa fa-window-restore" style="font-size:84px"></i></p>
+        </div>
+        
+        <div class="col-sm-7 col-xs-7">
+            <h3 style="float:left;">Create New Post {{this.isCreatingPost }}</h3>
+        </div>
+        
     </div>
+    
     <div class="card-body">
-      <div
-        v-if="status_msg"
-        :class="{ 'alert-success': status, 'alert-danger': !status }"
-        class="alert"
-        role="alert"
-      >
-        {{ status_msg }}
+        <div
+          v-if="status_msg"
+          :class="{ 'alert-success': status, 'alert-danger': !status }"
+          class="alert"
+          role="alert"
+        >
+            {{ status_msg }}
 		
-      </div>
+        </div>
 	  
-	  
+        <!-- Display errors if any come from Controller Request Php validator -->
+        <div v-for="book in this.errroList" :key="book" class="alert alert-danger"> 
+            Error: {{  book }} 
+        </div>
+    
+	    
 	  
       <form>
 	    <input type="hidden" name="_token" :value="tokenXX" /> <!-- csfr token -->
@@ -32,10 +46,12 @@
             required
           >
         </div>
+        
         <div class="form-group">
           <label for="exampleFormControlTextarea1">Post Content</label>
           <textarea id="post-content" v-model="body" class="form-control" rows="3" required />
         </div>
+        
         <div class>
           <el-upload
             action="https://jsonplaceholder.typicode.com/posts/"
@@ -90,8 +106,10 @@
 }
 </style>
 
+
 <script>
-import { mapActions } from 'vuex'
+import { mapActions } from 'vuex';
+import { mapState } from 'vuex';
 export default {
   name: 'CreatePost',
   data () {
@@ -106,9 +124,12 @@ export default {
       body: '',
       componentKey: 0,
 	  tokenXX:'',
+      errroList: [], //list of errors of php validator
     }
   },
-  computed: {},
+  computed: {
+      //...mapState(['api_tokenY']), //is needed for Vuex store, after it u may address Vuex Store value as {posts} instead of {this.$store.state.posts}
+  },
   mounted () {
       let token = document.head.querySelector('meta[name="csrf-token"]'); //gets meta tag with csrf
       //alert(token.content);
@@ -150,6 +171,9 @@ export default {
           headers: { 'Content-Type': 'multipart/form-data' }
         }) 
 		*/
+        //var thatX = this;
+        alert('token is ' + this.$store.state.api_tokenY);
+        
 		$.ajax({
                           
 		    url: 'api/post/create_post_vue', 
@@ -157,7 +181,8 @@ export default {
 			//crossDomain: true,
 			
 			contentType:"application/json; charset=utf-8",						  
-			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + this.$store.state.api_tokenY},
+            //headers: { 'Content-Type': 'application/json',  },
             contentType: 'application/x-www-form-urlencoded; charset=utf-8',	  
             
 			//contentType: false,
@@ -172,16 +197,42 @@ export default {
                 body: this.body,				
 			},
             success: function(data) {
-                            
-                alert(JSON.stringify(data, null, 4));
-			                
+                alert("success");            
+                alert("success" + JSON.stringify(data, null, 4));
+                
+                /*
+                if (data.errors) { 
+                    alert("success" + JSON.stringify(data.errors, null, 4));
+                    this.errroList = data.errors;
+                }*/
+                
+                
+                if(data.error == true || data.error == "Unauthenticated."){ //if Rest endpoint returns any predefined error
+                  swal("Unauthenticated", "Check Bearer Token", "error");
+                  
+                } else if(data.error == false){
+                    swal("Good", "Bearer Token is OK", "success");
+                }
+			    that.isCreatingPost = false; //change button text            
             },  //end success
-			error: function (error) {
-			    alert(JSON.stringify(error, null, 4));
-                console.log(error);
+			error: function (errorZ) {
+                alert("Crashed"); 
+			    alert("error" +  JSON.stringify(errorZ, null, 4));
+                console.log(errorZ);
+                if(errorZ.responseJSON != null){
+                    if(errorZ.responseJSON.error == true || errorZ.responseJSON.error == "Unauthenticated."){ //if Rest endpoint returns any predefined error
+                       swal("Error: Unauthenticated", "Check Bearer Token", "error");  
+                      //alert("Unauthenticated");                  
+                    } 
+                }
+                swal("Error", "Something crashed", "error");  
+
+                
+                that.isCreatingPost = false; //change button text   
 			}	  
             });                             
             //END AJAXed  part 
+            
 		    return false;
 		
 		

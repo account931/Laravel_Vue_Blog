@@ -48,8 +48,10 @@
                         <i class="fa fa-window-restore" style="font-size:84px"></i>
                         Laravel Vue Blog with VUEX Store <span class="small text-danger">*</span> 
                     </div>
-                
                     <div class="panel-body">
+                                         
+                        <p> <i class="fa fa-check-circle-o" style="font-size:24px"></i> Laravel Rest Api Blog on Vue + Vuex Store + Bearer token Header Authentication (middleware 'auth:api'). </p>
+                        <p> <i class="fa fa-check-circle-o" style="font-size:24px"></i> Token is User's table 'api_token' field. </p>
                         <p> <i class="fa fa-check-circle-o" style="font-size:24px"></i> Blog with images </p>
                         <p> <i class="fa fa-check-circle-o" style="font-size:24px"></i> Loaded via ajax, Rest Api Endpoints </p>
                         <p> <i class="fa fa-check-circle-o" style="font-size:24px"></i> Uses Vuex Store </p>

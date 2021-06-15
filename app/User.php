@@ -8,10 +8,10 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 //use Illuminate\Database\Eloquent\Model; //Added by me
 use Zizaco\Entrust\Traits\EntrustUserTrait; //my
-use Tymon\JWTAuth\Contracts\JWTSubject; //JWT
+//use Tymon\JWTAuth\Contracts\JWTSubject; //JWT
 
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable //implements JWTSubject
 {
     use EntrustUserTrait; //use Zizaco Entrust
 	use Notifiable;
@@ -43,16 +43,20 @@ class User extends Authenticatable implements JWTSubject
      *
      * @return mixed
      */
+    /*
     public function getJWTIdentifier() {
         return $this->getKey();
     }
-
+    */
+    
     /**
      * Return a key value array, containing any custom claims to be added to the JWT.
      *
      * @return array
      */
+    /*
     public function getJWTCustomClaims() {
         return [];
-    }    
+    } 
+    */    
 }

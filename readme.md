@@ -1,5 +1,5 @@
 
-## Laravel Rest Api Blog on Vue + Vuex Store + Bearer token Header Authentication (middleware 'auth:api').
+## Laravel Rest Api Blog on Vue + Vuex Store + Bearer token Header Authentication (middleware 'auth:api'). Token is User's table 'api_token' field.
 - <p>To run the application on <b>http://localhost</b>, copy the repository code and run <b>composer install</b> to load all dependencies. </p>
 - <p>Create root file <b>.env</b> with your DB seetings based on  <b>.env.example</b>.</p>
 - <p>Run <b> php artisan key:generate </b> </p>
@@ -14,6 +14,10 @@
 ## Brief overview of the application
 
 ## Blog front page
+
+![Screenshot](public/images/Screenshots/9.png)
+
+![Screenshot](public/images/Screenshots/6.png)
 
 ![Screenshot](public/images/Screenshots/1.png)
 
@@ -32,6 +36,17 @@
 ## Unauthenticated request. Bearer token is missing/incorrect
 
 ![Screenshot](public/images/Screenshots/5.png)
+
+![Screenshot](public/images/Screenshots/5.1.png)
+
+
+## Token section
+
+![Screenshot](public/images/Screenshots/7.png)
+
+## Token section
+
+![Screenshot](public/images/Screenshots/8.png)
 
 [Watch video presentation on Youtube](  )
  

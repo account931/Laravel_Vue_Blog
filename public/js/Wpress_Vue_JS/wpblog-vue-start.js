@@ -25569,6 +25569,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -25584,11 +25602,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       title: '',
       body: '',
       componentKey: 0,
-      tokenXX: ''
+      tokenXX: '',
+      errroList: [] //list of errors of php validator
     };
   },
 
-  computed: {},
+  computed: {
+    //...mapState(['api_tokenY']), //is needed for Vuex store, after it u may address Vuex Store value as {posts} instead of {this.$store.state.posts}
+  },
   mounted: function mounted() {
     var token = document.head.querySelector('meta[name="csrf-token"]'); //gets meta tag with csrf
     //alert(token.content);
@@ -25631,6 +25652,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           headers: { 'Content-Type': 'multipart/form-data' }
         }) 
       */
+      //var thatX = this;
+      alert('token is ' + this.$store.state.api_tokenY);
+
       $.ajax((_$$ajax = {
 
         url: 'api/post/create_post_vue',
@@ -25638,20 +25662,46 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         //crossDomain: true,
 
         contentType: "application/json; charset=utf-8",
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + this.$store.state.api_tokenY }
       }, _defineProperty(_$$ajax, 'contentType', 'application/x-www-form-urlencoded; charset=utf-8'), _defineProperty(_$$ajax, 'data', //dataX//JSON.stringify(dataX)  ('#createNew').serialize()
       {
         _token: this.tokenXX, //csrf token	
         title: this.title,
         body: this.body
       }), _defineProperty(_$$ajax, 'success', function success(data) {
+        alert("success");
+        alert("success" + JSON.stringify(data, null, 4));
 
-        alert(JSON.stringify(data, null, 4));
-      }), _defineProperty(_$$ajax, 'error', function error(_error) {
-        alert(JSON.stringify(_error, null, 4));
-        console.log(_error);
+        /*
+        if (data.errors) { 
+            alert("success" + JSON.stringify(data.errors, null, 4));
+            this.errroList = data.errors;
+        }*/
+
+        if (data.error == true || data.error == "Unauthenticated.") {
+          //if Rest endpoint returns any predefined error
+          swal("Unauthenticated", "Check Bearer Token", "error");
+        } else if (data.error == false) {
+          swal("Good", "Bearer Token is OK", "success");
+        }
+        that.isCreatingPost = false; //change button text            
+      }), _defineProperty(_$$ajax, 'error', function error(errorZ) {
+        alert("Crashed");
+        alert("error" + JSON.stringify(errorZ, null, 4));
+        console.log(errorZ);
+        if (errorZ.responseJSON != null) {
+          if (errorZ.responseJSON.error == true || errorZ.responseJSON.error == "Unauthenticated.") {
+            //if Rest endpoint returns any predefined error
+            swal("Error: Unauthenticated", "Check Bearer Token", "error");
+            //alert("Unauthenticated");                  
+          }
+        }
+        swal("Error", "Something crashed", "error");
+
+        that.isCreatingPost = false; //change button text   
       }), _$$ajax));
       //END AJAXed  part 
+
       return false;
 
       //my fix instead of api.post. NOT ENGAGED, reassigned to ajax
@@ -25713,132 +25763,153 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { key: _vm.componentKey, staticClass: "card mt-4" }, [
-    _c("div", { staticClass: "card-header" }, [
-      _vm._v("\n      New Post\n    ")
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "card-body" }, [
-      _vm.status_msg
-        ? _c(
-            "div",
-            {
-              staticClass: "alert",
-              class: {
-                "alert-success": _vm.status,
-                "alert-danger": !_vm.status
-              },
-              attrs: { role: "alert" }
-            },
-            [_vm._v("\n        " + _vm._s(_vm.status_msg) + "\n\t\t\n      ")]
-          )
-        : _vm._e(),
+    _c("div", { staticClass: "card-header row" }, [
+      _vm._m(0),
       _vm._v(" "),
-      _c("form", [
-        _c("input", {
-          attrs: { type: "hidden", name: "_token" },
-          domProps: { value: _vm.tokenXX }
-        }),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "exampleFormControlInput1" } }, [
-            _vm._v("Title")
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.title,
-                expression: "title"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: {
-              id: "title",
-              type: "text",
-              placeholder: "Post Title",
-              required: ""
-            },
-            domProps: { value: _vm.title },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.title = $event.target.value
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "exampleFormControlTextarea1" } }, [
-            _vm._v("Post Content")
-          ]),
-          _vm._v(" "),
-          _c("textarea", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.body,
-                expression: "body"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { id: "post-content", rows: "3", required: "" },
-            domProps: { value: _vm.body },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.body = $event.target.value
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c(
-          "div",
-          {},
-          [
-            _c(
-              "el-upload",
-              {
-                attrs: {
-                  action: "https://jsonplaceholder.typicode.com/posts/",
-                  "list-type": "picture-card",
-                  "on-preview": _vm.handlePictureCardPreview,
-                  "on-change": _vm.updateImageList,
-                  "auto-upload": false
-                }
-              },
-              [_c("i", { staticClass: "el-icon-plus" })]
-            ),
-            _vm._v(" "),
-            _c(
-              "el-dialog",
-              {
-                attrs: { visible: _vm.dialogVisible },
-                on: {
-                  "update:visible": function($event) {
-                    _vm.dialogVisible = $event
-                  }
-                }
-              },
-              [
-                _c("img", {
-                  attrs: { width: "100%", src: _vm.dialogImageUrl, alt: "" }
-                })
-              ]
-            )
-          ],
-          1
-        )
+      _c("div", { staticClass: "col-sm-7 col-xs-7" }, [
+        _c("h3", { staticStyle: { float: "left" } }, [
+          _vm._v("Create New Post " + _vm._s(this.isCreatingPost))
+        ])
       ])
     ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "card-body" },
+      [
+        _vm.status_msg
+          ? _c(
+              "div",
+              {
+                staticClass: "alert",
+                class: {
+                  "alert-success": _vm.status,
+                  "alert-danger": !_vm.status
+                },
+                attrs: { role: "alert" }
+              },
+              [
+                _vm._v(
+                  "\n            " + _vm._s(_vm.status_msg) + "\n\t\t\n        "
+                )
+              ]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm._l(this.errroList, function(book) {
+          return _c("div", { key: book, staticClass: "alert alert-danger" }, [
+            _vm._v(" \n            Error: " + _vm._s(book) + " \n        ")
+          ])
+        }),
+        _vm._v(" "),
+        _c("form", [
+          _c("input", {
+            attrs: { type: "hidden", name: "_token" },
+            domProps: { value: _vm.tokenXX }
+          }),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "exampleFormControlInput1" } }, [
+              _vm._v("Title")
+            ]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.title,
+                  expression: "title"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                id: "title",
+                type: "text",
+                placeholder: "Post Title",
+                required: ""
+              },
+              domProps: { value: _vm.title },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.title = $event.target.value
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "exampleFormControlTextarea1" } }, [
+              _vm._v("Post Content")
+            ]),
+            _vm._v(" "),
+            _c("textarea", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.body,
+                  expression: "body"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { id: "post-content", rows: "3", required: "" },
+              domProps: { value: _vm.body },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.body = $event.target.value
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            {},
+            [
+              _c(
+                "el-upload",
+                {
+                  attrs: {
+                    action: "https://jsonplaceholder.typicode.com/posts/",
+                    "list-type": "picture-card",
+                    "on-preview": _vm.handlePictureCardPreview,
+                    "on-change": _vm.updateImageList,
+                    "auto-upload": false
+                  }
+                },
+                [_c("i", { staticClass: "el-icon-plus" })]
+              ),
+              _vm._v(" "),
+              _c(
+                "el-dialog",
+                {
+                  attrs: { visible: _vm.dialogVisible },
+                  on: {
+                    "update:visible": function($event) {
+                      _vm.dialogVisible = $event
+                    }
+                  }
+                },
+                [
+                  _c("img", {
+                    attrs: { width: "100%", src: _vm.dialogImageUrl, alt: "" }
+                  })
+                ]
+              )
+            ],
+            1
+          )
+        ])
+      ],
+      2
+    ),
     _vm._v(" "),
     _c("div", { staticClass: "card-footer" }, [
       _c(
@@ -25859,7 +25930,21 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-5 col-xs-5" }, [
+      _c("p", { staticStyle: { float: "right" } }, [
+        _c("i", {
+          staticClass: "fa fa-window-restore",
+          staticStyle: { "font-size": "84px" }
+        })
+      ])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -25930,6 +26015,7 @@ var debug = "development" !== 'production';
       $('.loader-x').fadeIn(800); //show loader
 
       setTimeout(function () {
+        //dont need
         alert('start (True) Disable 2nd alert in AllPosts beforeMount');
         alert("store1 " + state.api_tokenY);
         //alert( "store2 "  + this.BASE_URL() );
@@ -25941,9 +26027,7 @@ var debug = "development" !== 'production';
 
 
         }).then(function (response) {
-          setTimeout(function () {
-            $('.loader-x').fadeOut(800);
-          }, 1000); //hide loader
+          $('.loader-x').fadeOut(800); //hide loader
           return response.json();
         }).then(function (dataZ) {
           console.log("Here STORE => " + dataZ);

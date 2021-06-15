@@ -5,16 +5,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
-
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-
-
 use Storage;
 use Illuminate\Support\Facades\DB;
 use App\models\wpBlogImages\Wpress_images_Posts; //model for all posts
 use App\models\wpBlogImages\Wpress_images_Category; //model for all Wpress_images_Category
 use App\User; 
+use App\Http\Requests\SaveNewArticleRequest;
 
 class WpBlog_Rest_API_Contoller extends Controller
 {
@@ -105,10 +103,10 @@ class WpBlog_Rest_API_Contoller extends Controller
 	
 	 /**
      * REST API to /POST (create) a new blog. NOT IMPLEMENTED. REWRITE WITHOUT TRANSACTION
-     * @param Request $request
+     * @param SaveNewArticleRequest $request
      * @return json
      */
-	public function createPost(Request $request)
+	public function createPost(SaveNewArticleRequest $request)
     {
 		/*
 		header('Access-Control-Allow-Origin:  *');
@@ -116,9 +114,29 @@ class WpBlog_Rest_API_Contoller extends Controller
         header('Access-Control-Allow-Headers:  Content-Type, X-Auth-Token, Origin, Authorization');
 	    */
        
+        //find User Id by his sent token
+        $userX = User::where('api_token', '=', $request->bearerToken())->first(); 
+		//return response()->json(['error' => false, 'data' => 'Too Good, but process back-end validation : ' . $request->title .  ' / ' .  $request->body . '/UserID:' . $userX->id  . '/' . $request->bearerToken()]);
+		  return response()->json(['error' => false, 'data' => 'Too Good, but process back-end validation : ' . $request->title]);
+
+        /*
+        $data       = $request->input();
+		$imagesData = $request->filename; //uploaded images
+		
+	    try{
+			$ticket = new Wpress_images_Posts();
+			$ticket->saveFields($data, $imagesData);
+			//return redirect('/wpBlogImages')->with('flashMessage',"Created successfully");
+            return response()->json(['error' => false, 'data' => 'Saved successfully']);
+			
+		} catch(Exception $e){
+			//return redirect('/createNewWpressImg')->with('success',"Operation failed");
+            return response()->json(['error' => true, 'data' => 'Error while saving']);
+
+		}
+        */
         
-		return response()->json("Too Good, but process back-end validation : " . $request->title .  " / " .  $request->body);
-		//dd($request->all());
+        //dd($request->all());
 		
 		/*
         DB::transaction(function () use ($request) {

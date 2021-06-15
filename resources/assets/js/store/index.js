@@ -54,7 +54,7 @@ export default new Vuex.Store({
 	  getAllPosts({ commit, state  }) {  //state is a fix
 	      $('.loader-x').fadeIn(800); //show loader
           
-          setTimeout(function(){ 
+          setTimeout(function(){ //dont need
           alert('start (True) Disable 2nd alert in AllPosts beforeMount');
           alert( "store1 " + state.api_tokenY);
 		  //alert( "store2 "  + this.BASE_URL() );
@@ -67,7 +67,7 @@ export default new Vuex.Store({
    
    
           }).then(response => {
-			  setTimeout(function(){ $('.loader-x').fadeOut(800); }, 1000); //hide loader
+              $('.loader-x').fadeOut(800);  //hide loader
               return response.json();
           }).then(dataZ => {
               console.log("Here STORE => " + dataZ);

@@ -51,8 +51,8 @@
 				</div>
                 
                 <div class="alert alert-danger">
-                   <p>100% works only with String Query, when u send token ({User} table field {api_token}) in ajax as url?token=xxxxx (in Vuex store)</p>
-                   <p>Middleware seem to work, but have to pass api_token manually, cant get the user</p>
+                   <p>100% works only with Bearer token, when u send Bearer token ({User} table field {api_token}) in ajax as HEADER  => headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + state.api_tokenY } (in Vuex store) or this.$store.state.api_tokenY (in other components) ,</p>
+                   <p>FALSE=>Middleware seem to work, but have to pass api_token manually, cant get the user</p>
                 </div>
                 
                 <div class="panel-body">
