@@ -16,18 +16,19 @@
         <div
           v-if="status_msg"
           :class="{ 'alert-success': status, 'alert-danger': !status }"
-          class="alert"
-          role="alert"
+          class="alert" role="alert"
         >
             {{ status_msg }}
 		
         </div>
+        
 	  
         <!-- Display errors if any come from Controller Request Php validator -->
-        <div v-for="book in this.errroList" :key="book" class="alert alert-danger"> 
-            Error: {{  book }} 
+        <div v-for="book in booksGet " :key="book" class="alert alert-danger"> 
+            Error: {{ book }} 
         </div>
-    
+        
+        
 	    
 	  
       <form>
@@ -124,12 +125,16 @@ export default {
       body: '',
       componentKey: 0,
 	  tokenXX:'',
-      errroList: [], //list of errors of php validator
+      errroList: ['v', 'b'], //list of errors of php validator
     }
   },
   computed: {
-      //...mapState(['api_tokenY']), //is needed for Vuex store, after it u may address Vuex Store value as {posts} instead of {this.$store.state.posts}
+      //...mapState(['errroList']), 
+       booksGet () { //compute Back-end validation errors
+           return this.errroList;
+      }      
   },
+  
   mounted () {
       let token = document.head.querySelector('meta[name="csrf-token"]'); //gets meta tag with csrf
       //alert(token.content);
@@ -207,8 +212,20 @@ export default {
                 }*/
                 
                 
-                if(data.error == true || data.error == "Unauthenticated."){ //if Rest endpoint returns any predefined error
-                  swal("Unauthenticated", "Check Bearer Token", "error");
+                if(data.error == true ){ //if Rest endpoint returns any predefined error
+                    var text = data.data;
+                    swal("Check", text, "error");
+                    
+                    //if validation errors (i.e if REST Contoller returns json ['error': true, 'data': 'Good, but validation crashes', 'validateErrors': title['Validation err text'],  body['Validation err text']])
+                    if(data.validateErrors){
+                       var tempoArray = []; //temp array
+                       for (var key in data.validateErrors) { //Object iterate
+                           var t = data.validateErrors[key][0]; //gets validation err message, e.g validateErrors.title[0]
+                           tempoArray.push(t);
+                       }
+                       
+                       that.errroList = tempoArray; //change state errroList //{this-that} fix
+                    }
                   
                 } else if(data.error == false){
                     swal("Good", "Bearer Token is OK", "success");
@@ -219,6 +236,12 @@ export default {
                 alert("Crashed"); 
 			    alert("error" +  JSON.stringify(errorZ, null, 4));
                 console.log(errorZ);
+                
+                /*
+                if (errorZ.status == 422) {
+                    swal("Error", "Validation crashed", "error");  
+                }*/
+                
                 if(errorZ.responseJSON != null){
                     if(errorZ.responseJSON.error == true || errorZ.responseJSON.error == "Unauthenticated."){ //if Rest endpoint returns any predefined error
                        swal("Error: Unauthenticated", "Check Bearer Token", "error");  
@@ -285,6 +308,17 @@ export default {
         this.status_msg = ''
       }, 3000 * 155)
     }
-  }
+  },
+  
+  
+  mutations: {
+    setErrors (state, dateX) {
+      // mutate state
+      state.errroList = dateX;
+      alert('mutated');
+    }
+  },
+    
+    
 }
 </script>

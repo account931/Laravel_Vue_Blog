@@ -1268,18 +1268,6 @@ var isInContainer = exports.isInContainer = function isInContainer(el, container
 
 /***/ }),
 /* 9 */
-/***/ (function(module, exports) {
-
-// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
-var global = module.exports = typeof window != 'undefined' && window.Math == Math
-  ? window : typeof self != 'undefined' && self.Math == Math ? self
-  // eslint-disable-next-line no-new-func
-  : Function('return this')();
-if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
-
-
-/***/ }),
-/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2538,6 +2526,18 @@ var index = {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(7)))
 
 /***/ }),
+/* 10 */
+/***/ (function(module, exports) {
+
+// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+var global = module.exports = typeof window != 'undefined' && window.Math == Math
+  ? window : typeof self != 'undefined' && self.Math == Math ? self
+  // eslint-disable-next-line no-new-func
+  : Function('return this')();
+if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
+
+
+/***/ }),
 /* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2653,7 +2653,7 @@ module.exports = function (it) {
 
 var store = __webpack_require__(51)('wks');
 var uid = __webpack_require__(29);
-var Symbol = __webpack_require__(9).Symbol;
+var Symbol = __webpack_require__(10).Symbol;
 var USE_SYMBOL = typeof Symbol == 'function';
 
 var $exports = module.exports = function (name) {
@@ -17404,7 +17404,7 @@ exports.default = aria.Utils;
 /* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var global = __webpack_require__(9);
+var global = __webpack_require__(10);
 var core = __webpack_require__(18);
 var ctx = __webpack_require__(162);
 var hide = __webpack_require__(14);
@@ -17525,7 +17525,7 @@ module.exports = function (key) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var core = __webpack_require__(18);
-var global = __webpack_require__(9);
+var global = __webpack_require__(10);
 var SHARED = '__core-js_shared__';
 var store = global[SHARED] || (global[SHARED] = {});
 
@@ -17597,7 +17597,7 @@ exports.f = __webpack_require__(17);
 /* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var global = __webpack_require__(9);
+var global = __webpack_require__(10);
 var core = __webpack_require__(18);
 var LIBRARY = __webpack_require__(28);
 var wksExt = __webpack_require__(57);
@@ -19457,7 +19457,7 @@ module.exports = !__webpack_require__(12) && !__webpack_require__(20)(function (
 /***/ (function(module, exports, __webpack_require__) {
 
 var isObject = __webpack_require__(19);
-var document = __webpack_require__(9).document;
+var document = __webpack_require__(10).document;
 // typeof document.createElement is 'object' in old IE
 var is = isObject(document) && isObject(document.createElement);
 module.exports = function (it) {
@@ -24423,7 +24423,7 @@ exports.push([module.i, "\n.contact form[data-v-091e05ee]{\r\n\tmax-width: 40em;
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(9);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 //
@@ -24658,7 +24658,7 @@ exports.push([module.i, "\n.contact form[data-v-379cdafe]{\r\n\tmax-width: 40em;
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(9);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 //
@@ -25165,7 +25165,7 @@ exports.push([module.i, "\n.contact form[data-v-2ee927a2]{\r\n\tmax-width: 40em;
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(9);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 //
@@ -25472,11 +25472,12 @@ exports.push([module.i, "\n.avatar-uploader .el-upload {\r\n  border: 1px dashed
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(9);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
 //
 //
 //
@@ -25603,13 +25604,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       body: '',
       componentKey: 0,
       tokenXX: '',
-      errroList: [] //list of errors of php validator
+      errroList: ['v', 'b'] //list of errors of php validator
     };
   },
 
   computed: {
-    //...mapState(['api_tokenY']), //is needed for Vuex store, after it u may address Vuex Store value as {posts} instead of {this.$store.state.posts}
+    //...mapState(['errroList']), 
+    booksGet: function booksGet() {
+      //compute Back-end validation errors
+      return this.errroList;
+    }
   },
+
   mounted: function mounted() {
     var token = document.head.querySelector('meta[name="csrf-token"]'); //gets meta tag with csrf
     //alert(token.content);
@@ -25678,9 +25684,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             this.errroList = data.errors;
         }*/
 
-        if (data.error == true || data.error == "Unauthenticated.") {
+        if (data.error == true) {
           //if Rest endpoint returns any predefined error
-          swal("Unauthenticated", "Check Bearer Token", "error");
+          var text = data.data;
+          swal("Check", text, "error");
+
+          //if validation errors (i.e if REST Contoller returns json ['error': true, 'data': 'Good, but validation crashes', 'validateErrors': title['Validation err text'],  body['Validation err text']])
+          if (data.validateErrors) {
+            var tempoArray = []; //temp array
+            for (var key in data.validateErrors) {
+              //Object iterate
+              var t = data.validateErrors[key][0]; //gets validation err message, e.g validateErrors.title[0]
+              tempoArray.push(t);
+            }
+
+            that.errroList = tempoArray; //change state errroList //{this-that} fix
+          }
         } else if (data.error == false) {
           swal("Good", "Bearer Token is OK", "success");
         }
@@ -25689,6 +25708,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         alert("Crashed");
         alert("error" + JSON.stringify(errorZ, null, 4));
         console.log(errorZ);
+
+        /*
+        if (errorZ.status == 422) {
+            swal("Error", "Validation crashed", "error");  
+        }*/
+
         if (errorZ.responseJSON != null) {
           if (errorZ.responseJSON.error == true || errorZ.responseJSON.error == "Unauthenticated.") {
             //if Rest endpoint returns any predefined error
@@ -25751,7 +25776,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this2.status_msg = '';
       }, 3000 * 155);
     }
-  })
+  }),
+
+  mutations: {
+    setErrors: function setErrors(state, dateX) {
+      // mutate state
+      state.errroList = dateX;
+      alert('mutated');
+    }
+  }
+
 });
 
 /***/ }),
@@ -25796,7 +25830,7 @@ var render = function() {
             )
           : _vm._e(),
         _vm._v(" "),
-        _vm._l(this.errroList, function(book) {
+        _vm._l(_vm.booksGet, function(book) {
           return _c("div", { key: book, staticClass: "alert alert-danger" }, [
             _vm._v(" \n            Error: " + _vm._s(book) + " \n        ")
           ])
@@ -25961,7 +25995,7 @@ if (false) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(9);
 //Vuex store
 
 
@@ -76785,7 +76819,7 @@ module.exports = __webpack_require__(12) ? Object.defineProperties : function de
 /* 174 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var document = __webpack_require__(9).document;
+var document = __webpack_require__(10).document;
 module.exports = document && document.documentElement;
 
 
@@ -76813,7 +76847,7 @@ module.exports = Object.getPrototypeOf || function (O) {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(177);
-var global = __webpack_require__(9);
+var global = __webpack_require__(10);
 var hide = __webpack_require__(14);
 var Iterators = __webpack_require__(55);
 var TO_STRING_TAG = __webpack_require__(17)('toStringTag');
@@ -76914,7 +76948,7 @@ module.exports = __webpack_require__(18).Symbol;
 "use strict";
 
 // ECMAScript 6 symbols shim
-var global = __webpack_require__(9);
+var global = __webpack_require__(10);
 var has = __webpack_require__(13);
 var DESCRIPTORS = __webpack_require__(12);
 var $export = __webpack_require__(46);
@@ -81333,7 +81367,7 @@ exports.push([module.i, "\n.avatar-uploader .el-upload {\r\n  border: 1px dashed
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(9);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -81783,7 +81817,7 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(9);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 //

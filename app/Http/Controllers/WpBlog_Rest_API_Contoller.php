@@ -106,8 +106,17 @@ class WpBlog_Rest_API_Contoller extends Controller
      * @param SaveNewArticleRequest $request
      * @return json
      */
-	public function createPost(SaveNewArticleRequest $request)
+	public function createPost(SaveNewArticleRequest $request) //SaveNewArticleRequest
     {
+        //Due to overridded {function failedValidation(Validator $validator)} in RequestClass, we can proceed here, even if Validation fails
+        if (isset($request->validator) && $request->validator->fails()) {
+           //return response()->json($request->validator->messages(), 400);
+           return response()->json([
+               'error' => true, 
+               'data' => 'Good, but validation crashes', 
+               'validateErrors'=>  $request->validator->messages()]);
+
+        }
 		/*
 		header('Access-Control-Allow-Origin:  *');
         header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE');
@@ -117,7 +126,7 @@ class WpBlog_Rest_API_Contoller extends Controller
         //find User Id by his sent token
         $userX = User::where('api_token', '=', $request->bearerToken())->first(); 
 		//return response()->json(['error' => false, 'data' => 'Too Good, but process back-end validation : ' . $request->title .  ' / ' .  $request->body . '/UserID:' . $userX->id  . '/' . $request->bearerToken()]);
-		  return response()->json(['error' => false, 'data' => 'Too Good, but process back-end validation : ' . $request->title]);
+		return response()->json(['error' => false, 'data' => 'Too Good, but process back-end validation : ' . $request->title]);
 
         /*
         $data       = $request->input();

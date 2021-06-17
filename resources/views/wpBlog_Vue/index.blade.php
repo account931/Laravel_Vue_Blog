@@ -83,7 +83,7 @@
 					
 					<!-- Form component -->
                     <div id="createPost" class="col-md-6">
-                        <create-post/> <!-- Vue component -->
+                        <!--<create-post/>--> <!-- Vue component -->
                     </div>
 					
 					<!-- Show all posts component -->
