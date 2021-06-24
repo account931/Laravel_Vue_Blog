@@ -1,3 +1,4 @@
+<!-- Most up-to-date version -->
 <template>
 	<div class="contact">
 		<h1> {{title}} </h1>
@@ -23,11 +24,11 @@
                 <div class="col-sm-6 col-xs-6">
 	
                     <!-- Show 1st image if exists. HasMany Relation. {get_images} is a model {function getImages()}  HasMany Relation -->		 
-                    <!--<img v-if="post.get_images.length" class="card-img-top my-img" :src="`images/${post.get_images[0].wpImStock_name}`" />-->
+                    <!--<img v-if="post.get_images.length" class="card-img-top my-img" :src="`images/wpressImages/${post.get_images[0].wpImStock_name}`" />-->
 		
 		            <!-- Image with LightBox -->
-	                <a v-if="post.get_images.length" :href="`images/${post.get_images[0].wpImStock_name}`"   title="image" :data-lightbox="`roadtrip${post.wpBlog_id}`" > <!-- roadtrip + currentID, to create a unique data-lightbox name, so in modal LightBox will show images related to this article only, not all -->
-                        <img v-if="post.get_images.length" class="card-img-top my-img" :src="`images/${post.get_images[0].wpImStock_name}`" />
+	                <a v-if="post.get_images.length" :href="`images/wpressImages/${post.get_images[0].wpImStock_name}`"   title="image" :data-lightbox="`roadtrip${post.wpBlog_id}`" > <!-- roadtrip + currentID, to create a unique data-lightbox name, so in modal LightBox will show images related to this article only, not all -->
+                        <img v-if="post.get_images.length" class="card-img-top my-img" :src="`images/wpressImages/${post.get_images[0].wpImStock_name}`" />
 	                </a>
                     <!-- End Image with LightBox -->
 		
@@ -54,9 +55,10 @@
         <h3>{{ currentPost.wpBlog_title }}</h3>
         <div class="row">
 		  
-		  <!-- Show all article images. HasMany Relation -->
-          <div class="col-md-6" v-for="(img, i) in currentPost.get_images" :key=i>
-            <img :src="`images/${img.wpImStock_name}`" class="img-thumbnail" alt="">
+          
+		  <!-- Show all article images via FOR LOOP. HasMany Relation -->
+          <div class="col-md-12" v-for="(img, i) in currentPost.get_images" :key=i>
+              <p><img :src="`images/wpressImages/${img.wpImStock_name}`" class="img-thumbnail" alt=""></p>
           </div>
 		  
         </div>

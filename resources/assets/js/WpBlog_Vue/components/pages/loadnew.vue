@@ -31,7 +31,7 @@
         
 	    
 	  
-      <form>
+      <form id="myFormZZ">
 	    <input type="hidden" name="_token" :value="tokenXX" /> <!-- csfr token -->
 		<!--<input type="hidden" name="_token" value="4gyBcsEYlPibNHfhi1r55rRQAZkBWepxCmVLlqAW" />-->
 		
@@ -143,7 +143,8 @@ export default {
   methods: {
     ...mapActions(['getAllPosts']),
     updateImageList (file) {
-      this.imageList.push(file.raw)
+        this.imageList.push(file.raw);
+        //console.log(this.imageList);
     },
 	
     handlePictureCardPreview (file) {
@@ -159,16 +160,26 @@ export default {
       }
 	  
 	  //Form //PROBLEM HERE
-      const that = this;
       this.isCreatingPost = true;
-      const formData = new FormData();
+      
+      //Use Formdata to bind inpts and images upload
+      var that = this;
+      /*const*/ var formData = new FormData(); //new FormData(document.getElementById("myFormZZ"));
       formData.append('title', this.title);
-      formData.append('body', this.body);
-      /*$.each(this.imageList, function (key, image) {
-        formData.append(`images[${key}]`, image);
-      }); */
+      formData.append('body',  this.body);
+      
+      var imagesUploaded = {};
+      $.each(this.imageList, function (key, imageV) {
+          formData.append(`imagesZZZ[${key}]`, imageV);
+          //imagesUploaded.push(`images[${key}]`, imageV);
+          //imagesUploaded.test = imageV;
+      });
 	  
-	   console.log(formData);
+      //formData.append('imageX', imagesUploaded); //imageX my custom name
+      
+      console.log(this.imageList)
+	  console.log(formData);
+       
 	   
 	  //SENDING AJAX 
       /* api
@@ -179,28 +190,47 @@ export default {
         //var thatX = this;
         alert('token is ' + this.$store.state.api_tokenY);
         
+       
+        
+        
+        //Add Bearer token to headers
+        $.ajaxSetup({
+            headers: {
+                'Authorization': 'Bearer ' + this.$store.state.api_tokenY
+            }
+        }); 
+      
 		$.ajax({
                           
 		    url: 'api/post/create_post_vue', 
             type: 'POST', //POST is to create a new user
-			//crossDomain: true,
-			
-			contentType:"application/json; charset=utf-8",						  
-			headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + this.$store.state.api_tokenY},
-            //headers: { 'Content-Type': 'application/json',  },
-            contentType: 'application/x-www-form-urlencoded; charset=utf-8',	  
             
+            cache : false,
+            dataType    : 'json',
+            processData : false,
+            contentType: false,
+            //contentType:"application/json; charset=utf-8",						  
+            //contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+            //contentType: 'multipart/form-data',
+
+			//crossDomain: true,
+			//headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + this.$store.state.api_tokenY},
+            //headers: { 'Content-Type': 'application/json',  },
 			//contentType: false,
-            //processData: false,
 			//dataType: 'json', //In Laravel causes crash!!!!!// without this it returned string(that can be alerted), now it returns object
-						   
+           
 			//passing the data
-            data: //dataX//JSON.stringify(dataX)  ('#createNew').serialize()
-		    {   
+         
+            
+            data: formData, //dataX//JSON.stringify(dataX)  ('#createNew').serialize()
+		    /*{   
                 _token: this.tokenXX, //csrf token	
-                title: this.title,	
-                body: this.body,				
-			},
+                title:    this.title,	
+                body:     this.body,
+                myImages: imagesToSend,	//array of images
+               
+                
+			}, */
             success: function(data) {
                 alert("success");            
                 alert("success" + JSON.stringify(data, null, 4));
@@ -218,7 +248,7 @@ export default {
                     
                     //if validation errors (i.e if REST Contoller returns json ['error': true, 'data': 'Good, but validation crashes', 'validateErrors': title['Validation err text'],  body['Validation err text']])
                     if(data.validateErrors){
-                       var tempoArray = []; //temp array
+                       var tempoArray = []; //temporary array
                        for (var key in data.validateErrors) { //Object iterate
                            var t = data.validateErrors[key][0]; //gets validation err message, e.g validateErrors.title[0]
                            tempoArray.push(t);
@@ -228,13 +258,18 @@ export default {
                     }
                   
                 } else if(data.error == false){
+                    var tempoArray = []; 
+                    that.errroList = tempoArray; //clears validationn errors if any. Simple that.errroList = [] won't work
                     swal("Good", "Bearer Token is OK", "success");
+                    swal("Good",  data.data, "success");
                 }
 			    that.isCreatingPost = false; //change button text            
             },  //end success
+            
 			error: function (errorZ) {
                 alert("Crashed"); 
 			    alert("error" +  JSON.stringify(errorZ, null, 4));
+                console.log(errorZ.responseText);
                 console.log(errorZ);
                 
                 /*

@@ -1,5 +1,5 @@
 
-## Laravel Rest Api Blog on Vue + Vuex Store + Bearer token Header Authentication (middleware 'auth:api'). Token is User's table 'api_token' field.
+## Laravel Rest Api Blog on Vue + Vuex Store + Vue Router + Bearer token Header Authentication (middleware 'auth:api'). Token is User's table 'api_token' field. Uses UI Toolkit Element-UI, Vue 2.0 based component library
 - <p>To run the application on <b>http://localhost</b>, copy the repository code and run <b>composer install</b> to load all dependencies. </p>
 - <p>Create root file <b>.env</b> with your DB seetings based on  <b>.env.example</b>.</p>
 - <p>Run <b> php artisan key:generate </b> </p>

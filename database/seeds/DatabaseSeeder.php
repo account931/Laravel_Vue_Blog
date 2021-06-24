@@ -4,6 +4,7 @@
 use Illuminate\Database\Seeder;
 //use App\database\seeds\SeedersFiles\ShopSimpleSeeder;
 //use Illuminate\Support\Facades\DB;
+//use File;
 use Faker\Factory as Faker;
 
 class DatabaseSeeder extends Seeder
@@ -123,19 +124,16 @@ class WpressImages_blog_Post_Seeder extends Seeder {
 
 		$NUMBER_OF_CATEGORIES = 5;
         $faker = Faker::create();
-
         $gender = $faker->randomElement(['male', 'female']);
 
     	foreach (range(1,20) as $index) {
 		
-	
             DB::table('wpressimages_blog_post')->insert([
-                'wpBlog_title' => $faker->name, //$faker->name($gender),
-                'wpBlog_text' =>  $faker->realText($maxNbChars = 200, $indexSize = 2), //$faker->text,
-                'wpBlog_author' => 1, //$faker->username,
+                'wpBlog_title'    => $faker->name, //$faker->name($gender),
+                'wpBlog_text'     =>  $faker->realText($maxNbChars = 200, $indexSize = 2), //$faker->text,
+                'wpBlog_author'   => 1, //$faker->username,
 				'wpBlog_category' => rand(1, $NUMBER_OF_CATEGORIES), //random string between min and max numbe
                 //'wpBlog_status' => $faker->date($format = 'Y-m-d', $max = 'now'),
-				
 				//'image' => $faker->image(public_path('images/students'),400,300, null, false), //saving images to 'public/images/students. Takes much time
                 //'image' => 'http://loremflickr.com/400/300?random='.rand(1, 100),
 
@@ -145,28 +143,56 @@ class WpressImages_blog_Post_Seeder extends Seeder {
 }
 
 
-
+//REWORK!!!!!!!!!!!!!!!!!!!!
 //fill DB table {wpressimage_imagesstock} with data.
 class WpressImages_ImagesStock_Seeder extends Seeder {
   public function run()
   {
     
 	    DB::table('wpressimage_imagesstock')->delete();  //whether to Delete old materials
+        
 		$NUMBER_OF_ARTICLES = 20;
         $faker = Faker::create();
-
         $gender = $faker->randomElement(['male', 'female']);
+  
+        //Manual image insert, to use preloaded images(for better UI -). If wish may switch to Faker images (decomment next paragraph)
+        //Firstly, copy images from folder '/preloaded' to '/wpressImages'. Can't set save those images in '/wpressImages' in first place as '/wpressImages' contains '.gitignore' file not to add to Git all images uploaded there and get the mess.
+        // get source directory
+        //$pathSource = Storage::disk('images/preloaded')->getDriver()->getAdapter()->applyPathPrefix(null);
 
+        // get destination directory (already exists)
+        //$pathDestination = Storage::disk('images/wpressImages')->getDriver()->getAdapter()->applyPathPrefix(null);
+        //File::copyDirectory($pathSource, $pathDestination);
+        //Storage::move('/images/preloaded',  '/images/wpressImages22');
+         \File::copyDirectory('/images/preloaded',  '/images/wpressImages'); //DOES NOT WORK
+        
+        
+        DB::table('wpressimage_imagesstock')->insert(['wpImStock_postID' => 1,  'wpImStock_name' => 'product1.png' ]);
+        DB::table('wpressimage_imagesstock')->insert(['wpImStock_postID' => 2,  'wpImStock_name' => 'product2.png' ]);
+        DB::table('wpressimage_imagesstock')->insert(['wpImStock_postID' => 3,  'wpImStock_name' => 'product3.png' ]);
+        DB::table('wpressimage_imagesstock')->insert(['wpImStock_postID' => 4,  'wpImStock_name' => 'product4.png' ]);
+        DB::table('wpressimage_imagesstock')->insert(['wpImStock_postID' => 5,  'wpImStock_name' => 'product5.png' ]);
+        DB::table('wpressimage_imagesstock')->insert(['wpImStock_postID' => 6,  'wpImStock_name' => 'product6.png' ]);
+        DB::table('wpressimage_imagesstock')->insert(['wpImStock_postID' => 7,  'wpImStock_name' => 'product7.png' ]);
+        DB::table('wpressimage_imagesstock')->insert(['wpImStock_postID' => 8,  'wpImStock_name' => 'product8.png' ]);
+        DB::table('wpressimage_imagesstock')->insert(['wpImStock_postID' => 9,  'wpImStock_name' => 'product9.png' ]);
+        DB::table('wpressimage_imagesstock')->insert(['wpImStock_postID' => 10, 'wpImStock_name' => 'product10.png' ]);
+        
+        //Working Seeder, just reassing from random images to preloaded(for better UI -))))
+        /*
     	foreach (range(1,20) as $index) {
 		
             DB::table('wpressimage_imagesstock')->insert([
+                //assign random images via Faker. Working
                 'wpImStock_name'   => $faker->image(public_path('images/wpressImages'),400,300, null, false), //saving images to 'public/images/students. Takes much time
                 'wpImStock_postID' =>  rand(1, $NUMBER_OF_ARTICLES), //random string between min and max number
-				
+
+                
 				//'image' => $faker->image(public_path('images/students'),400,300, null, false), //saving images to 'public/images/students. Takes much time
                 //'image' => 'http://loremflickr.com/400/300?random='.rand(1, 100),
 
             ]);
-        }   
+        } 
+        */        
   } 
 }

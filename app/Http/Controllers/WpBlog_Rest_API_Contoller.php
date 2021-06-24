@@ -106,8 +106,35 @@ class WpBlog_Rest_API_Contoller extends Controller
      * @param SaveNewArticleRequest $request
      * @return json
      */
-	public function createPost(SaveNewArticleRequest $request) //SaveNewArticleRequest
+	public function createPost(SaveNewArticleRequest $request) //Request Class //SaveNewArticleRequest
     {
+        
+        //var_dump($request->imagesZZZ[0]->getClientOriginalName(), true);  //$request->all()
+        //die();
+        
+        /*
+        //Getting info of uploaded images (for test purpose). Working.
+        if($request->has('imagesZZZ')) { //(for test purpose)
+            $b = 'Image is isset';
+        } else {
+            $b = 'Image not isset';
+        }
+      
+        //Getting info of uploaded images (for test purpose). Working.
+        $tt = '';
+        if($request->hasFile('imagesZZZ')) {
+            foreach($request->imagesZZZ as $z) { 
+                $tt.= $z->getClientOriginalName() . ', ';
+                $tt.= round( ($z->getSize() / 1024), 2 ). ' kilobyte. /';
+                $tt.= $z->getClientOriginalExtension() . ' / ';
+            }
+        } else {
+            $tt = "Images files are not sent";
+        }
+        return response()->json(['error' => false, 'data' => 'Too Good  : ' . $b . " My FILES: " . $tt ]);
+        */
+        
+        
         //Due to overridded {function failedValidation(Validator $validator)} in RequestClass, we can proceed here, even if Validation fails
         if (isset($request->validator) && $request->validator->fails()) {
            //return response()->json($request->validator->messages(), 400);
@@ -115,8 +142,8 @@ class WpBlog_Rest_API_Contoller extends Controller
                'error' => true, 
                'data' => 'Good, but validation crashes', 
                'validateErrors'=>  $request->validator->messages()]);
-
         }
+        
 		/*
 		header('Access-Control-Allow-Origin:  *');
         header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE');
@@ -125,9 +152,44 @@ class WpBlog_Rest_API_Contoller extends Controller
        
         //find User Id by his sent token
         $userX = User::where('api_token', '=', $request->bearerToken())->first(); 
+        
 		//return response()->json(['error' => false, 'data' => 'Too Good, but process back-end validation : ' . $request->title .  ' / ' .  $request->body . '/UserID:' . $userX->id  . '/' . $request->bearerToken()]);
-		return response()->json(['error' => false, 'data' => 'Too Good, but process back-end validation : ' . $request->title]);
+	    //return response()->json(['error' => false, 'data' => 'Too Good, but process back-end validation : ' . $request->bearerToken()]);
 
+        //dd($request->all());
+        
+        
+        
+        /*
+        //just for test, get uploaded images from array
+        $requestText = '';
+        foreach($request->myImages as $v){
+            $requestText.= $v . ", " ;
+        } 
+      
+        return response()->json(['error' => false, 'data' => 'Too Good, back-end validation is OK. Imaged : ' . $requestText ]);
+        */
+        
+        $data       = array($request->title, $request->body); //$request->all(); //$request->input();
+		$imagesData = $request->imagesZZZ; //uploaded images//$request->myImages
+		
+        //return response()->json(['error' => false, 'data' => 'Too Good, but process back-end validation : ' . $request->title .  ' / ' .  $request->body . '/UserID:' . $userX->id  . '/' . $request->bearerToken()]);
+
+	    try{
+			$ticket = new Wpress_images_Posts();
+			if($b = $ticket->saveFields($data, $imagesData, $userX->id)){
+			   return response()->json(['error' => false, 'data' => 'Saved successfully ' . $b]);
+            } else {
+                return response()->json(['error' => true, 'data' => 'Saving failed1']);
+            }
+			
+		} catch(Exception $e){
+			return response()->json(['error' => true, 'data' => 'Saving failed2']);
+		}
+        
+        
+        
+               
         /*
         $data       = $request->input();
 		$imagesData = $request->filename; //uploaded images

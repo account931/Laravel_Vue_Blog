@@ -13,12 +13,13 @@ export default new Vuex.Store({
 	  //posts used in Vue blog
 	  posts: [],
       //posts: [{"wpBlog_id":1,"wpBlog_title":"Guadalupe Runolfsdottir", "wpBlog_text":"Store text 1", ,"wpBlog_category":4,"wpBlog_status":"1", "get_images":[{"wpImStock_id":16,"wpImStock_name":"product6.png","wpImStock_postID":1,"created_at":null,"updated_at":null}],"author_name":{"id":1,"name":"Admin","email":"admin@ukr.net","created_at":null,"updated_at":null},"category_names":{"wpCategory_id":4,"wpCategory_name":"Geeks","created_at":null,"updated_at":null}}, 
-       //{"wpBlog_id":2,"wpBlog_title":"New", "wpBlog_text":"Store text 2"}],
+              //{"wpBlog_id":2,"wpBlog_title":"New", "wpBlog_text":"Store text 2"}],
       
       api_tokenY: '', //api_token is passed from php in view as <vue-router-menu-with-link-content-display v-bind:current-user='{!! Auth::user()->toJson() !!}'>  and uplifted here to this store in VueRouterMenu in beforeMount() Section
       
-	  //products are used in Router example
-	  products:[
+	  //products are used in Router example. NOT USED IN CLEANSED Version. Set via seeder to DB and extracted via store/index.js ajax
+      /*	 
+      products:[
 	      {productTitle:"ABCN", image: 'product1.png', productId:1},
           {productTitle:"KARMA",image: 'product2.png', productId:2},
           {productTitle:"Tino", image: 'product3.png', productId:3},
@@ -26,6 +27,7 @@ export default new Vuex.Store({
           {productTitle:"MLI",  image: 'product5.png', productId:5},
           {productTitle:"Banan",image: 'product6.png', productId:6}
         ],
+        */
   },
   
 
@@ -107,7 +109,7 @@ export default new Vuex.Store({
 
 
   mutations: {
-    setPosts(state, response) {  alert('set posts mutation');
+    setPosts(state, response) {  alert('Set posts mutation successfully');
         state.posts = response.data/*.data*/;
 	    console.log('setPosts executed in store' + response);
         

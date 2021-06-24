@@ -4,6 +4,7 @@ namespace App\models\wpBlogImages;
 
 use Illuminate\Database\Eloquent\Model;
 use App\models\wpBlogImages\Wpress_ImagesStock; //table for images
+use Illuminate\Support\Facades\File;
 
 class Wpress_images_Posts extends Model
 {
@@ -129,40 +130,43 @@ class Wpress_images_Posts extends Model
 	* @param array $imagesData, contains all form images
     * @return 
     */
-	public function saveFields($data, $imagesData){
+	public function saveFields($data, $imagesData, $userZ)
+    {
 		
 		//dd(gettype ($data));
 		//dd($imagesData);
 		
-		$this->wpBlog_author     = auth()->user()->id;
-        $this->wpBlog_text       = $data['description'];
-        $this->wpBlog_title      = $data['title'];
-		$this->wpBlog_category   = $data['category_sel'];
+		$this->wpBlog_author     = $userZ; //auth()->user()->id;
+        $this->wpBlog_text       = $data[0]; //$data['description'];
+        $this->wpBlog_title      = $data[1]; //$data['title'];
+		$this->wpBlog_category   = 1; //$data['category_sel'];
 		$this->wpBlog_created_at = date('Y-m-d H:i:s');
 		$this->save();
 		$idX = $this->id;
 		
-		if($this->save()){
+		if($this->save()){ 
 		    
 		    foreach ($imagesData as $fileImageX){
 			
 			    //getting Image info for Flash Message
 		        $imageName = time(). '_' . $fileImageX->getClientOriginalName();
-		        $sizeInByte =     $fileImageX->getSize() . ' byte';
-		        $sizeInKiloByte = round( ($fileImageX->getSize() / 1024), 2 ). ' kilobyte'; //round 10.55364364 to 10.5
-		        $fileExtens =     $fileImageX->getClientOriginalExtension();
+		        //$sizeInByte =     $fileImageX->getSize() . ' byte';
+		        //$sizeInKiloByte = round( ($fileImageX->getSize() / 1024), 2 ). ' kilobyte'; //round 10.55364364 to 10.5
+		        //$fileExtens =     $fileImageX->getClientOriginalExtension();
 		        //getting Image info for Flash Message
 		
-		
+		    
 		        //Move uploaded image to the specified folder 
 		        $fileImageX->move(public_path('images/wpressImages'), $imageName);
+                //$move = File::move($imageName, public_path('images/wpressImages'));
 				//saving images
 		        $model = new Wpress_ImagesStock();
 			    $model->wpImStock_name    = $imageName; //image
 			    $model->wpImStock_postID  = $idX; // just saved article ID
 				$model->save();
 			
-		    }
+		    } 
+            return $imageName; // true;
 		}
 	}
 

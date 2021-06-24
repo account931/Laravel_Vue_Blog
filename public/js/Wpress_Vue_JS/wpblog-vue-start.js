@@ -24742,6 +24742,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -24899,7 +24901,9 @@ var render = function() {
                     "a",
                     {
                       attrs: {
-                        href: "images/" + post.get_images[0].wpImStock_name,
+                        href:
+                          "images/wpressImages/" +
+                          post.get_images[0].wpImStock_name,
                         title: "image",
                         "data-lightbox": "roadtrip" + post.wpBlog_id
                       }
@@ -24909,7 +24913,9 @@ var render = function() {
                         ? _c("img", {
                             staticClass: "card-img-top my-img",
                             attrs: {
-                              src: "images/" + post.get_images[0].wpImStock_name
+                              src:
+                                "images/wpressImages/" +
+                                post.get_images[0].wpImStock_name
                             }
                           })
                         : _vm._e()
@@ -24998,11 +25004,16 @@ var render = function() {
                   "div",
                   { staticClass: "row" },
                   _vm._l(_vm.currentPost.get_images, function(img, i) {
-                    return _c("div", { key: i, staticClass: "col-md-6" }, [
-                      _c("img", {
-                        staticClass: "img-thumbnail",
-                        attrs: { src: "images/" + img.wpImStock_name, alt: "" }
-                      })
+                    return _c("div", { key: i, staticClass: "col-md-12" }, [
+                      _c("p", [
+                        _c("img", {
+                          staticClass: "img-thumbnail",
+                          attrs: {
+                            src: "images/wpressImages/" + img.wpImStock_name,
+                            alt: ""
+                          }
+                        })
+                      ])
                     ])
                   }),
                   0
@@ -25210,6 +25221,18 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -25271,93 +25294,124 @@ var render = function() {
         ])
       }),
       _vm._v(" "),
-      _c("div", [
-        _c("hr"),
-        _vm._v(" "),
-        _c(
-          "p",
-          { staticClass: "z-overlay-fix-2" },
-          [
-            _c(
-              "router-link",
-              { staticClass: "nav-link", attrs: { to: "/New_2021" } },
-              [
-                _c("button", { staticClass: "btn" }, [
-                  _vm._v("Back to Blog_2021 "),
-                  _c("i", {
-                    staticClass: "fa fa-tag",
-                    staticStyle: { "font-size": "14px" }
-                  })
-                ])
-              ]
-            )
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _c("p", [_vm._v(" One product ")]),
-        _vm._v(" "),
-        _c("p", [
-          _vm._v(
-            _vm._s(this.$store.state.posts[this.currentDetailID].wpBlog_id) +
+      _c(
+        "div",
+        [
+          _c("hr"),
+          _vm._v(" "),
+          _c(
+            "p",
+            { staticClass: "z-overlay-fix-2" },
+            [
+              _c(
+                "router-link",
+                { staticClass: "nav-link", attrs: { to: "/New_2021" } },
+                [
+                  _c("button", { staticClass: "btn" }, [
+                    _vm._v("Back to Blog_2021 "),
+                    _c("i", {
+                      staticClass: "fa fa-tag",
+                      staticStyle: { "font-size": "14px" }
+                    })
+                  ])
+                ]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("p", [_vm._v(" One product ")]),
+          _vm._v(" "),
+          _c("p", [
+            _vm._v(
               " " +
-              _vm._s(this.$store.state.posts[this.currentDetailID].wpBlog_title)
-          )
-        ]),
-        _vm._v(" "),
-        _c("p", [
-          _c("img", {
-            staticClass: "card-img-top my-img",
-            attrs: {
-              src:
-                "images/" +
-                this.$store.state.posts[this.currentDetailID].get_images[0]
-                  .wpImStock_name
+                _vm._s(
+                  this.$store.state.posts[this.currentDetailID].wpBlog_id
+                ) +
+                " " +
+                _vm._s(
+                  this.$store.state.posts[this.currentDetailID].wpBlog_title
+                )
+            )
+          ]),
+          _vm._v(" "),
+          _c("p", [
+            this.$store.state.posts[this.currentDetailID].get_images.length
+              ? _c("img", {
+                  staticClass: "card-img-top my-img",
+                  attrs: {
+                    src:
+                      "images/wpressImages/" +
+                      this.$store.state.posts[this.currentDetailID]
+                        .get_images[0].wpImStock_name
+                  }
+                })
+              : _vm._e()
+          ]),
+          _c("p"),
+          _c("p", [
+            _vm._v(
+              "           " +
+                _vm._s(
+                  this.$store.state.posts[this.currentDetailID].wpBlog_text
+                ) +
+                " "
+            )
+          ]),
+          _vm._v(" "),
+          _c("p", [
+            _vm._v(
+              " Author:   " +
+                _vm._s(
+                  this.$store.state.posts[this.currentDetailID].author_name.name
+                ) +
+                " "
+            )
+          ]),
+          _vm._v(" "),
+          _c("p", [
+            _vm._v(
+              " Email:    " +
+                _vm._s(
+                  this.$store.state.posts[this.currentDetailID].author_name
+                    .email
+                ) +
+                " "
+            )
+          ]),
+          _vm._v(" "),
+          _c("p", [
+            _vm._v(
+              " Category: " +
+                _vm._s(
+                  this.$store.state.posts[this.currentDetailID].category_names
+                    .wpCategory_name
+                ) +
+                " "
+            )
+          ]),
+          _vm._v(" "),
+          _vm._l(
+            this.$store.state.posts[this.currentDetailID].get_images,
+            function(img, i) {
+              return _c("div", { key: i, staticClass: "col-md-12" }, [
+                i > 0
+                  ? _c("div", [
+                      _c("img", {
+                        staticClass: "img-thumbnail",
+                        attrs: {
+                          src: "images/wpressImages/" + img.wpImStock_name,
+                          alt: ""
+                        }
+                      })
+                    ])
+                  : _vm._e()
+              ])
             }
-          })
-        ]),
-        _c("p"),
-        _c("p", [
-          _vm._v(
-            "           " +
-              _vm._s(
-                this.$store.state.posts[this.currentDetailID].wpBlog_text
-              ) +
-              " "
           )
-        ]),
-        _vm._v(" "),
-        _c("p", [
-          _vm._v(
-            " Author:   " +
-              _vm._s(
-                this.$store.state.posts[this.currentDetailID].author_name.name
-              ) +
-              " "
-          )
-        ]),
-        _vm._v(" "),
-        _c("p", [
-          _vm._v(
-            " Email:    " +
-              _vm._s(
-                this.$store.state.posts[this.currentDetailID].author_name.email
-              ) +
-              " "
-          )
-        ]),
-        _vm._v(" "),
-        _c("p", [
-          _vm._v(
-            " Category: " +
-              _vm._s(
-                this.$store.state.posts[this.currentDetailID].category_names
-                  .wpCategory_name
-              ) +
-              " "
-          )
-        ])
-      ]),
+        ],
+        2
+      ),
       _vm._v(" "),
       _c("br"),
       _c("br")
@@ -25474,8 +25528,6 @@ exports.push([module.i, "\n.avatar-uploader .el-upload {\r\n  border: 1px dashed
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(9);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 //
 //
@@ -25625,6 +25677,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['getAllPosts']), {
     updateImageList: function updateImageList(file) {
       this.imageList.push(file.raw);
+      //console.log(this.imageList);
     },
     handlePictureCardPreview: function handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
@@ -25632,8 +25685,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.dialogVisible = true;
     },
     createPost: function createPost(e) {
-      var _$$ajax,
-          _this = this;
+      var _this = this;
 
       e.preventDefault();
       if (!this.validateForm()) {
@@ -25641,15 +25693,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       //Form //PROBLEM HERE
-      var that = this;
       this.isCreatingPost = true;
-      var formData = new FormData();
+
+      //Use Formdata to bind inpts and images upload
+      var that = this;
+      /*const*/var formData = new FormData(); //new FormData(document.getElementById("myFormZZ"));
       formData.append('title', this.title);
       formData.append('body', this.body);
-      /*$.each(this.imageList, function (key, image) {
-        formData.append(`images[${key}]`, image);
-      }); */
 
+      var imagesUploaded = {};
+      $.each(this.imageList, function (key, imageV) {
+        formData.append('imagesZZZ[' + key + ']', imageV);
+        //imagesUploaded.push(`images[${key}]`, imageV);
+        //imagesUploaded.test = imageV;
+      });
+
+      //formData.append('imageX', imagesUploaded); //imageX my custom name
+
+      console.log(this.imageList);
       console.log(formData);
 
       //SENDING AJAX 
@@ -25661,70 +25722,102 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       //var thatX = this;
       alert('token is ' + this.$store.state.api_tokenY);
 
-      $.ajax((_$$ajax = {
+      //Add Bearer token to headers
+      $.ajaxSetup({
+        headers: {
+          'Authorization': 'Bearer ' + this.$store.state.api_tokenY
+        }
+      });
+
+      $.ajax({
 
         url: 'api/post/create_post_vue',
         type: 'POST', //POST is to create a new user
+
+        cache: false,
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        //contentType:"application/json; charset=utf-8",						  
+        //contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+        //contentType: 'multipart/form-data',
+
         //crossDomain: true,
+        //headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + this.$store.state.api_tokenY},
+        //headers: { 'Content-Type': 'application/json',  },
+        //contentType: false,
+        //dataType: 'json', //In Laravel causes crash!!!!!// without this it returned string(that can be alerted), now it returns object
 
-        contentType: "application/json; charset=utf-8",
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + this.$store.state.api_tokenY }
-      }, _defineProperty(_$$ajax, 'contentType', 'application/x-www-form-urlencoded; charset=utf-8'), _defineProperty(_$$ajax, 'data', //dataX//JSON.stringify(dataX)  ('#createNew').serialize()
-      {
-        _token: this.tokenXX, //csrf token	
-        title: this.title,
-        body: this.body
-      }), _defineProperty(_$$ajax, 'success', function success(data) {
-        alert("success");
-        alert("success" + JSON.stringify(data, null, 4));
+        //passing the data
 
-        /*
-        if (data.errors) { 
-            alert("success" + JSON.stringify(data.errors, null, 4));
-            this.errroList = data.errors;
-        }*/
 
-        if (data.error == true) {
-          //if Rest endpoint returns any predefined error
-          var text = data.data;
-          swal("Check", text, "error");
+        data: formData, //dataX//JSON.stringify(dataX)  ('#createNew').serialize()
+        /*{   
+                  _token: this.tokenXX, //csrf token	
+                  title:    this.title,	
+                  body:     this.body,
+                  myImages: imagesToSend,	//array of images
+                 
+                  
+        }, */
+        success: function success(data) {
+          alert("success");
+          alert("success" + JSON.stringify(data, null, 4));
 
-          //if validation errors (i.e if REST Contoller returns json ['error': true, 'data': 'Good, but validation crashes', 'validateErrors': title['Validation err text'],  body['Validation err text']])
-          if (data.validateErrors) {
-            var tempoArray = []; //temp array
-            for (var key in data.validateErrors) {
-              //Object iterate
-              var t = data.validateErrors[key][0]; //gets validation err message, e.g validateErrors.title[0]
-              tempoArray.push(t);
-            }
+          /*
+          if (data.errors) { 
+              alert("success" + JSON.stringify(data.errors, null, 4));
+              this.errroList = data.errors;
+          }*/
 
-            that.errroList = tempoArray; //change state errroList //{this-that} fix
-          }
-        } else if (data.error == false) {
-          swal("Good", "Bearer Token is OK", "success");
-        }
-        that.isCreatingPost = false; //change button text            
-      }), _defineProperty(_$$ajax, 'error', function error(errorZ) {
-        alert("Crashed");
-        alert("error" + JSON.stringify(errorZ, null, 4));
-        console.log(errorZ);
-
-        /*
-        if (errorZ.status == 422) {
-            swal("Error", "Validation crashed", "error");  
-        }*/
-
-        if (errorZ.responseJSON != null) {
-          if (errorZ.responseJSON.error == true || errorZ.responseJSON.error == "Unauthenticated.") {
+          if (data.error == true) {
             //if Rest endpoint returns any predefined error
-            swal("Error: Unauthenticated", "Check Bearer Token", "error");
-            //alert("Unauthenticated");                  
-          }
-        }
-        swal("Error", "Something crashed", "error");
+            var text = data.data;
+            swal("Check", text, "error");
 
-        that.isCreatingPost = false; //change button text   
-      }), _$$ajax));
+            //if validation errors (i.e if REST Contoller returns json ['error': true, 'data': 'Good, but validation crashes', 'validateErrors': title['Validation err text'],  body['Validation err text']])
+            if (data.validateErrors) {
+              var tempoArray = []; //temporary array
+              for (var key in data.validateErrors) {
+                //Object iterate
+                var t = data.validateErrors[key][0]; //gets validation err message, e.g validateErrors.title[0]
+                tempoArray.push(t);
+              }
+
+              that.errroList = tempoArray; //change state errroList //{this-that} fix
+            }
+          } else if (data.error == false) {
+            var tempoArray = [];
+            that.errroList = tempoArray; //clears validationn errors if any. Simple that.errroList = [] won't work
+            swal("Good", "Bearer Token is OK", "success");
+            swal("Good", data.data, "success");
+          }
+          that.isCreatingPost = false; //change button text            
+        }, //end success
+
+        error: function error(errorZ) {
+          alert("Crashed");
+          alert("error" + JSON.stringify(errorZ, null, 4));
+          console.log(errorZ.responseText);
+          console.log(errorZ);
+
+          /*
+          if (errorZ.status == 422) {
+              swal("Error", "Validation crashed", "error");  
+          }*/
+
+          if (errorZ.responseJSON != null) {
+            if (errorZ.responseJSON.error == true || errorZ.responseJSON.error == "Unauthenticated.") {
+              //if Rest endpoint returns any predefined error
+              swal("Error: Unauthenticated", "Check Bearer Token", "error");
+              //alert("Unauthenticated");                  
+            }
+          }
+          swal("Error", "Something crashed", "error");
+
+          that.isCreatingPost = false; //change button text   
+        }
+      });
       //END AJAXed  part 
 
       return false;
@@ -25836,7 +25929,7 @@ var render = function() {
           ])
         }),
         _vm._v(" "),
-        _c("form", [
+        _c("form", { attrs: { id: "myFormZZ" } }, [
           _c("input", {
             attrs: { type: "hidden", name: "_token" },
             domProps: { value: _vm.tokenXX }
@@ -26012,10 +26105,19 @@ var debug = "development" !== 'production';
     //posts: [{"wpBlog_id":1,"wpBlog_title":"Guadalupe Runolfsdottir", "wpBlog_text":"Store text 1", ,"wpBlog_category":4,"wpBlog_status":"1", "get_images":[{"wpImStock_id":16,"wpImStock_name":"product6.png","wpImStock_postID":1,"created_at":null,"updated_at":null}],"author_name":{"id":1,"name":"Admin","email":"admin@ukr.net","created_at":null,"updated_at":null},"category_names":{"wpCategory_id":4,"wpCategory_name":"Geeks","created_at":null,"updated_at":null}}, 
     //{"wpBlog_id":2,"wpBlog_title":"New", "wpBlog_text":"Store text 2"}],
 
-    api_tokenY: '', //api_token is passed from php in view as <vue-router-menu-with-link-content-display v-bind:current-user='{!! Auth::user()->toJson() !!}'>  and uplifted here to this store in VueRouterMenu in beforeMount() Section
+    api_tokenY: '' //api_token is passed from php in view as <vue-router-menu-with-link-content-display v-bind:current-user='{!! Auth::user()->toJson() !!}'>  and uplifted here to this store in VueRouterMenu in beforeMount() Section
 
-    //products are used in Router example
-    products: [{ productTitle: "ABCN", image: 'product1.png', productId: 1 }, { productTitle: "KARMA", image: 'product2.png', productId: 2 }, { productTitle: "Tino", image: 'product3.png', productId: 3 }, { productTitle: "EFG", image: 'product4.png', productId: 4 }, { productTitle: "MLI", image: 'product5.png', productId: 5 }, { productTitle: "Banan", image: 'product6.png', productId: 6 }]
+    //products are used in Router example. NOT USED IN CLEANSED Version. Set via seeder to DB and extracted via store/index.js ajax
+    /*	 
+    products:[
+     {productTitle:"ABCN", image: 'product1.png', productId:1},
+        {productTitle:"KARMA",image: 'product2.png', productId:2},
+        {productTitle:"Tino", image: 'product3.png', productId:3},
+        {productTitle:"EFG",  image: 'product4.png', productId:4},
+        {productTitle:"MLI",  image: 'product5.png', productId:5},
+        {productTitle:"Banan",image: 'product6.png', productId:6}
+      ],
+      */
   },
 
   computed: {
@@ -26086,7 +26188,7 @@ var debug = "development" !== 'production';
 
   mutations: {
     setPosts: function setPosts(state, response) {
-      alert('set posts mutation');
+      alert('Set posts mutation successfully');
       state.posts = response.data /*.data*/;
       console.log('setPosts executed in store' + response);
     },

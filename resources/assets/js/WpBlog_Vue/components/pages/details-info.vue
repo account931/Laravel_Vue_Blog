@@ -24,14 +24,26 @@
 		    <hr>
             <p class="z-overlay-fix-2"> <router-link class="nav-link" to="/New_2021"><button class="btn">Back to Blog_2021 <i class="fa fa-tag" style="font-size:14px"></i></button></router-link></p>
 		    <p> One product </p>
-		    <p>{{  this.$store.state.posts[this.currentDetailID].wpBlog_id }} {{ this.$store.state.posts[this.currentDetailID].wpBlog_title }}</p>
-            <p><img :src="`images/${this.$store.state.posts[this.currentDetailID].get_images[0].wpImStock_name}`" class="card-img-top my-img"> <p>
-		    <p>           {{ this.$store.state.posts[this.currentDetailID].wpBlog_text }} </p>
+		    <p> {{ this.$store.state.posts[this.currentDetailID].wpBlog_id }} {{ this.$store.state.posts[this.currentDetailID].wpBlog_title }}</p>
+            
+            <!-- Show the first image -->
+            <p> <img :src="`images/wpressImages/${this.$store.state.posts[this.currentDetailID].get_images[0].wpImStock_name}`"  v-if="this.$store.state.posts[this.currentDetailID].get_images.length" class="card-img-top my-img"> <p>
+		    
+            <p>           {{ this.$store.state.posts[this.currentDetailID].wpBlog_text }} </p>
             <p> Author:   {{ this.$store.state.posts[this.currentDetailID].author_name.name }} </p>
             <p> Email:    {{ this.$store.state.posts[this.currentDetailID].author_name.email }} </p>
             <p> Category: {{ this.$store.state.posts[this.currentDetailID].category_names.wpCategory_name }} </p>
 
-
+           
+            <!-- Show all article images via FOR LOOP except for first. HasMany Relation -->
+            <div class="col-md-12" v-for="(img, i) in this.$store.state.posts[this.currentDetailID].get_images" :key=i>
+                <div v-if="i > 0">
+                   <img :src="`images/wpressImages/${img.wpImStock_name}`" class="img-thumbnail" alt="">
+                </div>
+            </div>
+          
+          
+          
         </div>
 		<!-- Show one product, based on URL ID -->
 	    

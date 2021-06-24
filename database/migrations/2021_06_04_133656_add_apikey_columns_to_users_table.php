@@ -16,7 +16,7 @@ class AddApikeyColumnsToUsersTable extends Migration
     {
         //
         Schema::table('users', function($table) {
-		    $table->string('api_token')->unique(); 
+		    $table->string('api_token')->unique()->nullable(); 
         });
     }
 
