@@ -61,7 +61,7 @@
 					
 					    <!-- Common links (make link highlighted )-->
 						<li class="{{ Request::is('wpBlogVueFrameWork*') ? 'active' : '' }}"> <a href="{{ route('wpBlogVueFrameWork') }}" > WPress Vue.js + Vuex Store     </a> </li> <!-- NOTE: name vs route -->
-						<li class="{{ Request::is('wpBlogVueFrameWork*') ? 'active' : '' }}"> <a href="{{ route('wpBlogVueFrameWork') }}" > Vue AdminP(N/A)</a></li>
+						<li class="{{ Request::is('adminStart*') ? 'active' : '' }}">         <a href="{{ route('adminStart') }}" > Vue AdminPart</a></li>
                         <li class="{{ Request::is('getToken*') ? 'active' : '' }}"> <a href="{{ route('getToken') }}" > Get token</a></li>
 
    
@@ -114,7 +114,7 @@
 	<!-- To register JS file for specific view only (In layout template) (for Wpress Vue.js + Vuex Framework asset only) -->
     @if (in_array(Route::getFacadeRoot()->current()->uri(), ['wpBlogVueFrameWork'])) <!--Route::getFacadeRoot()->current()->uri()  returns testRest--> 
         <link  href="{{ asset('css/Wpress_Vue_JS/wpVue_css.css') }}" rel="stylesheet">
-		<script src="{{ asset('js/Wpress_Vue_JS/wpblog-vue-start.js') }}"></script> <!-- wpress Vue JS -->
+		<script src="{{ asset('js/Wpress_Vue_JS/wpblog-vue-start.js') }}"></script> <!-- wpress Vue JS core entry point -->
 		
 		
 		<script src="{{ asset('js/Wpress_ImagesBlog/LightBox/lightbox.js') }}"></script>       <!-- LightBox Lib JS  -->
@@ -126,6 +126,22 @@
         <script src='https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js'></script> <!--Sweet Alert JS-->        
 	@endif
 
+    
+    <!-- (for Wpress Admin Part asset only -->
+	<!-- To register JS file for specific view only (In layout template) (Wpress Admin Part asset only) -->
+    @if (in_array(Route::getFacadeRoot()->current()->uri(), ['adminStart'])) <!--Route::getFacadeRoot()->current()->uri()  returns testRest--> 
+        <link  href="{{ asset('css/WpBlog_Admin_Part/wp_admin.css') }}" rel="stylesheet">
+		<script src="{{ asset('js/WpBlog_Admin_Part/wpblog-admin-part-start.js') }}"></script> <!-- wpress Vue JS Admin Part core entry point -->
+		
+		
+		<script src="{{ asset('js/Wpress_ImagesBlog/LightBox/lightbox.js') }}"></script>       <!-- LightBox Lib JS  -->
+        <link  href="{{ asset('css/Wpress_Images/LightBox/lightbox.css') }}" rel="stylesheet"> <!-- LightBox Lib CSS -->
+        
+        <link  href="{{ asset('css/Wpress_Vue_JS/Element_UI/theme-chalk/index.css') }}" rel="stylesheet"> <!-- Elememt-UI icons (fix)  -->
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css"> <!-- Sweet Alert CSS -->
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js'></script> <!--Sweet Alert JS-->        
+	@endif
 	<!-- ALL OTHER/SOME OTHER CSS/JS SCRIPT ARE LOADED IN EVERY SPECIFIC VIEW (before {endsection}) -->
 
 </body>

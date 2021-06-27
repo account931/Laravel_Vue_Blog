@@ -164,7 +164,7 @@ class WpressImages_ImagesStock_Seeder extends Seeder {
         //$pathDestination = Storage::disk('images/wpressImages')->getDriver()->getAdapter()->applyPathPrefix(null);
         //File::copyDirectory($pathSource, $pathDestination);
         //Storage::move('/images/preloaded',  '/images/wpressImages22');
-         \File::copyDirectory('/images/preloaded',  '/images/wpressImages'); //DOES NOT WORK
+        // \File::copyDirectory('/images/preloaded',  '/images/wpressImages'); //DOES NOT WORK
         
         
         DB::table('wpressimage_imagesstock')->insert(['wpImStock_postID' => 1,  'wpImStock_name' => 'product1.png' ]);
@@ -173,10 +173,10 @@ class WpressImages_ImagesStock_Seeder extends Seeder {
         DB::table('wpressimage_imagesstock')->insert(['wpImStock_postID' => 4,  'wpImStock_name' => 'product4.png' ]);
         DB::table('wpressimage_imagesstock')->insert(['wpImStock_postID' => 5,  'wpImStock_name' => 'product5.png' ]);
         DB::table('wpressimage_imagesstock')->insert(['wpImStock_postID' => 6,  'wpImStock_name' => 'product6.png' ]);
-        DB::table('wpressimage_imagesstock')->insert(['wpImStock_postID' => 7,  'wpImStock_name' => 'product7.png' ]);
-        DB::table('wpressimage_imagesstock')->insert(['wpImStock_postID' => 8,  'wpImStock_name' => 'product8.png' ]);
-        DB::table('wpressimage_imagesstock')->insert(['wpImStock_postID' => 9,  'wpImStock_name' => 'product9.png' ]);
-        DB::table('wpressimage_imagesstock')->insert(['wpImStock_postID' => 10, 'wpImStock_name' => 'product10.png' ]);
+        DB::table('wpressimage_imagesstock')->insert(['wpImStock_postID' => 7,  'wpImStock_name' => 'product7.jpg' ]);
+        DB::table('wpressimage_imagesstock')->insert(['wpImStock_postID' => 8,  'wpImStock_name' => 'product8.jpg' ]);
+        DB::table('wpressimage_imagesstock')->insert(['wpImStock_postID' => 9,  'wpImStock_name' => 'product9.jpg' ]);
+        DB::table('wpressimage_imagesstock')->insert(['wpImStock_postID' => 10, 'wpImStock_name' => 'product10.jpg' ]);
         
         //Working Seeder, just reassing from random images to preloaded(for better UI -))))
         /*

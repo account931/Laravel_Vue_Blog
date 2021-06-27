@@ -1,7 +1,6 @@
 <?php
-//https://medium.com/js-dojo/build-a-simple-blog-with-multiple-image-upload-using-laravel-vue-5517de920796
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\WpBlog_Admin_Part;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
@@ -14,8 +13,9 @@ use App\models\wpBlogImages\Wpress_images_Category; //model for all Wpress_image
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Cookie;
+use App\Http\Controllers\Controller; //to move Controller to subfolder
 
-class WpBlog_VueContoller extends Controller
+class WpBlog_AdminContoller extends Controller
 {
     public function __construct(){
 		//$this->middleware('checkX');
@@ -25,7 +25,7 @@ class WpBlog_VueContoller extends Controller
 	
 	
 	/**
-     * Show all Blog entries (on Vue framework). 
+     * Show List of all blogs with Delete/Edit option. Uses Vue component.
      * uses middleware' => ['sendTokenMy'] in routes/api
      * @return \Illuminate\Http\Response
      */
@@ -39,25 +39,8 @@ class WpBlog_VueContoller extends Controller
         //gets current user Db table field {api_token}
 		$myDBToken = auth()->user()->api_token;
         
-        //set global var
-        /*        
-        session_start();
-        session(['myGlobalApiToken' => $myDBToken]);
-        //dd(session('myGlobalApiToken'));
-        
-        Config(['myGlobalApiToken' => $myDBToken]);
-        //dd(Config('myGlobalApiToken'));
-        */
-  
-        /*
-        Config(['myGlobalApiToken' => $myDBToken]);
-        Cache::put('myGlobalApiToken', $myDBToken, 60); 
-        session(['myGlobalApiToken' => $myDBToken]);*/
-        
-        //$data = ['admin_color' => $myDBToken]; // your input];
-        //Config::write('admin-settings', $data);
     
-        return view('wpBlog_Vue.index')->with(compact('myDBToken'));
+        return view('wpBlog_Admin_Part.index')->with(compact('myDBToken'));
     }
 	
 }

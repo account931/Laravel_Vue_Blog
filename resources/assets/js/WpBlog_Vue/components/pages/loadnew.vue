@@ -24,7 +24,7 @@
         
 	  
         <!-- Display errors if any come from Controller Request Php validator -->
-        <div v-for="book in booksGet " :key="book" class="alert alert-danger"> 
+        <div v-for="(book, i) in booksGet " :key="book" class="alert alert-danger"> 
             Error: {{ book }} 
         </div>
         
@@ -238,7 +238,7 @@ export default {
                 /*
                 if (data.errors) { 
                     alert("success" + JSON.stringify(data.errors, null, 4));
-                    this.errroList = data.errors;
+                    that.errroList = data.errors;
                 }*/
                 
                 

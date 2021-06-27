@@ -26,7 +26,7 @@ class WpBlog_Rest_API_Contoller extends Controller
 	
 	/**
      * REST API endpoint to /GET all posts
-     *
+     * Ajax Requst comes from /assets/js/store/index.js
      * @return json
      */
 	public function getAllPosts(Request $request) //http://localhost/Laravel+Yii2_comment_widget/blog_Laravel/public/post/get_all
@@ -102,7 +102,8 @@ class WpBlog_Rest_API_Contoller extends Controller
 	
 	
 	 /**
-     * REST API to /POST (create) a new blog. NOT IMPLEMENTED. REWRITE WITHOUT TRANSACTION
+     * REST API to /POST (create) a new blog. 
+     * Ajax Requst comes from \resources\assets\js\WpBlog_Vue\components\pages\loadnew.vue
      * @param SaveNewArticleRequest $request
      * @return json
      */

@@ -27,6 +27,9 @@ Route::get('/wpBlogVueFrameWork',   'WpBlog_VueContoller@index')  ->name('wpBlog
 Route::get('/getToken',       'GetTokenContoller@index')   ->name('getToken')     ->middleware('auth');  //Displays current token or button to generate
 Route::get('/generateToken',  'GetTokenContoller@generate')->name('generateToken')->middleware('auth');  //Generates token
 
+//Admin Part
+Route::get('/adminStart',     'WpBlog_Admin_Part\WpBlog_AdminContoller@index')->name('adminStart')   ->middleware('auth');  // Controller is in Subfolder "/WpBlog_Admin_Part"
+
 
 
 /*
