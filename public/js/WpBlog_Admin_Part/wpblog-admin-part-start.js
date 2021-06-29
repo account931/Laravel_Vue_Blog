@@ -78653,12 +78653,12 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_2_element_ui___default.a); //connect Vue to us
 
 
 //Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component('show-quantity-of-posts', __webpack_require__(263)); //register component dispalying qunatity
+Vue.component('show-quantity-of-posts', __webpack_require__(249)); //register component dispalying qunatity
 //Vue.component('create-post',            require('./components/CreatePost.vue')/*.default*/);
 //Vue.component('all-posts',              require('./components/AllPosts.vue')/*.default*/); //register component dispalying all posts
 
 //vue-router-menu
-Vue.component('vue-router-menu-with-link-content-display', __webpack_require__(249)); //register component dispalying vue-router-menu
+Vue.component('vue-router-menu-with-link-content-display', __webpack_require__(252)); //register component dispalying vue-router-menu
 
 
 /**
@@ -78710,7 +78710,10 @@ var appMenu = new Vue({
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_pages_contact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_pages_contact__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_pages_list_all__ = __webpack_require__(244);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_pages_list_all___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_pages_list_all__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_pages_editItem__ = __webpack_require__(266);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_pages_editItem___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_pages_editItem__);
 //https://github.com/hayanisaid/Vue-router
+
 
 
 
@@ -78736,6 +78739,13 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_
     path: '/list_all',
     name: 'List_all',
     component: __WEBPACK_IMPORTED_MODULE_4__components_pages_list_all___default.a
+  },
+
+  //Edit item Routing
+  {
+    path: '/edit-one-item/:PidMyID',
+    name: 'edit-one-item', //same as in component return section
+    component: __WEBPACK_IMPORTED_MODULE_5__components_pages_editItem___default.a //component itself
   }]
 }));
 
@@ -79178,7 +79188,7 @@ exports = module.exports = __webpack_require__(8)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -79231,7 +79241,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             title: 'List all blog entries',
-            ajaxList: [] //[{wpBlog_title:'bl', wpBlog_text:'bl-text'}, {wpBlog_title:'bl2', wpBlog_text:'bl-text2'}],
+            ajaxList: [] //[ {wpBlog_title:'bl', wpBlog_text:'bl-text', wpBlog_author:1, get_images:[{wpImStock_id:56, wpImStock_name:"product2.png"}]}, {wpBlog_title:'bl2', wpBlog_text:'bl-text2', wpBlog_author:1, get_images:[{wpImStock_id:56, wpImStock_name:"product2.png"}]} ],
         };
     },
 
@@ -79296,7 +79306,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         var text = data.data;
                         swal("Check", text, "error");
                     } else if (data.error == false) {
-                        //return commit('setPosts', data ); //sets ajax results to store via mutation
                         that.ajaxList = data.data;
                         console.log("LISTT1: " + data.data);
                         console.log("LISTTT: " + that.ajaxList[0].wpBlog_title);
@@ -79336,16 +79345,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return text.substr(0, 64) + '...';
             }
             return text;
+        },
+        deletePost: function deletePost(item) {
+            this.selectedItem = item;
+            alert('Delete ' + this.selectedItem + " Implement REST API delete function");
+        },
+
+
+        //Router
+        goToEditDetail: function goToEditDetail(prodId) {
+            var proId = prodId;
+            this.$router.push({ name: 'edit-one-item', params: { PidMyID: proId } }); //creates route like "/wpBlogVueFrameWork#/details/3"
         }
     },
 
-    mutations: {
-        setPosts: function setPosts(state, response) {
-            alert('Set ajaxList mutation successfully');
-            state.ajaxList = response.data /*.data*/;
-            console.log('setPosts executed in store' + response);
-        }
-    }
+    mutations: {}
 
 });
 
@@ -79368,7 +79382,11 @@ var render = function() {
       _vm._l(_vm.booksGet, function(postAdmin, i) {
         return _c(
           "div",
-          { key: i, staticClass: "col-sm-12 col-xs-12 oneAdminPost" },
+          {
+            key: i,
+            staticClass: "col-sm-12 col-xs-12 oneAdminPost",
+            attrs: { id: postAdmin.wpBlog_id }
+          },
           [
             _c("p", [_vm._v(_vm._s(postAdmin.wpBlog_title))]),
             _vm._v(" "),
@@ -79406,7 +79424,35 @@ var render = function() {
             _vm._v(" "),
             _c("hr"),
             _vm._v(" "),
-            _vm._m(0, true)
+            _c("p", [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-success",
+                  staticStyle: { "font-size": "19px" },
+                  on: {
+                    click: function($event) {
+                      return _vm.goToEditDetail(postAdmin.wpBlog_id)
+                    }
+                  }
+                },
+                [_vm._v("Edit   "), _c("i", { staticClass: "fa fa-pencil" })]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-danger",
+                  staticStyle: { "font-size": "19px" },
+                  on: {
+                    click: function($event) {
+                      return _vm.deletePost(postAdmin.wpBlog_id)
+                    }
+                  }
+                },
+                [_vm._v(" Delete "), _c("i", { staticClass: "fa fa-trash-o" })]
+              )
+            ])
           ]
         )
       })
@@ -79414,29 +79460,7 @@ var render = function() {
     2
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("p", [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-success",
-          staticStyle: { "font-size": "19px" }
-        },
-        [_vm._v("Edit   "), _c("i", { staticClass: "fa fa-pencil" })]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        { staticClass: "btn btn-danger", staticStyle: { "font-size": "19px" } },
-        [_vm._v(" Delete "), _c("i", { staticClass: "fa fa-trash-o" })]
-      )
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -79451,15 +79475,118 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+var normalizeComponent = __webpack_require__(4)
+/* script */
+var __vue_script__ = __webpack_require__(250)
+/* template */
+var __vue_template__ = __webpack_require__(251)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/WpBlog_Admin_Part/components/Div_with_Quantity.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-95b590d2", Component.options)
+  } else {
+    hotAPI.reload("data-v-95b590d2", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 250 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'all-posts',
+  data: function data() {
+    return {
+      //postDialogVisible: false,
+    };
+  },
+
+
+  //computed property is used to declaratively describe a value that depends on other values. When you data-bind to a computed property inside the template, Vue knows when to update the DOM when any of the values depended upon by the computed property has changed.
+  computed: {},
+  beforeMount: function beforeMount() {},
+
+  methods: {}
+});
+
+/***/ }),
+/* 251 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "col-sm-12 col-xs-12 alert alert-info borderX" },
+    [_vm._v("\n\t\tAricles found(Vue): Calc me  ")]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-95b590d2", module.exports)
+  }
+}
+
+/***/ }),
+/* 252 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(250)
+  __webpack_require__(253)
 }
 var normalizeComponent = __webpack_require__(4)
 /* script */
-var __vue_script__ = __webpack_require__(252)
+var __vue_script__ = __webpack_require__(255)
 /* template */
-var __vue_template__ = __webpack_require__(253)
+var __vue_template__ = __webpack_require__(256)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -79498,13 +79625,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 250 */
+/* 253 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(251);
+var content = __webpack_require__(254);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -79524,7 +79651,7 @@ if(false) {
 }
 
 /***/ }),
-/* 251 */
+/* 254 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(8)(false);
@@ -79538,7 +79665,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 
 /***/ }),
-/* 252 */
+/* 255 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -79590,7 +79717,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 253 */
+/* 256 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -79681,30 +79808,34 @@ if (false) {
 }
 
 /***/ }),
-/* 254 */,
-/* 255 */,
-/* 256 */,
 /* 257 */,
 /* 258 */,
 /* 259 */,
 /* 260 */,
 /* 261 */,
 /* 262 */,
-/* 263 */
+/* 263 */,
+/* 264 */,
+/* 265 */,
+/* 266 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(267)
+}
 var normalizeComponent = __webpack_require__(4)
 /* script */
-var __vue_script__ = __webpack_require__(264)
+var __vue_script__ = __webpack_require__(269)
 /* template */
-var __vue_template__ = __webpack_require__(265)
+var __vue_template__ = __webpack_require__(270)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = null
+var __vue_scopeId__ = "data-v-e60b83d2"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -79715,7 +79846,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/WpBlog_Admin_Part/components/Div_with_Quantity.vue"
+Component.options.__file = "resources/assets/js/WpBlog_Admin_Part/components/pages/editItem.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -79724,9 +79855,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-95b590d2", Component.options)
+    hotAPI.createRecord("data-v-e60b83d2", Component.options)
   } else {
-    hotAPI.reload("data-v-95b590d2", Component.options)
+    hotAPI.reload("data-v-e60b83d2", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -79737,11 +79868,144 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 264 */
+/* 267 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(268);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(9)("3423517d", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-e60b83d2\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./editItem.vue", function() {
+     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-e60b83d2\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./editItem.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 268 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(8)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 269 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(17);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -79753,23 +80017,165 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'all-posts',
-  data: function data() {
-    return {
-      //postDialogVisible: false,
-    };
-  },
+    name: 'edit-one-item',
+    data: function data() {
+        return {
+            title: 'Edit one item',
+            ajaxOneItem: [], /*[{wpBlog_title:'bl', wpBlog_text:'bl-text', wpBlog_author:1, get_images:[{wpImStock_id:56, wpImStock_name:"product2.png"}] ],*/
+            currentDetailID: 0, //Id of edited blog
+            tokenXX: '', //csrf token
+            imageList: [],
+            isCreatingPost: false, //flag
+            dialogVisible: false, //flag
+            dialogImageUrl: '', //contains images to display as loaded
+            status_msg: '',
+            status: '',
+            errroList: ['v', 'b'], //list of errors of php validator
+            inputTitleValue: "", //contains loaded edited item's title (from DB)
+            inputBodyValue: "", //edited item's body (from DB)
+            inputImagesValueX: [] //edited item's images (from DB)
+        };
+    },
 
 
-  //computed property is used to declaratively describe a value that depends on other values. When you data-bind to a computed property inside the template, Vue knows when to update the DOM when any of the values depended upon by the computed property has changed.
-  computed: {},
-  beforeMount: function beforeMount() {},
+    computed: {
+        booksGet: function booksGet() {
+            //make reactive ajax response 
+            return this.ajaxOneItem;
+        },
+        imggGet: function imggGet() {
+            //make reactive ajax response 
+            return this.inputImagesValueX;
+        }
+    },
 
-  methods: {}
+    beforeMount: function beforeMount() {
+        //getting route ID => e.g "wpBlogVueFrameWork#/details/2", gets 2. {Pid} is set in 'pages/home' in => this.$router.push({name:'details',params:{Pid:proId}})
+        var ID = this.$route.params.PidMyID; //gets 2
+        this.currentDetailID = ID; // 
+        alert(this.currentDetailID);
+
+        //get the csrf token
+        var token = document.head.querySelector('meta[name="csrf-token"]'); //gets meta tag with csrf
+        this.tokenXX = token.content; //gets csrf token and sets it to data.tokenXX
+
+
+        //run ajax to get One item
+        this.runAjaxToGetOneItem(this.currentDetailID);
+    },
+
+
+    methods: {
+
+        //INJECTED
+        updateImageList: function updateImageList(file) {
+            this.imageList.push(file.raw);
+            //console.log(this.imageList);
+        },
+        handlePictureCardPreview: function handlePictureCardPreview(file) {
+            this.dialogImageUrl = file.url;
+            this.imageList.push(file);
+            this.dialogVisible = true;
+        },
+
+        //END INJECTED
+
+        runAjaxToGetOneItem: function runAjaxToGetOneItem(idZ) {
+
+            var that = this;
+            alert('start one');
+            $('.loader-x').fadeIn(800); //show loader
+
+            //Add Bearer token to headers
+            $.ajaxSetup({
+                headers: {
+                    'Authorization': 'Bearer ' + this.$store.state.api_tokenY
+                }
+            });
+
+            $.ajax({
+                url: 'api/post/admin_get_one_blog/' + idZ,
+                type: 'GET', //
+
+                cache: false,
+                dataType: 'json',
+                processData: false,
+                contentType: false,
+                //contentType:"application/json; charset=utf-8",						  
+                //contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+                //contentType: 'multipart/form-data',
+
+
+                //passing the data
+                //data: {  _token: this.tokenXX, }, //csrf token, though here is not required
+
+                success: function success(data) {
+                    alert("success");
+                    alert("success" + JSON.stringify(data, null, 4));
+
+                    if (data.error == true) {
+                        //if Rest endpoint returns any predefined error
+                        var text = data.data;
+                        swal("Check", text, "error");
+                    } else if (data.error == false) {
+                        //return commit('setPosts', data ); //sets ajax results to store via mutation
+                        that.ajaxOneItem = data.data;
+                        that.inputTitleValue = data.data[0].wpBlog_title; //gets blog title
+                        that.inputBodyValue = data.data[0].wpBlog_text; //gets blog text
+
+                        //adding images loaded from DB
+                        $.each(data.data[0].get_images, function (key, imageV) {
+                            that.dialogImageUrl = "images/wpressImages/" + imageV.wpImStock_name;
+                            var b = /*"images/wpressImages/" +*/imageV.wpImStock_name;
+                            that.inputImagesValueX.push(b);
+                        });
+                        //that.dialogVisible = true;
+                        console.log(that.dialogImageUrl);
+                        console.log("imVal " + that.inputImagesValueX);
+
+                        console.log("LISTT1: " + data.data);
+                        var tempoArray = [];
+                        swal("Good", "Bearer Token is OK", "success");
+                        swal("Good", data.data, "success");
+                    }
+                    $('.loader-x').fadeOut(800); //show loader
+                }, //end success
+
+                error: function error(errorZ) {
+                    alert("Crashed");
+                    alert("error" + JSON.stringify(errorZ, null, 4));
+                    console.log(errorZ.responseText);
+                    console.log(errorZ);
+
+                    /*
+                    if (errorZ.status == 422) {
+                        swal("Error", "Validation crashed", "error");  
+                    }*/
+
+                    if (errorZ.responseJSON != null) {
+                        if (errorZ.responseJSON.error == true || errorZ.responseJSON.error == "Unauthenticated.") {
+                            //if Rest endpoint returns any predefined error
+                            swal("Error: Unauthenticated", "Check Bearer Token", "error");
+                        }
+                    }
+                    swal("Error", "Something crashed", "error");
+                    $('.loader-x').fadeOut(800); //hide loader
+                }
+            });
+            //END AJAXed  part
+        },
+
+
+        //ajax to update one post
+        editOnePost: function editOnePost() {}
+    },
+
+    mutations: {}
+
 });
 
 /***/ }),
-/* 265 */
+/* 270 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -79778,8 +80184,217 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "col-sm-12 col-xs-12 alert alert-info borderX" },
-    [_vm._v("\n\t\tAricles found(Vue): Calc me  ")]
+    { staticClass: "services" },
+    [
+      _c("h1", [
+        _vm._v(_vm._s(_vm.title) + " number "),
+        _c("b", [_vm._v(" " + _vm._s(this.currentDetailID))])
+      ]),
+      _vm._v(" "),
+      _c(
+        "p",
+        { staticClass: "z-overlay-fix-2" },
+        [
+          _c(
+            "router-link",
+            { staticClass: "nav-link", attrs: { to: "/list_all" } },
+            [
+              _c("button", { staticClass: "btn" }, [
+                _vm._v("Back to List all "),
+                _c("i", {
+                  staticClass: "fa fa-tag",
+                  staticStyle: { "font-size": "14px" }
+                })
+              ])
+            ]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("p", [
+        _vm._v(" You are editing "),
+        _c("i", [
+          _vm._v(
+            " " +
+              _vm._s(this.inputTitleValue) +
+              " " +
+              _vm._s(/*booksGet[0].wpBlog_title*/) +
+              " "
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _vm._l(_vm.imggGet, function(imageXX, i) {
+        return _c("div", { key: i, staticClass: "alert alert-danger" }, [
+          _vm.imggGet.length
+            ? _c("img", {
+                staticClass: "card-img-top my-adm-img",
+                attrs: { src: "images/wpressImages/" + imageXX }
+              })
+            : _vm._e()
+        ])
+      }),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "card-body" },
+        [
+          _vm.status_msg
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert",
+                  class: {
+                    "alert-success": _vm.status,
+                    "alert-danger": !_vm.status
+                  },
+                  attrs: { role: "alert" }
+                },
+                [
+                  _vm._v(
+                    "\n            " +
+                      _vm._s(_vm.status_msg) +
+                      "\n\t\t\n        "
+                  )
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm._l(_vm.booksGet, function(book, i) {
+            return _c("div", { key: i, staticClass: "alert alert-danger" }, [
+              _vm._v(" \n            Error: " + _vm._s(book) + " \n        ")
+            ])
+          }),
+          _vm._v(" "),
+          _c("form", { attrs: { id: "myFormZZ" } }, [
+            _c("input", {
+              attrs: { type: "hidden", name: "_token" },
+              domProps: { value: _vm.tokenXX }
+            }),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "exampleFormControlInput1" } }, [
+                _vm._v("Title")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.inputTitleValue,
+                    expression: "inputTitleValue"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  id: "title",
+                  type: "text",
+                  placeholder: "Post Title",
+                  required: ""
+                },
+                domProps: { value: _vm.inputTitleValue },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.inputTitleValue = $event.target.value
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "exampleFormControlTextarea1" } }, [
+                _vm._v("Post Content")
+              ]),
+              _vm._v(" "),
+              _c("textarea", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.inputBodyValue,
+                    expression: "inputBodyValue"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { id: "post-content", rows: "3", required: "" },
+                domProps: { value: _vm.inputBodyValue },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.inputBodyValue = $event.target.value
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {},
+              [
+                _c(
+                  "el-upload",
+                  {
+                    attrs: {
+                      action: "https://jsonplaceholder.typicode.com/posts/",
+                      "list-type": "picture-card",
+                      "on-preview": _vm.handlePictureCardPreview,
+                      "on-change": _vm.updateImageList,
+                      "auto-upload": false
+                    }
+                  },
+                  [_c("i", { staticClass: "el-icon-plus" })]
+                ),
+                _vm._v(" "),
+                _c(
+                  "el-dialog",
+                  {
+                    attrs: { visible: _vm.dialogVisible },
+                    on: {
+                      "update:visible": function($event) {
+                        _vm.dialogVisible = $event
+                      }
+                    }
+                  },
+                  [
+                    _c("img", {
+                      attrs: { width: "100%", src: _vm.dialogImageUrl, alt: "" }
+                    })
+                  ]
+                )
+              ],
+              1
+            )
+          ])
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-footer" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-success",
+            attrs: { type: "button" },
+            on: { click: _vm.editOnePost }
+          },
+          [
+            _vm._v(
+              "\n        " +
+                _vm._s(_vm.isCreatingPost ? "Updating..." : "Edit Post") +
+                "\n      "
+            )
+          ]
+        )
+      ])
+    ],
+    2
   )
 }
 var staticRenderFns = []
@@ -79788,7 +80403,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-95b590d2", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-e60b83d2", module.exports)
   }
 }
 

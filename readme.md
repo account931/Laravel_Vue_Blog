@@ -48,6 +48,10 @@
 
 ![Screenshot](public/images/Screenshots/8.png)
 
+## Admin Part
+
+![Screenshot](public/images/Screenshots/10.png)
+
 [Watch video presentation on Youtube](  )
  
  

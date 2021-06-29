@@ -80829,11 +80829,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
   data: function data() {
     return {
       dialogImageUrl: '',
-      dialogVisible: false,
-      imageList: [],
+      dialogVisible: false, //flag
+      imageList: [], //stores uploaded images
       status_msg: '',
       status: '',
-      isCreatingPost: false,
+      isCreatingPost: false, //flag
       title: '',
       body: '',
       componentKey: 0,
@@ -81922,6 +81922,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(17);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+//
 //
 //
 //

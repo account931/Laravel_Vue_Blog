@@ -39,8 +39,7 @@ class WpBlog_AdminContoller extends Controller
         //gets current user Db table field {api_token}
 		$myDBToken = auth()->user()->api_token;
         
-    
         return view('wpBlog_Admin_Part.index')->with(compact('myDBToken'));
     }
-	
+        
 }

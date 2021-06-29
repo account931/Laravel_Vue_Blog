@@ -25,19 +25,28 @@ class WpBlog_Admin_Rest_API_Contoller extends Controller
 	
 	/**
      * Admin REST API endpoint to /GET all posts
-     * Ajax Requst comes from ........../list_all.vue
+     * Ajax Requst comes from ........../resources/assets/js/WpBlog_Admin_Part/components/pages/list_all.vue
      * @return json
      */
 	public function getAllAdminPosts(Request $request) //http://localhost/Laravel+Yii2_comment_widget/blog_Laravel/public/post/get_all
     {   
-               
         $posts = Wpress_images_Posts::with('getImages', 'authorName', 'categoryNames')->orderBy('wpBlog_created_at', 'desc')->get(); //->with('getImages', 'authorName', 'categoryNames') => hasMany/belongTo Eager Loading
         return response()->json(['error' => false, 'data' => $posts]);
     }
 	
 	
+
 	
-	
+	/**
+     * Admin REST API endpoint to /GET get one blog/item by ID.
+     * Ajax Requst comes from ........../resources/assets/js/WpBlog_Admin_Part/components/pages/editItem.vue
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllAdminOneItem($idX)
+    {    
+        $posts = Wpress_images_Posts::with('getImages', 'authorName', 'categoryNames')->where('wpBlog_id', $idX)->orderBy('wpBlog_created_at', 'desc')->get(); //->with('getImages', 'authorName', 'categoryNames') => hasMany/belongTo Eager Loading
+        return response()->json(['error' => false, 'data' => $posts]);
+    }
 	
 	
 	

@@ -116,11 +116,11 @@ export default {
   data () {
     return {
       dialogImageUrl: '',
-      dialogVisible: false,
-      imageList: [],
+      dialogVisible: false, //flag
+      imageList: [],        //stores uploaded images
       status_msg: '',
       status: '',
-      isCreatingPost: false,
+      isCreatingPost: false,//flag
       title: '',
       body: '',
       componentKey: 0,

@@ -7,7 +7,7 @@
 		</p>
         
         <!-- V loop over ajax success data -->
-        <div v-for="(postAdmin, i) in booksGet" :key=i class="col-sm-12 col-xs-12 oneAdminPost"> 
+        <div v-for="(postAdmin, i) in booksGet" :key=i class="col-sm-12 col-xs-12 oneAdminPost" :id="postAdmin.wpBlog_id"> 
             <p>{{postAdmin.wpBlog_title}}</p>
             <p>{{ truncateText(postAdmin.wpBlog_text) }}</p>
             
@@ -23,8 +23,8 @@
             <!-- Edit/Delet Buttons --> 
             <hr>            
             <p>  
-                <button style="font-size:19px" class="btn btn-success">Edit   <i class="fa fa-pencil"></i></button>
-                <button style="font-size:19px" class="btn btn-danger"> Delete <i class="fa fa-trash-o"></i></button>
+                <button style="font-size:19px" class="btn btn-success" @click="goToEditDetail(postAdmin.wpBlog_id)">Edit   <i class="fa fa-pencil"></i></button>
+                <button style="font-size:19px" class="btn btn-danger"  @click="deletePost(postAdmin.wpBlog_id)"> Delete <i class="fa fa-trash-o"></i></button>
             </p>
         </div>
         <!-- End V loop over ajax success data -->
@@ -39,7 +39,7 @@
 		data (){
 			return{
 				title:'List all blog entries',
-                ajaxList: [], //[{wpBlog_title:'bl', wpBlog_text:'bl-text'}, {wpBlog_title:'bl2', wpBlog_text:'bl-text2'}],
+                ajaxList: [], //[ {wpBlog_title:'bl', wpBlog_text:'bl-text', wpBlog_author:1, get_images:[{wpImStock_id:56, wpImStock_name:"product2.png"}]}, {wpBlog_title:'bl2', wpBlog_text:'bl-text2', wpBlog_author:1, get_images:[{wpImStock_id:56, wpImStock_name:"product2.png"}]} ],
 			}
 		},
         
@@ -107,7 +107,6 @@
               
                   
                 } else if(data.error == false){
-                    //return commit('setPosts', data ); //sets ajax results to store via mutation
                     that.ajaxList = data.data; 
                     console.log("LISTT1: " + data.data);
                     console.log("LISTTT: " + that.ajaxList[0].wpBlog_title);
@@ -151,16 +150,21 @@
                 }
                 return text;
             },
+            
+            deletePost(item){
+                this.selectedItem = item;
+                alert('Delete ' + this.selectedItem + " Implement REST API delete function");
+            },
+            
+            //Router
+            goToEditDetail(prodId) {
+                let proId = prodId;
+                this.$router.push({name:'edit-one-item',params:{PidMyID:proId}}) //creates route like "/wpBlogVueFrameWork#/details/3"
+            }, 
         },
         
         
-        mutations: {
-            setPosts(state, response) {  alert('Set ajaxList mutation successfully');
-                state.ajaxList = response.data/*.data*/;
-	            console.log('setPosts executed in store' + response);
-        
-           } ,
-        },
+        mutations: {},
         
 	}
 </script>
