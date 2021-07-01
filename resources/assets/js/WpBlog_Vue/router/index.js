@@ -13,13 +13,15 @@ import loadNew1 from  '../components/pages/loadnew';
 
 Vue.use(Router);
 
-export default new Router({
+export default new Router({ 
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: home
+      name: 'new_2021', //same as in component return section
+      component: blog_2021,  //component itself
+      props: { tokenZZ: 'i am set in router/index.js' },
     },
+    
     {
       path: '/home',
       name: 'home',
@@ -64,7 +66,9 @@ export default new Router({
     {
       path: '/loadNew', 
       name: 'load-New', //same as in component return section
-      component: loadNew1 //component itself
+      component: loadNew1, //component itself
+      props: true,
+      //props: { categorrr: this.categoriesxx },
     },
 	
   ]

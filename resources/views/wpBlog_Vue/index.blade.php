@@ -66,20 +66,21 @@
 			<!----------- Vue.js Components + VUEX Store + VUE ROUTER ------------>	 
 			<div class="col-sm-12 col-xs-12" >
 
-					
-					<!-- Vue route menu -->
-					<div  id="vue-menu" class="col-sm-12 col-xs-12"> <!--  id="vue-menu" --> 
-					    <h3><b>Menu with Vue-Router</b></h3>
-                        <!-- My Vue component with Menu Links -->
-					    <vue-router-menu-with-link-content-display v-bind:current-user='{!! Auth::user()->toJson() !!}'> 
-                        </vue-router-menu-with-link-content-display/>
-                    </div>
-					
 					<!-- Show blogs quantity component -->
 					<div id="quant" class="col-sm-12 col-xs-12">
 					    <h3><b>Blog articles on Vue<b></h3>
 					    <show-quantity-of-posts/> <!-- Vue component -->
                     </div>
+                    
+                    
+					<!-- Vue route menu -->
+					<div  id="vue-menu" class="col-sm-12 col-xs-12"> <!--  id="vue-menu" --> 
+					    <h3><b>Menu with Vue-Router</b></h3>                      
+                        <!-- My Vue component with Menu Links -->
+					    <vue-router-menu-with-link-content-display v-bind:current-user='{!! Auth::user()->toJson() !!}' > 
+                        </vue-router-menu-with-link-content-display/>
+                    </div>
+					
 					
 					<!-- Form component -->
                     <div id="createPost" class="col-md-6">

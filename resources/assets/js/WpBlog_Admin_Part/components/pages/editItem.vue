@@ -6,12 +6,13 @@
 
         
         <!-- V loop over ajax success data -->
-        <p> You are editing <i> {{this.inputTitleValue}} {{ /*booksGet[0].wpBlog_title*/ }} </i></p>
+        <p> You are editing item with title:  <i class="text-danger"><b> {{this.inputTitleValue}}  </b></i></p>
         <!-- End V loop over ajax success data -->
         
         
         <!-- Display Loaded images -->
-        <div v-for="(imageXX, i) in imggGet " :key="i" class="alert alert-danger"> 
+        <div v-for="(imageXX, i) in imggGet " :key="i" class="alert alert-success"> 
+            <div class="col-sm-12 col-xs-12"  v-if="i  == 0"> <p> Item's images </p></div>
             <img v-if="imggGet.length" class="card-img-top my-adm-img" :src="`images/wpressImages/${imageXX}`" />
         </div>
         
@@ -31,9 +32,8 @@
         </div>
         
 	  
-        <!-- Display errors if any come from Controller Request Php validator -->
-        
-        <div v-for="(book, i) in booksGet " :key="i" class="alert alert-danger"> 
+        <!-- Display errors if any come from Controller Request Php validator -->   
+        <div v-for="(book, i) in ValidorErrorGet " :key="i" class="alert alert-danger"> 
             Error: {{ book }} 
         </div>
         
@@ -108,13 +108,13 @@
                 ajaxOneItem: [], /*[{wpBlog_title:'bl', wpBlog_text:'bl-text', wpBlog_author:1, get_images:[{wpImStock_id:56, wpImStock_name:"product2.png"}] ],*/
 			    currentDetailID: 0, //Id of edited blog
                 tokenXX:'', //csrf token
-                imageList: [],
+                imageList: [], //store form uploaded images
                 isCreatingPost: false, //flag
                 dialogVisible: false, //flag
                 dialogImageUrl: '',   //contains images to display as loaded
                 status_msg: '',
                 status: '',
-                errroList: ['v', 'b'], //list of errors of php validator
+                errroList: ['validation error 1'], //list of errors of php validator
                 inputTitleValue: "",  //contains loaded edited item's title (from DB)
                 inputBodyValue: "",   //edited item's body (from DB)
                 inputImagesValueX: [],   //edited item's images (from DB)
@@ -123,11 +123,16 @@
         
         
         computed: {
-       
+            
+            ValidorErrorGet() { //make reactive ajax response 
+                return this.errroList;
+            },
+            
+            //Not used???
             booksGet() { //make reactive ajax response 
                 return this.ajaxOneItem;
             },
-            
+            //images already loaded to DB
             imggGet() { //make reactive ajax response 
                 return this.inputImagesValueX;
             }
@@ -157,18 +162,19 @@
             //INJECTED
             updateImageList (file) {
                 this.imageList.push(file.raw);
-                //console.log(this.imageList);
+                console.log(this.imageList);
             },
 	
             handlePictureCardPreview (file) {
-                 this.dialogImageUrl = file.url
-                 this.imageList.push(file)
-                 this.dialogVisible = true
+                alert('preview');
+                this.dialogImageUrl = file.url;
+                this.imageList.push(file);
+                this.dialogVisible = true;
             },
             //END INJECTED
             
-            runAjaxToGetOneItem(idZ) {
-                
+            //ajax to get 1 item data (to use in edit form)
+            runAjaxToGetOneItem(idZ) {     
                 var that = this;
                 alert('start one');
                 $('.loader-x').fadeIn(800); //show loader

@@ -10,6 +10,8 @@
             <h3 style="float:left;">Create New Post {{this.isCreatingPost }}</h3>
         </div>
         
+    
+        
     </div>
     
     <div class="card-body">
@@ -22,9 +24,10 @@
 		
         </div>
         
-	  
+        
+        
         <!-- Display errors if any come from Controller Request Php validator -->
-        <div v-for="(book, i) in booksGet " :key="book" class="alert alert-danger"> 
+        <div v-for="(book, i) in booksGet " :key="i" class="alert alert-danger"> 
             Error: {{ book }} 
         </div>
         
@@ -35,29 +38,42 @@
 	    <input type="hidden" name="_token" :value="tokenXX" /> <!-- csfr token -->
 		<!--<input type="hidden" name="_token" value="4gyBcsEYlPibNHfhi1r55rRQAZkBWepxCmVLlqAW" />-->
 		
-		
+		<!-- Post Title -->
         <div class="form-group">
           <label for="exampleFormControlInput1">Title</label>
-          <input
-            id="title"
-            v-model="title"
-            type="text"
-            class="form-control"
-            placeholder="Post Title"
-            required
-          >
+          <input id="title" v-model="title"
+            type="text" class="form-control" placeholder="Post Title" required>
         </div>
         
+        <!-- Post Body -->
         <div class="form-group">
           <label for="exampleFormControlTextarea1">Post Content</label>
           <textarea id="post-content" v-model="body" class="form-control" rows="3" required />
         </div>
         
+        
+        <!-- Select category -->
+        <div class="form-group">
+            <label for="exampleFormControlTextarea1">Category</label>
+        
+            <select name="category_sel" class="mdb-select md-form" v-model="selectV">
+				<option  disabled="disabled"  selected="selected">Choose category</option>
+                >!-- Loop -->
+				<option v-for="(book, i) in this.categoriesList " :key="i" :value="book.wpCategory_id"  > {{ book.wpCategory_name}} </option>
+		    </select>
+		</div>					
+        
+
+
+        
+                                
         <div class>
           <el-upload
             action="https://jsonplaceholder.typicode.com/posts/"
             list-type="picture-card"
             :on-preview="handlePictureCardPreview"
+            :on-remove="handleRemove"
+            :before-remove="beforeRemove"
             :on-change="updateImageList"
             :auto-upload="false"
           >
@@ -113,6 +129,7 @@ import { mapActions } from 'vuex';
 import { mapState } from 'vuex';
 export default {
   name: 'CreatePost',
+  //props: ['categorrrv'], //passed in view 
   data () {
     return {
       dialogImageUrl: '',
@@ -123,9 +140,11 @@ export default {
       isCreatingPost: false,//flag
       title: '',
       body: '',
+      selectV: '',
       componentKey: 0,
 	  tokenXX:'',
       errroList: ['v', 'b'], //list of errors of php validator
+      categoriesList: [],
     }
   },
   computed: {
@@ -139,20 +158,48 @@ export default {
       let token = document.head.querySelector('meta[name="csrf-token"]'); //gets meta tag with csrf
       //alert(token.content);
 	  this.tokenXX = token.content; //gets csrf token and sets it to data.tokenXX
+      
+      this.getAjaxCategories(); //get /GET all DB table categories (to build <select> in loadnew.vue)
+      
   },
+  created(){
+  },
+  
   methods: {
     ...mapActions(['getAllPosts']),
+    
+    //on adding new image to form, do update array {this.imageList} (used to store all form uploaded images & appended to form)
     updateImageList (file) {
         this.imageList.push(file.raw);
-        //console.log(this.imageList);
+        console.log(this.imageList);
     },
 	
+    //if u click "Preview" icon in Element-UI image Layout
     handlePictureCardPreview (file) {
-      this.dialogImageUrl = file.url
-      this.imageList.push(file)
-      this.dialogVisible = true
+      this.dialogImageUrl = file.url;
+      //this.imageList.push(file); //THIS WAS INCORRECT????
+      this.dialogVisible = true;//show pop-up with image
+    },
+    
+    //if u click "Delete" icon in Element-UI image Layout
+    handleRemove(file){
+        alert("Delete " + file.uid); //https://www.programmersought.com/article/73755547037/
+        
+            for(var i = 0; i < this.imageList.length; i++){
+                if(file.uid == this.imageList[i].uid){
+                    this.imageList.splice(i, 1);
+                }
+            }
+        
+        console.log(this.imageList);
+    },
+    
+    beforeRemove(file){
+        //some stuff
+        
     },
 	
+    //when user clicks Form submitting (create new post)
     createPost (e) {
       e.preventDefault();
       if (!this.validateForm()) {
@@ -167,6 +214,8 @@ export default {
       /*const*/ var formData = new FormData(); //new FormData(document.getElementById("myFormZZ"));
       formData.append('title', this.title);
       formData.append('body',  this.body);
+      formData.append('selectV', this.selectV);
+      
       
       var imagesUploaded = {};
       $.each(this.imageList, function (key, imageV) {
@@ -181,7 +230,7 @@ export default {
 	  console.log(formData);
        
 	   
-	  //SENDING AJAX 
+	  //SENDING AJAX to create new post item
       /* api
         .post('/post/create_post', formData, {
           headers: { 'Content-Type': 'multipart/form-data' }
@@ -223,7 +272,8 @@ export default {
          
             
             data: formData, //dataX//JSON.stringify(dataX)  ('#createNew').serialize()
-		    /*{   
+		    //Not used below
+            /*{   
                 _token: this.tokenXX, //csrf token	
                 title:    this.title,	
                 body:     this.body,
@@ -319,7 +369,38 @@ export default {
         })
     },
 	
-	
+    //GET all DB table categories (to build <select> in loadnew.vue)
+	getAjaxCategories(){
+    
+        fetch('api/post/get_categories', { /*http://localhost/Laravel+Yii2_comment_widget/blog_Laravel/public/post/get_categories*/
+            method: 'get',
+            //pass Bearer token in headers ()
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.$store.state.api_tokenY },
+            //contentType: 'application/json',
+
+   
+        }).then(response => {
+              $('.loader-x').fadeOut(800);  //hide loader
+              return response.json();
+        }).then(dataZ => {
+            console.log("Categories => " + dataZ); 
+            if(dataZ.error == true|| dataZ.error == "Unauthenticated."){ //if Rest endpoint returns any predefined error
+                alert(dataZ.data);
+                swal("Unauthenticated", "Check Bearer Token", "error");
+                  
+            } else if(dataZ.error == false){
+                swal("Done", "Categories are loaded.", "success");
+                this.categoriesList = dataZ.data;
+                console.log("Categ " + this.categoriesList[0].wpCategory_name);
+            }
+        })
+	    .catch(/*err => */ function(err){
+            alert("Getting categories failed. Check if u're logged =>  " + err);
+            swal("Crashed", "You are in catch", "error");
+        }); // catch any error
+      
+    },
+    
 	
 	
     validateForm () {
@@ -334,6 +415,14 @@ export default {
         this.showNotification('Post body cannot be empty')
         return false
       }
+      
+      /*
+       if (!this.selectV) {
+        this.status = false;
+        this.showNotification('Select cannot be empty');
+        return false;
+      }*/
+      
       this.showNotification(''); //clears error messages if any
       return true
     },

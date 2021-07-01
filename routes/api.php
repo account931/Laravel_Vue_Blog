@@ -22,9 +22,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //middleware' => ['sendTokenMy', 'checkX', 'auth:api'] // middleware' => 'auth', 'auth:api' //By default auth:api middleware requires each user to have a field in the database called api_token,
 Route::group(['middleware' => ['auth:api'/*, 'sendTokenMyX'*/, 'myJsonForce'],  'prefix' => 'post'], function () { //url must contain /post/, i.e /post/get_all
     
-    Route::get ('get_all',         'WpBlog_Rest_API_Contoller@getAllPosts')->name('fetch_all');       //REST API to /GET all posts
-    Route::post('create_post_vue', 'WpBlog_Rest_API_Contoller@createPost') ->name('create_post_vue'); //REST API to /POST (create) a new blog
+    Route::get ('get_all',         'WpBlog_Rest_API_Contoller@getAllPosts')     ->name('fetch_all');       //REST API to /GET all posts
+    Route::post('create_post_vue', 'WpBlog_Rest_API_Contoller@createPost')      ->name('create_post_vue'); //REST API to /POST (create) a new blog
+    Route::get ('get_categories',  'WpBlog_Rest_API_Contoller@getAllCategories')->name('get_categories');  //REST API to /GET all DB table categories (to build <select> in loadnew.vue)
 
+    
+    
     //Admin Part routes
     Route::get ('admin_get_all_blog', 'WpBlog_Admin_Part\WpBlog_Admin_Rest_API_Contoller@getAllAdminPosts')->name('admin_get_all_blog');  //REST API to /GET all posts for Admin Part. Controller is in Subfolder "/WpBlog_Admin_Part"
     Route::get ('admin_get_one_blog/{id}', 'WpBlog_Admin_Part\WpBlog_Admin_Rest_API_Contoller@getAllAdminOneItem')->name('admin_get_one_blog');  //REST API to /GET One post/item (by ID) for Admin Part. Controller is in Subfolder "/WpBlog_Admin_Part"

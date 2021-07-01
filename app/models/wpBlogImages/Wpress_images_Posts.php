@@ -139,7 +139,7 @@ class Wpress_images_Posts extends Model
 		$this->wpBlog_author     = $userZ; //auth()->user()->id;
         $this->wpBlog_text       = $data[0]; //$data['description'];
         $this->wpBlog_title      = $data[1]; //$data['title'];
-		$this->wpBlog_category   = 1; //$data['category_sel'];
+		$this->wpBlog_category   = $data[2];
 		$this->wpBlog_created_at = date('Y-m-d H:i:s');
 		$this->save();
 		$idX = $this->id;

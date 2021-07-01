@@ -5,6 +5,9 @@
     <div id="appDemo">
         
         <p> Current token(passed from view) {{this.currentUser.api_token}} </p> <!-- //passed from php in view as <vue-router-menu-with-link-content-display v-bind:current-user='{!! Auth::user()->toJson() !!}'>  -->
+           
+       
+        
         <!-- navbar menu -->
         <div class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
 	  
@@ -34,7 +37,8 @@
                                 <router-link class="nav-link" to="/New_2021">Blog_2021</router-link>
                             </li>
                              <li class="nav-item">
-                                <router-link class="nav-link" to="/loadNew">Load new</router-link>
+                                <router-link class="nav-link" to="/loadNew">Load new- </router-link>
+                                <!--<router-link class="nav-link" :to="{name: 'load-New', params: { categorrrv: "IICCC" }  }"> Load new </router-link>-->
                             </li>
                     </ul>
                 </div> <!-- end  id="navbarResponsive" -->
@@ -43,7 +47,7 @@
         </div>
 	    <!-- End navbar menu -->
 	  
-
+    
 
 
 
@@ -120,7 +124,7 @@
 <script>
     export default {
         name: 'App',
-        props: ['currentUser'],
+        props: ['currentUser', 'categoriesxx'],
         
         
         

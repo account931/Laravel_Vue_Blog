@@ -308,6 +308,115 @@ if (false) {
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports) {
+
+/* globals __VUE_SSR_CONTEXT__ */
+
+// IMPORTANT: Do NOT use ES2015 features in this file.
+// This module is a runtime utility for cleaner component module output and will
+// be included in the final webpack user bundle.
+
+module.exports = function normalizeComponent (
+  rawScriptExports,
+  compiledTemplate,
+  functionalTemplate,
+  injectStyles,
+  scopeId,
+  moduleIdentifier /* server only */
+) {
+  var esModule
+  var scriptExports = rawScriptExports = rawScriptExports || {}
+
+  // ES6 modules interop
+  var type = typeof rawScriptExports.default
+  if (type === 'object' || type === 'function') {
+    esModule = rawScriptExports
+    scriptExports = rawScriptExports.default
+  }
+
+  // Vue.extend constructor export interop
+  var options = typeof scriptExports === 'function'
+    ? scriptExports.options
+    : scriptExports
+
+  // render functions
+  if (compiledTemplate) {
+    options.render = compiledTemplate.render
+    options.staticRenderFns = compiledTemplate.staticRenderFns
+    options._compiled = true
+  }
+
+  // functional template
+  if (functionalTemplate) {
+    options.functional = true
+  }
+
+  // scopedId
+  if (scopeId) {
+    options._scopeId = scopeId
+  }
+
+  var hook
+  if (moduleIdentifier) { // server build
+    hook = function (context) {
+      // 2.3 injection
+      context =
+        context || // cached call
+        (this.$vnode && this.$vnode.ssrContext) || // stateful
+        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
+      // 2.2 with runInNewContext: true
+      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+        context = __VUE_SSR_CONTEXT__
+      }
+      // inject component styles
+      if (injectStyles) {
+        injectStyles.call(this, context)
+      }
+      // register component module identifier for async chunk inferrence
+      if (context && context._registeredComponents) {
+        context._registeredComponents.add(moduleIdentifier)
+      }
+    }
+    // used by ssr in case component is cached and beforeCreate
+    // never gets called
+    options._ssrRegister = hook
+  } else if (injectStyles) {
+    hook = injectStyles
+  }
+
+  if (hook) {
+    var functional = options.functional
+    var existing = functional
+      ? options.render
+      : options.beforeCreate
+
+    if (!functional) {
+      // inject component registration as beforeCreate hook
+      options.beforeCreate = existing
+        ? [].concat(existing, hook)
+        : [hook]
+    } else {
+      // for template-only hot-reload because in that case the render fn doesn't
+      // go through the normalizer
+      options._injectStyles = hook
+      // register for functioal component in vue file
+      options.render = function renderWithStyleInjection (h, context) {
+        hook.call(context)
+        return existing(h, context)
+      }
+    }
+  }
+
+  return {
+    esModule: esModule,
+    exports: scriptExports,
+    options: options
+  }
+}
+
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -581,115 +690,6 @@ function objToArray(obj) {
 }
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports) {
-
-/* globals __VUE_SSR_CONTEXT__ */
-
-// IMPORTANT: Do NOT use ES2015 features in this file.
-// This module is a runtime utility for cleaner component module output and will
-// be included in the final webpack user bundle.
-
-module.exports = function normalizeComponent (
-  rawScriptExports,
-  compiledTemplate,
-  functionalTemplate,
-  injectStyles,
-  scopeId,
-  moduleIdentifier /* server only */
-) {
-  var esModule
-  var scriptExports = rawScriptExports = rawScriptExports || {}
-
-  // ES6 modules interop
-  var type = typeof rawScriptExports.default
-  if (type === 'object' || type === 'function') {
-    esModule = rawScriptExports
-    scriptExports = rawScriptExports.default
-  }
-
-  // Vue.extend constructor export interop
-  var options = typeof scriptExports === 'function'
-    ? scriptExports.options
-    : scriptExports
-
-  // render functions
-  if (compiledTemplate) {
-    options.render = compiledTemplate.render
-    options.staticRenderFns = compiledTemplate.staticRenderFns
-    options._compiled = true
-  }
-
-  // functional template
-  if (functionalTemplate) {
-    options.functional = true
-  }
-
-  // scopedId
-  if (scopeId) {
-    options._scopeId = scopeId
-  }
-
-  var hook
-  if (moduleIdentifier) { // server build
-    hook = function (context) {
-      // 2.3 injection
-      context =
-        context || // cached call
-        (this.$vnode && this.$vnode.ssrContext) || // stateful
-        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
-      // 2.2 with runInNewContext: true
-      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
-        context = __VUE_SSR_CONTEXT__
-      }
-      // inject component styles
-      if (injectStyles) {
-        injectStyles.call(this, context)
-      }
-      // register component module identifier for async chunk inferrence
-      if (context && context._registeredComponents) {
-        context._registeredComponents.add(moduleIdentifier)
-      }
-    }
-    // used by ssr in case component is cached and beforeCreate
-    // never gets called
-    options._ssrRegister = hook
-  } else if (injectStyles) {
-    hook = injectStyles
-  }
-
-  if (hook) {
-    var functional = options.functional
-    var existing = functional
-      ? options.render
-      : options.beforeCreate
-
-    if (!functional) {
-      // inject component registration as beforeCreate hook
-      options.beforeCreate = existing
-        ? [].concat(existing, hook)
-        : [hook]
-    } else {
-      // for template-only hot-reload because in that case the render fn doesn't
-      // go through the normalizer
-      options._injectStyles = hook
-      // register for functioal component in vue file
-      options.render = function renderWithStyleInjection (h, context) {
-        hook.call(context)
-        return existing(h, context)
-      }
-    }
-  }
-
-  return {
-    esModule: esModule,
-    exports: scriptExports,
-    options: options
-  }
-}
-
-
-/***/ }),
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -945,33 +945,6 @@ if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
 /* 7 */
 /***/ (function(module, exports) {
 
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
 /*
 	MIT License http://www.opensource.org/licenses/mit-license.php
 	Author Tobias Koppers @sokra
@@ -1051,7 +1024,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -1276,6 +1249,33 @@ function applyToTag (styleElement, obj) {
     styleElement.appendChild(document.createTextNode(css))
   }
 }
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
 
 
 /***/ }),
@@ -2662,7 +2662,7 @@ var index = {
 /* harmony default export */ __webpack_exports__["a"] = (index);
 
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(7)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(9)))
 
 /***/ }),
 /* 18 */
@@ -4770,7 +4770,7 @@ module.exports = __webpack_require__(5);
 /***/ 3:
 /***/ (function(module, exports) {
 
-module.exports = __webpack_require__(3);
+module.exports = __webpack_require__(4);
 
 /***/ }),
 
@@ -17153,7 +17153,7 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7), __webpack_require__(56).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9), __webpack_require__(56).setImmediate))
 
 /***/ }),
 /* 56 */
@@ -17223,7 +17223,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
                          (typeof global !== "undefined" && global.clearImmediate) ||
                          (this && this.clearImmediate);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ }),
 /* 57 */
@@ -17416,7 +17416,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7), __webpack_require__(58)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9), __webpack_require__(58)))
 
 /***/ }),
 /* 58 */
@@ -18268,7 +18268,7 @@ exports.PopupManager = _popupManager2.default;
 
 exports.__esModule = true;
 
-var _util = __webpack_require__(3);
+var _util = __webpack_require__(4);
 
 /**
  * Show migrating guide in browser console.
@@ -23585,7 +23585,7 @@ module.exports = __webpack_require__(5);
 /* 2 */
 /***/ (function(module, exports) {
 
-module.exports = __webpack_require__(3);
+module.exports = __webpack_require__(4);
 
 /***/ }),
 /* 3 */
@@ -65748,7 +65748,7 @@ exports.default = function (Vue) {
   return template;
 };
 
-var _util = __webpack_require__(3);
+var _util = __webpack_require__(4);
 
 var RE_NARGS = /(%|)\{([0-9a-zA-Z_]+)\}/g;
 /**
@@ -68535,7 +68535,7 @@ var index = (function () {
 
 /* harmony default export */ __webpack_exports__["default"] = (index);
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(7)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(9)))
 
 /***/ }),
 /* 91 */
@@ -68647,7 +68647,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 exports.isVNode = isVNode;
 
-var _util = __webpack_require__(3);
+var _util = __webpack_require__(4);
 
 function isVNode(node) {
   return node !== null && (typeof node === 'undefined' ? 'undefined' : _typeof(node)) === 'object' && (0, _util.hasOwn)(node, 'componentOptions');
@@ -69061,7 +69061,7 @@ module.exports = __webpack_require__(5);
 /***/ 3:
 /***/ (function(module, exports) {
 
-module.exports = __webpack_require__(3);
+module.exports = __webpack_require__(4);
 
 /***/ }),
 
@@ -70545,7 +70545,7 @@ module.exports = __webpack_require__(39);
 /***/ 3:
 /***/ (function(module, exports) {
 
-module.exports = __webpack_require__(3);
+module.exports = __webpack_require__(4);
 
 /***/ }),
 
@@ -72664,7 +72664,7 @@ function normalizeComponent (
 /***/ 3:
 /***/ (function(module, exports) {
 
-module.exports = __webpack_require__(3);
+module.exports = __webpack_require__(4);
 
 /***/ }),
 
@@ -76585,7 +76585,7 @@ module.exports = __webpack_require__(65);
 /***/ 3:
 /***/ (function(module, exports) {
 
-module.exports = __webpack_require__(3);
+module.exports = __webpack_require__(4);
 
 /***/ }),
 
@@ -78124,7 +78124,7 @@ module.exports = __webpack_require__(5);
 /***/ 3:
 /***/ (function(module, exports) {
 
-module.exports = __webpack_require__(3);
+module.exports = __webpack_require__(4);
 
 /***/ }),
 
@@ -78675,8 +78675,9 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_
 /* harmony default export */ __webpack_exports__["a"] = (new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
   routes: [{
     path: '/',
-    name: 'home',
-    component: __WEBPACK_IMPORTED_MODULE_2__components_pages_home___default.a
+    name: 'new_2021', //same as in component return section
+    component: __WEBPACK_IMPORTED_MODULE_7__components_pages_blog_2021___default.a, //component itself
+    props: { tokenZZ: 'i am set in router/index.js' }
   }, {
     path: '/home',
     name: 'home',
@@ -78712,7 +78713,9 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_
   }, {
     path: '/loadNew',
     name: 'load-New', //same as in component return section
-    component: __WEBPACK_IMPORTED_MODULE_9__components_pages_loadnew___default.a //component itself
+    component: __WEBPACK_IMPORTED_MODULE_9__components_pages_loadnew___default.a, //component itself
+    props: true
+    //props: { categorrr: this.categoriesxx },
   }]
 }));
 
@@ -78725,7 +78728,7 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(176)
 }
-var normalizeComponent = __webpack_require__(4)
+var normalizeComponent = __webpack_require__(3)
 /* script */
 var __vue_script__ = __webpack_require__(178)
 /* template */
@@ -78778,7 +78781,7 @@ var content = __webpack_require__(177);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(9)("408535ca", content, false, {});
+var update = __webpack_require__(8)("408535ca", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -78797,7 +78800,7 @@ if(false) {
 /* 177 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(8)(false);
+exports = module.exports = __webpack_require__(7)(false);
 // imports
 
 
@@ -78927,7 +78930,7 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(181)
 }
-var normalizeComponent = __webpack_require__(4)
+var normalizeComponent = __webpack_require__(3)
 /* script */
 var __vue_script__ = __webpack_require__(183)
 /* template */
@@ -78980,7 +78983,7 @@ var content = __webpack_require__(182);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(9)("37106411", content, false, {});
+var update = __webpack_require__(8)("37106411", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -78999,7 +79002,7 @@ if(false) {
 /* 182 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(8)(false);
+exports = module.exports = __webpack_require__(7)(false);
 // imports
 
 
@@ -79156,7 +79159,7 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(186)
 }
-var normalizeComponent = __webpack_require__(4)
+var normalizeComponent = __webpack_require__(3)
 /* script */
 var __vue_script__ = __webpack_require__(188)
 /* template */
@@ -79209,7 +79212,7 @@ var content = __webpack_require__(187);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(9)("0b5bd7a0", content, false, {});
+var update = __webpack_require__(8)("0b5bd7a0", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -79228,7 +79231,7 @@ if(false) {
 /* 187 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(8)(false);
+exports = module.exports = __webpack_require__(7)(false);
 // imports
 
 
@@ -79326,7 +79329,7 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(191)
 }
-var normalizeComponent = __webpack_require__(4)
+var normalizeComponent = __webpack_require__(3)
 /* script */
 var __vue_script__ = __webpack_require__(193)
 /* template */
@@ -79379,7 +79382,7 @@ var content = __webpack_require__(192);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(9)("6356d33f", content, false, {});
+var update = __webpack_require__(8)("6356d33f", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -79398,7 +79401,7 @@ if(false) {
 /* 192 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(8)(false);
+exports = module.exports = __webpack_require__(7)(false);
 // imports
 
 
@@ -79517,7 +79520,7 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(196)
 }
-var normalizeComponent = __webpack_require__(4)
+var normalizeComponent = __webpack_require__(3)
 /* script */
 var __vue_script__ = __webpack_require__(198)
 /* template */
@@ -79570,7 +79573,7 @@ var content = __webpack_require__(197);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(9)("1039f7b6", content, false, {});
+var update = __webpack_require__(8)("1039f7b6", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -79589,7 +79592,7 @@ if(false) {
 /* 197 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(8)(false);
+exports = module.exports = __webpack_require__(7)(false);
 // imports
 
 
@@ -79752,7 +79755,7 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(201)
 }
-var normalizeComponent = __webpack_require__(4)
+var normalizeComponent = __webpack_require__(3)
 /* script */
 var __vue_script__ = __webpack_require__(203)
 /* template */
@@ -79805,7 +79808,7 @@ var content = __webpack_require__(202);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(9)("b981d4e4", content, false, {});
+var update = __webpack_require__(8)("b981d4e4", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -79824,7 +79827,7 @@ if(false) {
 /* 202 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(8)(false);
+exports = module.exports = __webpack_require__(7)(false);
 // imports
 
 
@@ -80270,7 +80273,7 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(206)
 }
-var normalizeComponent = __webpack_require__(4)
+var normalizeComponent = __webpack_require__(3)
 /* script */
 var __vue_script__ = __webpack_require__(208)
 /* template */
@@ -80323,7 +80326,7 @@ var content = __webpack_require__(207);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(9)("2541310b", content, false, {});
+var update = __webpack_require__(8)("2541310b", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -80342,7 +80345,7 @@ if(false) {
 /* 207 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(8)(false);
+exports = module.exports = __webpack_require__(7)(false);
 // imports
 
 
@@ -80620,7 +80623,7 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(211)
 }
-var normalizeComponent = __webpack_require__(4)
+var normalizeComponent = __webpack_require__(3)
 /* script */
 var __vue_script__ = __webpack_require__(213)
 /* template */
@@ -80673,7 +80676,7 @@ var content = __webpack_require__(212);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(9)("79e42f39", content, false, {});
+var update = __webpack_require__(8)("79e42f39", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -80692,7 +80695,7 @@ if(false) {
 /* 212 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(8)(false);
+exports = module.exports = __webpack_require__(7)(false);
 // imports
 
 
@@ -80821,245 +80824,336 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'CreatePost',
-  data: function data() {
-    return {
-      dialogImageUrl: '',
-      dialogVisible: false, //flag
-      imageList: [], //stores uploaded images
-      status_msg: '',
-      status: '',
-      isCreatingPost: false, //flag
-      title: '',
-      body: '',
-      componentKey: 0,
-      tokenXX: '',
-      errroList: ['v', 'b'] //list of errors of php validator
-    };
-  },
-
-  computed: {
-    //...mapState(['errroList']), 
-    booksGet: function booksGet() {
-      //compute Back-end validation errors
-      return this.errroList;
-    }
-  },
-
-  mounted: function mounted() {
-    var token = document.head.querySelector('meta[name="csrf-token"]'); //gets meta tag with csrf
-    //alert(token.content);
-    this.tokenXX = token.content; //gets csrf token and sets it to data.tokenXX
-  },
-
-  methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['getAllPosts']), {
-    updateImageList: function updateImageList(file) {
-      this.imageList.push(file.raw);
-      //console.log(this.imageList);
+    name: 'CreatePost',
+    //props: ['categorrrv'], //passed in view 
+    data: function data() {
+        return {
+            dialogImageUrl: '',
+            dialogVisible: false, //flag
+            imageList: [], //stores uploaded images
+            status_msg: '',
+            status: '',
+            isCreatingPost: false, //flag
+            title: '',
+            body: '',
+            selectV: '',
+            componentKey: 0,
+            tokenXX: '',
+            errroList: ['v', 'b'], //list of errors of php validator
+            categoriesList: []
+        };
     },
-    handlePictureCardPreview: function handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.imageList.push(file);
-      this.dialogVisible = true;
-    },
-    createPost: function createPost(e) {
-      var _this = this;
 
-      e.preventDefault();
-      if (!this.validateForm()) {
-        return false;
-      }
-
-      //Form //PROBLEM HERE
-      this.isCreatingPost = true;
-
-      //Use Formdata to bind inpts and images upload
-      var that = this;
-      /*const*/var formData = new FormData(); //new FormData(document.getElementById("myFormZZ"));
-      formData.append('title', this.title);
-      formData.append('body', this.body);
-
-      var imagesUploaded = {};
-      $.each(this.imageList, function (key, imageV) {
-        formData.append('imagesZZZ[' + key + ']', imageV);
-        //imagesUploaded.push(`images[${key}]`, imageV);
-        //imagesUploaded.test = imageV;
-      });
-
-      //formData.append('imageX', imagesUploaded); //imageX my custom name
-
-      console.log(this.imageList);
-      console.log(formData);
-
-      //SENDING AJAX 
-      /* api
-        .post('/post/create_post', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        }) 
-      */
-      //var thatX = this;
-      alert('token is ' + this.$store.state.api_tokenY);
-
-      //Add Bearer token to headers
-      $.ajaxSetup({
-        headers: {
-          'Authorization': 'Bearer ' + this.$store.state.api_tokenY
+    computed: {
+        //...mapState(['errroList']), 
+        booksGet: function booksGet() {
+            //compute Back-end validation errors
+            return this.errroList;
         }
-      });
+    },
 
-      $.ajax({
+    mounted: function mounted() {
+        var token = document.head.querySelector('meta[name="csrf-token"]'); //gets meta tag with csrf
+        //alert(token.content);
+        this.tokenXX = token.content; //gets csrf token and sets it to data.tokenXX
 
-        url: 'api/post/create_post_vue',
-        type: 'POST', //POST is to create a new user
-
-        cache: false,
-        dataType: 'json',
-        processData: false,
-        contentType: false,
-        //contentType:"application/json; charset=utf-8",						  
-        //contentType: 'application/x-www-form-urlencoded; charset=utf-8',
-        //contentType: 'multipart/form-data',
-
-        //crossDomain: true,
-        //headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + this.$store.state.api_tokenY},
-        //headers: { 'Content-Type': 'application/json',  },
-        //contentType: false,
-        //dataType: 'json', //In Laravel causes crash!!!!!// without this it returned string(that can be alerted), now it returns object
-
-        //passing the data
+        this.getAjaxCategories(); //get /GET all DB table categories (to build <select> in loadnew.vue)
+    },
+    created: function created() {},
 
 
-        data: formData, //dataX//JSON.stringify(dataX)  ('#createNew').serialize()
-        /*{   
-                  _token: this.tokenXX, //csrf token	
-                  title:    this.title,	
-                  body:     this.body,
-                  myImages: imagesToSend,	//array of images
-                 
-                  
-        }, */
-        success: function success(data) {
-          alert("success");
-          alert("success" + JSON.stringify(data, null, 4));
+    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['getAllPosts']), {
 
-          /*
-          if (data.errors) { 
-              alert("success" + JSON.stringify(data.errors, null, 4));
-              that.errroList = data.errors;
-          }*/
+        //on adding new image to form, do update array {this.imageList} (used to store all form uploaded images & appended to form)
+        updateImageList: function updateImageList(file) {
+            this.imageList.push(file.raw);
+            console.log(this.imageList);
+        },
 
-          if (data.error == true) {
-            //if Rest endpoint returns any predefined error
-            var text = data.data;
-            swal("Check", text, "error");
 
-            //if validation errors (i.e if REST Contoller returns json ['error': true, 'data': 'Good, but validation crashes', 'validateErrors': title['Validation err text'],  body['Validation err text']])
-            if (data.validateErrors) {
-              var tempoArray = []; //temporary array
-              for (var key in data.validateErrors) {
-                //Object iterate
-                var t = data.validateErrors[key][0]; //gets validation err message, e.g validateErrors.title[0]
-                tempoArray.push(t);
-              }
+        //if u click "Preview" icon in Element-UI image Layout
+        handlePictureCardPreview: function handlePictureCardPreview(file) {
+            this.dialogImageUrl = file.url;
+            //this.imageList.push(file); //THIS WAS INCORRECT????
+            this.dialogVisible = true; //show pop-up with image
+        },
 
-              that.errroList = tempoArray; //change state errroList //{this-that} fix
+
+        //if u click "Delete" icon in Element-UI image Layout
+        handleRemove: function handleRemove(file) {
+            alert("Delete " + file.uid); //https://www.programmersought.com/article/73755547037/
+
+            for (var i = 0; i < this.imageList.length; i++) {
+                if (file.uid == this.imageList[i].uid) {
+                    this.imageList.splice(i, 1);
+                }
             }
-          } else if (data.error == false) {
-            var tempoArray = [];
-            that.errroList = tempoArray; //clears validationn errors if any. Simple that.errroList = [] won't work
-            swal("Good", "Bearer Token is OK", "success");
-            swal("Good", data.data, "success");
-          }
-          that.isCreatingPost = false; //change button text            
-        }, //end success
 
-        error: function error(errorZ) {
-          alert("Crashed");
-          alert("error" + JSON.stringify(errorZ, null, 4));
-          console.log(errorZ.responseText);
-          console.log(errorZ);
+            console.log(this.imageList);
+        },
+        beforeRemove: function beforeRemove(file) {
+            //some stuff
 
-          /*
-          if (errorZ.status == 422) {
-              swal("Error", "Validation crashed", "error");  
-          }*/
+        },
 
-          if (errorZ.responseJSON != null) {
-            if (errorZ.responseJSON.error == true || errorZ.responseJSON.error == "Unauthenticated.") {
-              //if Rest endpoint returns any predefined error
-              swal("Error: Unauthenticated", "Check Bearer Token", "error");
-              //alert("Unauthenticated");                  
+
+        //when user clicks Form submitting (create new post)
+        createPost: function createPost(e) {
+            var _this = this;
+
+            e.preventDefault();
+            if (!this.validateForm()) {
+                return false;
             }
-          }
-          swal("Error", "Something crashed", "error");
 
-          that.isCreatingPost = false; //change button text   
+            //Form //PROBLEM HERE
+            this.isCreatingPost = true;
+
+            //Use Formdata to bind inpts and images upload
+            var that = this;
+            /*const*/var formData = new FormData(); //new FormData(document.getElementById("myFormZZ"));
+            formData.append('title', this.title);
+            formData.append('body', this.body);
+            formData.append('selectV', this.selectV);
+
+            var imagesUploaded = {};
+            $.each(this.imageList, function (key, imageV) {
+                formData.append('imagesZZZ[' + key + ']', imageV);
+                //imagesUploaded.push(`images[${key}]`, imageV);
+                //imagesUploaded.test = imageV;
+            });
+
+            //formData.append('imageX', imagesUploaded); //imageX my custom name
+
+            console.log(this.imageList);
+            console.log(formData);
+
+            //SENDING AJAX to create new post item
+            /* api
+              .post('/post/create_post', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+              }) 
+            */
+            //var thatX = this;
+            alert('token is ' + this.$store.state.api_tokenY);
+
+            //Add Bearer token to headers
+            $.ajaxSetup({
+                headers: {
+                    'Authorization': 'Bearer ' + this.$store.state.api_tokenY
+                }
+            });
+
+            $.ajax({
+
+                url: 'api/post/create_post_vue',
+                type: 'POST', //POST is to create a new user
+
+                cache: false,
+                dataType: 'json',
+                processData: false,
+                contentType: false,
+                //contentType:"application/json; charset=utf-8",						  
+                //contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+                //contentType: 'multipart/form-data',
+
+                //crossDomain: true,
+                //headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + this.$store.state.api_tokenY},
+                //headers: { 'Content-Type': 'application/json',  },
+                //contentType: false,
+                //dataType: 'json', //In Laravel causes crash!!!!!// without this it returned string(that can be alerted), now it returns object
+
+                //passing the data
+
+
+                data: formData, //dataX//JSON.stringify(dataX)  ('#createNew').serialize()
+                //Not used below
+                /*{   
+                    _token: this.tokenXX, //csrf token	
+                    title:    this.title,	
+                    body:     this.body,
+                    myImages: imagesToSend,	//array of images
+                   
+                    
+                }, */
+                success: function success(data) {
+                    alert("success");
+                    alert("success" + JSON.stringify(data, null, 4));
+
+                    /*
+                    if (data.errors) { 
+                        alert("success" + JSON.stringify(data.errors, null, 4));
+                        that.errroList = data.errors;
+                    }*/
+
+                    if (data.error == true) {
+                        //if Rest endpoint returns any predefined error
+                        var text = data.data;
+                        swal("Check", text, "error");
+
+                        //if validation errors (i.e if REST Contoller returns json ['error': true, 'data': 'Good, but validation crashes', 'validateErrors': title['Validation err text'],  body['Validation err text']])
+                        if (data.validateErrors) {
+                            var tempoArray = []; //temporary array
+                            for (var key in data.validateErrors) {
+                                //Object iterate
+                                var t = data.validateErrors[key][0]; //gets validation err message, e.g validateErrors.title[0]
+                                tempoArray.push(t);
+                            }
+
+                            that.errroList = tempoArray; //change state errroList //{this-that} fix
+                        }
+                    } else if (data.error == false) {
+                        var tempoArray = [];
+                        that.errroList = tempoArray; //clears validationn errors if any. Simple that.errroList = [] won't work
+                        swal("Good", "Bearer Token is OK", "success");
+                        swal("Good", data.data, "success");
+                    }
+                    that.isCreatingPost = false; //change button text            
+                }, //end success
+
+                error: function error(errorZ) {
+                    alert("Crashed");
+                    alert("error" + JSON.stringify(errorZ, null, 4));
+                    console.log(errorZ.responseText);
+                    console.log(errorZ);
+
+                    /*
+                    if (errorZ.status == 422) {
+                        swal("Error", "Validation crashed", "error");  
+                    }*/
+
+                    if (errorZ.responseJSON != null) {
+                        if (errorZ.responseJSON.error == true || errorZ.responseJSON.error == "Unauthenticated.") {
+                            //if Rest endpoint returns any predefined error
+                            swal("Error: Unauthenticated", "Check Bearer Token", "error");
+                            //alert("Unauthenticated");                  
+                        }
+                    }
+                    swal("Error", "Something crashed", "error");
+
+                    that.isCreatingPost = false; //change button text   
+                }
+            });
+            //END AJAXed  part 
+
+            return false;
+
+            //my fix instead of api.post. NOT ENGAGED, reassigned to ajax
+            fetch('api/post/create_post_vue', formData, {
+                method: 'POST'
+
+                //headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
+                //contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+                //data :   {//'_token': document.head.querySelector('meta[name="csrf-token"]').content,},
+            }).then(function (res) {
+                console.log(res);
+                _this.title = _this.body = '';
+                _this.status = true;
+                _this.showNotification('Post Successfully Created. REWRITE function createPost(Request $request) without transactions');
+                _this.isCreatingPost = false;
+                _this.imageList = [];
+                /*
+                 this.getAllPosts() can be used here as well
+                 note: "that" has been assigned the value of "this" at the top
+                 to avoid context related issues.
+                 */
+                that.getAllPosts();
+                that.componentKey += 1;
+            });
+        },
+
+
+        //GET all DB table categories (to build <select> in loadnew.vue)
+        getAjaxCategories: function getAjaxCategories() {
+            var _this2 = this;
+
+            fetch('api/post/get_categories', { /*http://localhost/Laravel+Yii2_comment_widget/blog_Laravel/public/post/get_categories*/
+                method: 'get',
+                //pass Bearer token in headers ()
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.$store.state.api_tokenY }
+                //contentType: 'application/json',
+
+
+            }).then(function (response) {
+                $('.loader-x').fadeOut(800); //hide loader
+                return response.json();
+            }).then(function (dataZ) {
+                console.log("Categories => " + dataZ);
+                if (dataZ.error == true || dataZ.error == "Unauthenticated.") {
+                    //if Rest endpoint returns any predefined error
+                    alert(dataZ.data);
+                    swal("Unauthenticated", "Check Bearer Token", "error");
+                } else if (dataZ.error == false) {
+                    swal("Done", "Categories are loaded.", "success");
+                    _this2.categoriesList = dataZ.data;
+                    console.log("Categ " + _this2.categoriesList[0].wpCategory_name);
+                }
+            }).catch( /*err => */function (err) {
+                alert("Getting categories failed. Check if u're logged =>  " + err);
+                swal("Crashed", "You are in catch", "error");
+            }); // catch any error
+        },
+        validateForm: function validateForm() {
+            // no vaildation for images - it is needed
+            if (!this.title) {
+                this.status = false;
+                this.showNotification('Post title cannot be empty');
+                return false;
+            }
+            if (!this.body) {
+                this.status = false;
+                this.showNotification('Post body cannot be empty');
+                return false;
+            }
+
+            /*
+             if (!this.selectV) {
+              this.status = false;
+              this.showNotification('Select cannot be empty');
+              return false;
+            }*/
+
+            this.showNotification(''); //clears error messages if any
+            return true;
+        },
+        showNotification: function showNotification(message) {
+            var _this3 = this;
+
+            this.status_msg = message;
+            setTimeout(function () {
+                //clears message in n seconds
+                _this3.status_msg = '';
+            }, 3000 * 155);
         }
-      });
-      //END AJAXed  part 
+    }),
 
-      return false;
-
-      //my fix instead of api.post. NOT ENGAGED, reassigned to ajax
-      fetch('api/post/create_post_vue', formData, {
-        method: 'POST'
-
-        //headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
-        //contentType: 'application/x-www-form-urlencoded; charset=utf-8',
-        //data :   {//'_token': document.head.querySelector('meta[name="csrf-token"]').content,},
-      }).then(function (res) {
-        console.log(res);
-        _this.title = _this.body = '';
-        _this.status = true;
-        _this.showNotification('Post Successfully Created. REWRITE function createPost(Request $request) without transactions');
-        _this.isCreatingPost = false;
-        _this.imageList = [];
-        /*
-         this.getAllPosts() can be used here as well
-         note: "that" has been assigned the value of "this" at the top
-         to avoid context related issues.
-         */
-        that.getAllPosts();
-        that.componentKey += 1;
-      });
-    },
-    validateForm: function validateForm() {
-      // no vaildation for images - it is needed
-      if (!this.title) {
-        this.status = false;
-        this.showNotification('Post title cannot be empty');
-        return false;
-      }
-      if (!this.body) {
-        this.status = false;
-        this.showNotification('Post body cannot be empty');
-        return false;
-      }
-      this.showNotification(''); //clears error messages if any
-      return true;
-    },
-    showNotification: function showNotification(message) {
-      var _this2 = this;
-
-      this.status_msg = message;
-      setTimeout(function () {
-        //clears message in n seconds
-        _this2.status_msg = '';
-      }, 3000 * 155);
+    mutations: {
+        setErrors: function setErrors(state, dateX) {
+            // mutate state
+            state.errroList = dateX;
+            alert('mutated');
+        }
     }
-  }),
-
-  mutations: {
-    setErrors: function setErrors(state, dateX) {
-      // mutate state
-      state.errroList = dateX;
-      alert('mutated');
-    }
-  }
 
 });
 
@@ -81106,7 +81200,7 @@ var render = function() {
           : _vm._e(),
         _vm._v(" "),
         _vm._l(_vm.booksGet, function(book, i) {
-          return _c("div", { key: book, staticClass: "alert alert-danger" }, [
+          return _c("div", { key: i, staticClass: "alert alert-danger" }, [
             _vm._v(" \n            Error: " + _vm._s(book) + " \n        ")
           ])
         }),
@@ -81178,6 +81272,59 @@ var render = function() {
             })
           ]),
           _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "exampleFormControlTextarea1" } }, [
+              _vm._v("Category")
+            ]),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.selectV,
+                    expression: "selectV"
+                  }
+                ],
+                staticClass: "mdb-select md-form",
+                attrs: { name: "category_sel" },
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.selectV = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  }
+                }
+              },
+              [
+                _c(
+                  "option",
+                  { attrs: { disabled: "disabled", selected: "selected" } },
+                  [_vm._v("Choose category")]
+                ),
+                _vm._v("\n                >!-- Loop -->\n\t\t\t\t"),
+                _vm._l(this.categoriesList, function(book, i) {
+                  return _c(
+                    "option",
+                    { key: i, domProps: { value: book.wpCategory_id } },
+                    [_vm._v(" " + _vm._s(book.wpCategory_name) + " ")]
+                  )
+                })
+              ],
+              2
+            )
+          ]),
+          _vm._v(" "),
           _c(
             "div",
             {},
@@ -81189,6 +81336,8 @@ var render = function() {
                     action: "https://jsonplaceholder.typicode.com/posts/",
                     "list-type": "picture-card",
                     "on-preview": _vm.handlePictureCardPreview,
+                    "on-remove": _vm.handleRemove,
+                    "before-remove": _vm.beforeRemove,
                     "on-change": _vm.updateImageList,
                     "auto-upload": false
                   }
@@ -81268,7 +81417,7 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(4)
+var normalizeComponent = __webpack_require__(3)
 /* script */
 var __vue_script__ = __webpack_require__(216)
 /* template */
@@ -81381,7 +81530,7 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(219)
 }
-var normalizeComponent = __webpack_require__(4)
+var normalizeComponent = __webpack_require__(3)
 /* script */
 var __vue_script__ = __webpack_require__(221)
 /* template */
@@ -81434,7 +81583,7 @@ var content = __webpack_require__(220);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(9)("33a16d07", content, false, {});
+var update = __webpack_require__(8)("33a16d07", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -81453,7 +81602,7 @@ if(false) {
 /* 220 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(8)(false);
+exports = module.exports = __webpack_require__(7)(false);
 // imports
 
 
@@ -81871,7 +82020,7 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(4)
+var normalizeComponent = __webpack_require__(3)
 /* script */
 var __vue_script__ = __webpack_require__(224)
 /* template */
@@ -82247,7 +82396,7 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(227)
 }
-var normalizeComponent = __webpack_require__(4)
+var normalizeComponent = __webpack_require__(3)
 /* script */
 var __vue_script__ = __webpack_require__(229)
 /* template */
@@ -82300,7 +82449,7 @@ var content = __webpack_require__(228);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(9)("28b43756", content, false, {});
+var update = __webpack_require__(8)("28b43756", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -82319,12 +82468,12 @@ if(false) {
 /* 228 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(8)(false);
+exports = module.exports = __webpack_require__(7)(false);
 // imports
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/* mine */\n.nav-item   {margin-left:2em;\n}\n.nav-item a {color:black;\n}\n.navbar-brand {color:black\n}\n#appDemo {\r\n  font-family: 'Avenir', Helvetica, Arial, sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n  text-align: center;\r\n  color: #2c3e50;\r\n  margin-top: 20px;\n}\n.moveInUp-enter-active{\r\n  -webkit-animation: fadeIn 2s ease-in;\r\n          animation: fadeIn 2s ease-in;\n}\n@-webkit-keyframes fadeIn{\n0%{\r\n    opacity: 0;\n}\n50%{\r\n    opacity: 0.5;\n}\n100%{\r\n    opacity: 1;\n}\n}\n@keyframes fadeIn{\n0%{\r\n    opacity: 0;\n}\n50%{\r\n    opacity: 0.5;\n}\n100%{\r\n    opacity: 1;\n}\n}\n.moveInUp-leave-active{\r\n  -webkit-animation: moveInUp .3s ease-in;\r\n          animation: moveInUp .3s ease-in;\n}\n@-webkit-keyframes moveInUp{\n0%{\r\n  -webkit-transform: translateY(0);\r\n          transform: translateY(0);\n}\n100%{\r\n  -webkit-transform: translateY(-400px);\r\n          transform: translateY(-400px);\n}\n}\n@keyframes moveInUp{\n0%{\r\n  -webkit-transform: translateY(0);\r\n          transform: translateY(0);\n}\n100%{\r\n  -webkit-transform: translateY(-400px);\r\n          transform: translateY(-400px);\n}\n}\r\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/* mine */\n.nav-item   {margin-left:2em;\n}\n.nav-item a {color:black;\n}\n.navbar-brand {color:black\n}\n#appDemo {\r\n  font-family: 'Avenir', Helvetica, Arial, sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n  text-align: center;\r\n  color: #2c3e50;\r\n  margin-top: 20px;\n}\n.moveInUp-enter-active{\r\n  -webkit-animation: fadeIn 2s ease-in;\r\n          animation: fadeIn 2s ease-in;\n}\n@-webkit-keyframes fadeIn{\n0%{\r\n    opacity: 0;\n}\n50%{\r\n    opacity: 0.5;\n}\n100%{\r\n    opacity: 1;\n}\n}\n@keyframes fadeIn{\n0%{\r\n    opacity: 0;\n}\n50%{\r\n    opacity: 0.5;\n}\n100%{\r\n    opacity: 1;\n}\n}\n.moveInUp-leave-active{\r\n  -webkit-animation: moveInUp .3s ease-in;\r\n          animation: moveInUp .3s ease-in;\n}\n@-webkit-keyframes moveInUp{\n0%{\r\n  -webkit-transform: translateY(0);\r\n          transform: translateY(0);\n}\n100%{\r\n  -webkit-transform: translateY(-400px);\r\n          transform: translateY(-400px);\n}\n}\n@keyframes moveInUp{\n0%{\r\n  -webkit-transform: translateY(0);\r\n          transform: translateY(0);\n}\n100%{\r\n  -webkit-transform: translateY(-400px);\r\n          transform: translateY(-400px);\n}\n}\r\n", ""]);
 
 // exports
 
@@ -82454,10 +82603,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'App',
-    props: ['currentUser'],
+    props: ['currentUser', 'categoriesxx'],
 
     //before mount
     beforeMount: function beforeMount() {
@@ -82568,7 +82721,7 @@ var render = function() {
                       _c(
                         "router-link",
                         { staticClass: "nav-link", attrs: { to: "/loadNew" } },
-                        [_vm._v("Load new")]
+                        [_vm._v("Load new- ")]
                       )
                     ],
                     1

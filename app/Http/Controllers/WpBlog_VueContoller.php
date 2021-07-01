@@ -39,6 +39,8 @@ class WpBlog_VueContoller extends Controller
         //gets current user Db table field {api_token}
 		$myDBToken = auth()->user()->api_token;
         
+        //$categories = Wpress_images_Category::all();//gets categories for dropdown select
+        
         //set global var
         /*        
         session_start();

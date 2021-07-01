@@ -171,7 +171,7 @@ class WpBlog_Rest_API_Contoller extends Controller
         return response()->json(['error' => false, 'data' => 'Too Good, back-end validation is OK. Imaged : ' . $requestText ]);
         */
         
-        $data       = array($request->title, $request->body); //$request->all(); //$request->input();
+        $data       = array($request->title, $request->body, $request->selectV); //$request->all(); //$request->input();
 		$imagesData = $request->imagesZZZ; //uploaded images//$request->myImages
 		
         //return response()->json(['error' => false, 'data' => 'Too Good, but process back-end validation : ' . $request->title .  ' / ' .  $request->body . '/UserID:' . $userX->id  . '/' . $request->bearerToken()]);
@@ -239,7 +239,16 @@ class WpBlog_Rest_API_Contoller extends Controller
 	
 	
 	
-	
+	/**
+     * REST API endpoint to /GET all DB table categories (to build <select> in loadnew.vue)
+     * Ajax Requst comes from .../loadnew.vue
+     * @return json
+     */
+	public function getAllCategories() 
+    { 
+        $posts =  Wpress_images_Category::all();//gets categories for dropdown select
+        return response()->json(['error' => false, 'data' => $posts]);
+    }
 	
 	
 }
