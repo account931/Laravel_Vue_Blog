@@ -22,8 +22,16 @@
 		<!-- {{  this.$store.state.posts[this.currentDetailID].wpBlog_id }} == same ==> {{  checkStore[this.currentDetailID].productId }} == same as(if used {...mapState(['products']),}) ==> products[this.currentDetailID].productId-->
 		<div>
 		    <hr>
-            <p class="z-overlay-fix-2"> <router-link class="nav-link" to="/New_2021"><button class="btn">Back to Blog_2021 <i class="fa fa-tag" style="font-size:14px"></i></button></router-link></p>
-		    <p> One product </p>
+            
+            <!-- Nav Link go back -->
+            <p class="z-overlay-fix-2"> 
+                <router-link class="nav-link" to="/New_2021">
+                    <button class="btn">Back to Blog_2021 <i class="fa fa-tag" style="font-size:14px"></i></button>
+                </router-link>
+            </p>
+            <!-- End Nav Link go back -->
+		    
+            <p> One product </p>
 		    <p> {{ this.$store.state.posts[this.currentDetailID].wpBlog_id }} {{ this.$store.state.posts[this.currentDetailID].wpBlog_title }}</p>
             
             <!-- Show the first image -->

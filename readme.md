@@ -52,6 +52,22 @@
 
 ![Screenshot](public/images/Screenshots/10.png)
 
+## Admin Part -> Edit a Post
+
+![Screenshot](public/images/Screenshots/11.png)
+
+## Admin Part -> If Validation Fails
+
+![Screenshot](public/images/Screenshots/12.png)
+
+![Screenshot](public/images/Screenshots/13.png)
+
+## Admin Part -> Validation OK
+
+![Screenshot](public/images/Screenshots/14.png)
+
+![Screenshot](public/images/Screenshots/15.png)
+
 [Watch video presentation on Youtube](  )
  
  

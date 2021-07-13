@@ -1,4 +1,5 @@
-<!-- OLD VERSION, NOT USED IN CLEANSED -->
+<!-- OLD VERSION, NOT USED IN CLEANSED, used in {/account***/...../Controllers/WpBlog_VueContoller.php} , just an example to use -->
+
 <template>
 
     <div class="row">

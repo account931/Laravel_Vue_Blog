@@ -26,7 +26,7 @@ class WpBlog_Rest_API_Contoller extends Controller
 	
 	/**
      * REST API endpoint to /GET all posts
-     * Ajax Requst comes from /assets/js/store/index.js
+     * Ajax Requst comes automatically onLoad from /assets/js/store/index.js. Triggered in beforeMount(this.$store.dispatch('getAllPosts');) in \resources\assets\js\WpBlog_Vue\components\pages\blog_2021.vue
      * @return json
      */
 	public function getAllPosts(Request $request) //http://localhost/Laravel+Yii2_comment_widget/blog_Laravel/public/post/get_all
@@ -103,7 +103,7 @@ class WpBlog_Rest_API_Contoller extends Controller
 	
 	 /**
      * REST API to /POST (create) a new blog. 
-     * Ajax Requst comes from \resources\assets\js\WpBlog_Vue\components\pages\loadnew.vue
+     * Ajax Requst comes by button click from \resources\assets\js\WpBlog_Vue\components\pages\loadnew.vue
      * @param SaveNewArticleRequest $request
      * @return json
      */
@@ -241,7 +241,7 @@ class WpBlog_Rest_API_Contoller extends Controller
 	
 	/**
      * REST API endpoint to /GET all DB table categories (to build <select> in loadnew.vue)
-     * Ajax Requst comes from .../loadnew.vue
+     * Ajax Requst comes automatically onLoad (is in section {mounted ()}) from \resources\assets\js\WpBlog_Vue\components\pages\loadnew.vue
      * @return json
      */
 	public function getAllCategories() 

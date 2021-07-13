@@ -29,9 +29,12 @@ Route::group(['middleware' => ['auth:api'/*, 'sendTokenMyX'*/, 'myJsonForce'],  
     
     
     //Admin Part routes
-    Route::get ('admin_get_all_blog', 'WpBlog_Admin_Part\WpBlog_Admin_Rest_API_Contoller@getAllAdminPosts')->name('admin_get_all_blog');  //REST API to /GET all posts for Admin Part. Controller is in Subfolder "/WpBlog_Admin_Part"
-    Route::get ('admin_get_one_blog/{id}', 'WpBlog_Admin_Part\WpBlog_Admin_Rest_API_Contoller@getAllAdminOneItem')->name('admin_get_one_blog');  //REST API to /GET One post/item (by ID) for Admin Part. Controller is in Subfolder "/WpBlog_Admin_Part"
+    Route::get   ('admin_get_all_blog',      'WpBlog_Admin_Part\WpBlog_Admin_Rest_API_Contoller@getAllAdminPosts')  ->name('admin_get_all_blog'); //REST API to /GET all posts for Admin Part. Controller is in Subfolder "/WpBlog_Admin_Part"
+    Route::get   ('admin_get_one_blog/{id}', 'WpBlog_Admin_Part\WpBlog_Admin_Rest_API_Contoller@getAllAdminOneItem')->name('admin_get_one_blog'); //REST API to /GET One post/item (by ID) for Admin Part. Controller is in Subfolder "/WpBlog_Admin_Part". Used in Edit/Update Form
+    Route::delete('admin_delete_item/{id}',  'WpBlog_Admin_Part\WpBlog_Admin_Rest_API_Contoller@deleteOneItem')     ->name('admin_delete_item');  //REST API to /POST Delete one item
+    Route::put   ('admin_update_item/{id}',  'WpBlog_Admin_Part\WpBlog_Admin_Rest_API_Contoller@AdminUpdateOneItem')->name('admin_update_item');  //REST API to /PUT Edit/Update one item
 
-
+    
+   
     
 });  

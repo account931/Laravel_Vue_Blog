@@ -22,6 +22,7 @@ export default new Router({
       props: { tokenZZ: 'i am set in router/index.js' },
     },
     
+    //remove home ???
     {
       path: '/home',
       name: 'home',

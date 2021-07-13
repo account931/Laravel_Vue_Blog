@@ -1,3 +1,4 @@
+<!-- Just a Lorem Ipsum template-->
 <template>
 	<div class="services">
 		<h1>{{title}}</h1>

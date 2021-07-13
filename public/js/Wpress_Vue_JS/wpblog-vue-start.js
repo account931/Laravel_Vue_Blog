@@ -78678,7 +78678,10 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_
     name: 'new_2021', //same as in component return section
     component: __WEBPACK_IMPORTED_MODULE_7__components_pages_blog_2021___default.a, //component itself
     props: { tokenZZ: 'i am set in router/index.js' }
-  }, {
+  },
+
+  //remove home ???
+  {
     path: '/home',
     name: 'home',
     component: __WEBPACK_IMPORTED_MODULE_2__components_pages_home___default.a
@@ -78816,6 +78819,8 @@ exports.push([module.i, "\n.row img[data-v-2858fd28]{\r\n  max-height: 15em;\r\n
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
 //
 //
 //
@@ -79007,7 +79012,7 @@ exports = module.exports = __webpack_require__(7)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -79018,6 +79023,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
 //
 //
 //
@@ -79236,7 +79242,7 @@ exports = module.exports = __webpack_require__(7)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -79247,6 +79253,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
 //
 //
 //
@@ -79611,6 +79618,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(17);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+//
+//
+//
 //
 //
 //
@@ -80418,6 +80428,14 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -80840,6 +80858,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -80854,13 +80876,13 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             status_msg: '',
             status: '',
             isCreatingPost: false, //flag
-            title: '',
-            body: '',
-            selectV: '',
+            title: '', //form input "Title"
+            body: '', //form input "Body"
+            selectV: '', //form input <select> 
             componentKey: 0,
             tokenXX: '',
-            errroList: ['v', 'b'], //list of errors of php validator
-            categoriesList: []
+            errroList: ['v', 'b'], //list of validations errors of server-side validator
+            categoriesList: [] //contains Categories from DB (loaded with ajax)
         };
     },
 
@@ -80883,6 +80905,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 
     methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['getAllPosts']), {
+
+        // ------ Element-UI Upload element METHODS ----------
 
         //on adding new image to form, do update array {this.imageList} (used to store all form uploaded images & appended to form)
         updateImageList: function updateImageList(file) {
@@ -80917,6 +80941,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         },
 
 
+        // ------ End Element-UI Upload element METHODS ----------
+
+
         //when user clicks Form submitting (create new post)
         createPost: function createPost(e) {
             var _this = this;
@@ -80930,7 +80957,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             this.isCreatingPost = true;
 
             //Use Formdata to bind inpts and images upload
-            var that = this;
+            var that = this; //Explaination => if you use this.data, it is incorrect, because when 'this' reference the vue-app, you could use this.data, but here (ajax success callback function), this does not reference to vue-app, instead 'this' reference to whatever who called this function(ajax call)
             /*const*/var formData = new FormData(); //new FormData(document.getElementById("myFormZZ"));
             formData.append('title', this.title);
             formData.append('body', this.body);
@@ -81007,7 +81034,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                     }*/
 
                     if (data.error == true) {
-                        //if Rest endpoint returns any predefined error
+                        //if Rest API endpoint returns any predefined validation error
                         var text = data.data;
                         swal("Check", text, "error");
 
@@ -81312,7 +81339,7 @@ var render = function() {
                   { attrs: { disabled: "disabled", selected: "selected" } },
                   [_vm._v("Choose category")]
                 ),
-                _vm._v("\n                >!-- Loop -->\n\t\t\t\t"),
+                _vm._v(" "),
                 _vm._l(this.categoriesList, function(book, i) {
                   return _c(
                     "option",
@@ -81623,6 +81650,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
 //
 //
 //
@@ -82071,6 +82100,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(17);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+//
 //
 //
 //

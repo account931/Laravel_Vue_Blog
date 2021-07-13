@@ -20,7 +20,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 .my-img  {width:70%;} /* blog main image */
 
 /* -- Loader */
-.loader-x  {position:absolute; top:16em; left:30em;width:99%; display:none;}
+.loader-x  {position:absolute; top:16em; left:40em;width:99%; display:none;}
 .loader-x img {width:13%;}
 
 /* ---------------------------------------- Mobile */

@@ -26,7 +26,7 @@
         
         
         
-        <!-- Display errors if any come from Controller Request Php validator -->
+        <!-- Display Validation errors if any come from Controller Request Php validator -->
         <div v-for="(book, i) in booksGet " :key="i" class="alert alert-danger"> 
             Error: {{ book }} 
         </div>
@@ -58,7 +58,7 @@
         
             <select name="category_sel" class="mdb-select md-form" v-model="selectV">
 				<option  disabled="disabled"  selected="selected">Choose category</option>
-                >!-- Loop -->
+                <!-- Loop -->
 				<option v-for="(book, i) in this.categoriesList " :key="i" :value="book.wpCategory_id"  > {{ book.wpCategory_name}} </option>
 		    </select>
 		</div>					
@@ -68,6 +68,7 @@
         
                                 
         <div class>
+          <!-- Element-UI Upload element -->
           <el-upload
             action="https://jsonplaceholder.typicode.com/posts/"
             list-type="picture-card"
@@ -79,9 +80,12 @@
           >
             <i class="el-icon-plus" />
           </el-upload>
+          
+          <!-- Element-UI Preview Uploaded element -->
           <el-dialog :visible.sync="dialogVisible">
             <img width="100%" :src="dialogImageUrl" alt>
           </el-dialog>
+          
         </div>
       </form>
     </div>
@@ -138,13 +142,13 @@ export default {
       status_msg: '',
       status: '',
       isCreatingPost: false,//flag
-      title: '',
-      body: '',
-      selectV: '',
+      title: '',  //form input "Title"
+      body: '',   //form input "Body"
+      selectV: '',//form input <select> 
       componentKey: 0,
 	  tokenXX:'',
-      errroList: ['v', 'b'], //list of errors of php validator
-      categoriesList: [],
+      errroList: ['v', 'b'], //list of validations errors of server-side validator
+      categoriesList: [], //contains Categories from DB (loaded with ajax)
     }
   },
   computed: {
@@ -167,6 +171,8 @@ export default {
   
   methods: {
     ...mapActions(['getAllPosts']),
+    
+    // ------ Element-UI Upload element METHODS ----------
     
     //on adding new image to form, do update array {this.imageList} (used to store all form uploaded images & appended to form)
     updateImageList (file) {
@@ -199,6 +205,10 @@ export default {
         
     },
 	
+    // ------ End Element-UI Upload element METHODS ----------
+    
+    
+    
     //when user clicks Form submitting (create new post)
     createPost (e) {
       e.preventDefault();
@@ -210,7 +220,7 @@ export default {
       this.isCreatingPost = true;
       
       //Use Formdata to bind inpts and images upload
-      var that = this;
+      var that = this; //Explaination => if you use this.data, it is incorrect, because when 'this' reference the vue-app, you could use this.data, but here (ajax success callback function), this does not reference to vue-app, instead 'this' reference to whatever who called this function(ajax call)
       /*const*/ var formData = new FormData(); //new FormData(document.getElementById("myFormZZ"));
       formData.append('title', this.title);
       formData.append('body',  this.body);
@@ -292,7 +302,7 @@ export default {
                 }*/
                 
                 
-                if(data.error == true ){ //if Rest endpoint returns any predefined error
+                if(data.error == true ){ //if Rest API endpoint returns any predefined validation error
                     var text = data.data;
                     swal("Check", text, "error");
                     
