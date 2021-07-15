@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\File;
 
 class Wpress_images_Posts extends Model
 {
-	//CAUSES hasmany Crashd
+	//CAUSES hasMany Crash
    /*
    public $wpBlog_id;
    public $wpBlog_title;
@@ -169,6 +169,124 @@ class Wpress_images_Posts extends Model
             return $imageName; // true;
 		}
 	}
+    
+    
+    
+    
+    
+    
+    //============= Methods Used in Admin Part (i.e while UPDATE/EDIT) ========================
 
-  
+    
+   /**
+    * Updates one post/item in DB 'wpressimages_blog_post'
+    * @param array $request, example of request => [ "title" => "TTTTTTTTT", "body" => "JavaScript Tutorial", "selectV" => "3", "imageToDelete" => "66", "_method" => "PUT", "imagesZZZ" => array:1 [0 => UploadedFile {#1172, -originalName: "2254.png", -mimeType: "image/png", -size: 30871} ] ]
+	* @param int $idX, id of edited post item
+    * @return 
+    */
+	public function updatePostItem($idX, $request)
+    {
+        self::where('wpBlog_id', $idX)->update([  'wpBlog_text' => $request->title, 'wpBlog_title' => $request->body, 'wpBlog_category' => $request->selectV  ]);
+        return $request->title . ' ' . $request->body . ' Category: ' . $request->selectV . ' ';
+        
+    }
+    
+    
+   /**
+    * Saves new images to DB Wpress_ImagesStock (new images that a user uploaded while updtaing/editing a post)
+    * @param array $request, example of request => [ "title" => "TTTTTTTTT", "body" => "JavaScript Tutorial", "selectV" => "3", "imageToDelete" => "66", "_method" => "PUT", "imagesZZZ" => array:1 [0 => UploadedFile {#1172, -originalName: "2254.png", -mimeType: "image/png", -size: 30871} ] ]
+	* @param int $idX, id of edited post item
+    * @return 
+    */
+	public function updateNewImages($idX, $request)
+    {
+        if (isset($request->imagesZZZ)){ //if user uploaded new images
+            
+            foreach ($request->imagesZZZ as $fileImageX){
+			
+			    //getting Image info for Flash Message
+		        $imageName = time(). '_' . $fileImageX->getClientOriginalName();
+		        //$sizeInByte =     $fileImageX->getSize() . ' byte';
+		        //$sizeInKiloByte = round( ($fileImageX->getSize() / 1024), 2 ). ' kilobyte'; //round 10.55364364 to 10.5
+		        //$fileExtens =     $fileImageX->getClientOriginalExtension();
+		        //getting Image info for Flash Message
+		
+		    
+		        //Move uploaded image to the specified folder 
+		        $fileImageX->move(public_path('images/wpressImages'), $imageName);
+                //$move = File::move($imageName, public_path('images/wpressImages'));
+				//saving images
+		        $model = new Wpress_ImagesStock();
+			    $model->wpImStock_name    = $imageName; //image
+			    $model->wpImStock_postID  = $idX; // just saved article ID
+				$model->save();
+			
+		    }
+        }
+            
+        //Below is just for testing  ----  
+        //New images uploaded by User (while editing)
+        $imagesNew = ' User Uploaded new Images: '; 
+        
+        //if ($request->has('imagesZZZ')){
+        if (isset($request->imagesZZZ)){
+            foreach($request->imagesZZZ as $d){
+                $imagesNew.= " " . $d;    
+            }
+        } else {
+            $imagesNew = 'User did not loaded new images ';
+        }
+        return $imagesNew;
+        
+    }
+    
+    
+    
+    /**
+    * Deletes old images DB Wpress_ImagesStock (old images that a user wished to delete while updtaing/editing a post)
+    * @param array $request
+	* @param int $idX, id of edited post item
+    * @return 
+    */
+	public function deleteOldImages($idX, $request)
+    {
+        if ($request->has('imageToDelete')){ //if user opted some old images to be deleted
+                    
+            //convert string {$request->imageToDelete} to array
+            $del = explode(" ", $request->imageToDelete); // for bizzare reason {$request->imageToDelete) comes to Server as string not array 
+            foreach($del as $d){ //$del = ['45', '56']
+                
+                //find the image DB entry to delete
+                $data = Wpress_ImagesStock::findOrFail($d); 
+                //$data = Wpress_ImagesStock::where('wpImStock_id', $d)->get(); //find all  images user wishes to delete
+                
+                //remove the file itself from the folder 'images/wpressImages'
+		        if(file_exists(public_path('images/wpressImages/' . $data->wpImStock_name))){
+		            \Illuminate\Support\Facades\File::delete('images/wpressImages/' . $data->wpImStock_name);
+		        }
+                $data->delete(); //deletes the image record from DB 'Wpress_ImagesStock'
+                
+
+            }
+        }
+        
+        //Below is just for testing  ----  
+        $imageToDelete = ' User while updating requested to delete Images: '; 
+        
+        if ($request->has('imageToDelete')){
+            //convert string {$request->imageToDelete} to array
+            $del = explode(" ", $request->imageToDelete); // for bizzare reason {$request->imageToDelete) comes to Server as string not array 
+            foreach($del as $d){
+                $imageToDelete.= $d;    
+            }
+        } else {
+            $imageToDelete = ' User did not opted to delete any old images ';
+        }
+        return $imageToDelete;
+        
+    }
+    
+    
+    
+	
 }

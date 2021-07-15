@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Storage;
 use Illuminate\Support\Facades\DB;
-use App\models\wpBlogImages\Wpress_images_Posts; //model for all posts
+use App\models\wpBlogImages\Wpress_images_Posts;    //model for all posts
 use App\models\wpBlogImages\Wpress_images_Category; //model for all Wpress_images_Category
 use App\User; 
 //use App\Http\Requests\SaveNewArticleRequest;
@@ -58,6 +58,8 @@ class WpBlog_Admin_Rest_API_Contoller extends Controller
     /**
      * Admin REST API endpoint to Update/Edit one blog/item by ID, used via  /PUT . Triggered by Edit/Update Form "Submit" button.
      * Ajax Requst comes from ........../resources/assets/js/WpBlog_Admin_Part/components/pages/editItem.vue. Triggered by clicking Form "Submit" button
+     * @param $idX, an id of edited post, set in URL(in editItem.vue) like this 'api/post/admin_get_one_blog/' + idZ 
+     * @param $request, example of request => [ "title" => "TTTTTTTTT", "body" => "JavaScript Tutorial", "selectV" => "3", "imageToDelete" => "66", "_method" => "PUT", "imagesZZZ" => array:1 [0 => UploadedFile {#1172, -originalName: "2254.png", -mimeType: "image/png", -size: 30871} ] 
      * @return \Illuminate\Http\Response
      */
     public function AdminUpdateOneItem($idX, UpdateExistingArticleRequest $request)  //Request Class validation //Request $request
@@ -67,13 +69,13 @@ class WpBlog_Admin_Rest_API_Contoller extends Controller
            //return response()->json($request->validator->messages(), 400);
            return response()->json([
                'error' => true, 
-               'data' => 'Good, but validation crashes', 
+               'data' => 'Was seem to be OK, but validation crashes', 
                'validateErrors'=>  $request->validator->messages()]);
         }
         
         
-        
         //Below is just for testing ------
+        /*
         //Old images User clicked to delete (while editing)
         $imageToDelete = ' User while updating requested to delete Images: '; 
         
@@ -90,7 +92,7 @@ class WpBlog_Admin_Rest_API_Contoller extends Controller
         //New images uploaded by User (while editing)
         $imagesNew = ' User Uploaded new Images: '; 
         
-        if ($request->has('imagesZZZ')){
+        if (isset($request->imagesZZZ)){
             foreach($request->imagesZZZ as $d){
                 $imagesNew.= " " . $d;    
             }
@@ -105,15 +107,32 @@ class WpBlog_Admin_Rest_API_Contoller extends Controller
                       $imageToDelete . ' / ' .
                       $imagesNew
         ]);
-        
+        */
         //End Below is just for testing --------
         
         
-        
-       
-        
-        //wpress_blog_post::where('wpBlog_id', $id)->update([  'wpBlog_text' => $data['description'], 'wpBlog_title' => $data['title'], 'wpBlog_category' => $data['category_sel'] ]);
 
+        
+        $model = new Wpress_images_Posts();
+        
+        //Updates one post/item in DB 'wpressimages_blog_post'
+        $updatePost  = $model ->updatePostItem($idX, $request);
+        
+        //Saves new images (if any) to DB Wpress_ImagesStock (new images that a user uploaded while updtaing/editing a post)
+        $uploadNewImg = $model ->updateNewImages($idX, $request);
+        
+        //Deletes old images (if any) to DB DB Wpress_ImagesStock (old images that a user wished to delete while updtaing/editing a post)
+        $deleteOldImg = $model ->deleteOldImages($idX, $request);
+        
+        
+          return response()->json([
+            'error' => false, 
+            'data' => 'Model methods says: ' . 
+                      $updatePost   . ' / ' .
+                      $uploadNewImg . ' / ' .
+                      $deleteOldImg
+        ]);
+        
     }
 	
     
