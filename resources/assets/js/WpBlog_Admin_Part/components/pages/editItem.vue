@@ -369,7 +369,7 @@
                 formData.append('body',          this.inputBodyValue);  //adds "Body" input filed
                 formData.append('selectV',       this.inputSelectV);    //adds <select> input filed
                 formData.append('imageToDelete', this.oldImagesID_to_delete); //append an array of old Images IDs to delete
-                formData. append("_method", "PUT"); //fix for PUT method
+                formData.append("_method", "PUT"); //fix for PUT method
                 
                 //append new uploaded images to formData
                 var imagesUploaded = {};
@@ -456,7 +456,14 @@
             },
             
             
-            //GET all DB table categories (to build <select> in loadnew.vue)
+            
+           /*
+            |--------------------------------------------------------------------------
+            | GET all DB table categories (to build <select> in loadnew.vue)
+            |--------------------------------------------------------------------------
+            |
+            |
+            */
 	        getAjaxCategories(){
     
                 fetch('api/post/get_categories', { /*http://localhost/Laravel+Yii2_comment_widget/blog_Laravel/public/post/get_categories*/
@@ -486,9 +493,7 @@
                     swal("Crashed to get categories", "You are in catch", "error");
                 }); // catch any error
       
-        },
-    
-    
+            },
     
         },
         
@@ -499,6 +504,5 @@
 	}
 </script>
 
-<style scoped>
-	
+<style scoped>	
 </style>

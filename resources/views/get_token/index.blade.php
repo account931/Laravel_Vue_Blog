@@ -7,7 +7,6 @@
         <div class="col-md-11 col-md-offset-1">
             <div class="panel panel-default">
 			
-			
 			    <!-- Flash message if Success -->
 				@if(session()->has('flashMessageX'))
                     <div class="alert alert-success">
@@ -39,8 +38,6 @@
                 <!-- End Display form validation errors var 2 -->				
 					
 						
-						
-						
                 <div class="panel-heading text-warning borderX" style="border:1px solid black;">
 				    <p>
 				        <button style="font-size:24px">Get token <i class="fa fa-book"></i></button>
@@ -50,7 +47,6 @@
                 <div class="panel-body">
 		        </div>
 		    </div>
-				 
 				 
 				 
 					
@@ -75,9 +71,6 @@
         </div>
     </div>
 </div>
-
-
-
 
 
 @endsection

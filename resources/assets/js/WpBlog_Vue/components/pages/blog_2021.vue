@@ -7,8 +7,7 @@
 		    <h3> Blog Vue  {{tokenZZ}} STORE: {{this.$store.state.api_tokenY}} </h3>
             <p>{{this.ifMakeAjax}}</p>
 		</div>
-        
-        
+         
         
         <div class="row">
         
@@ -95,12 +94,10 @@
 			}
 		},
         
-        
-        
           
-       //computed property is used to declaratively describe a value that depends on other values. When you data-bind to a computed property inside the template, Vue knows when to update the DOM when any of the values depended upon by the computed property has changed.
-       computed: {
-           ...mapState(['posts']), //is needed for Vuex store, after it u may address Vuex Store value as {posts} instead of {this.$store.state.posts}
+        //computed property is used to declaratively describe a value that depends on other values. When you data-bind to a computed property inside the template, Vue knows when to update the DOM when any of the values depended upon by the computed property has changed.
+        computed: {
+            ...mapState(['posts']), //is needed for Vuex store, after it u may address Vuex Store value as {posts} instead of {this.$store.state.posts}
 	
 	        //mine test, not must-have, CONFIRM DELETE?????
 	        checkStore() {
@@ -128,83 +125,52 @@
   
   
   
-  //CONFIRM DELETE
-  //check if prev URL was '/details-info/2', if True, don't make ajax request again, as u are back from details-info
-  beforeRouteEnter (to, from, next) { //the target Route Object being navigated to,  the current route being navigated away from., this function must be called to resolve the hook
-     alert("beforeRouteEnter " + from.path);
-     
-    
-     
-     /*
-     
-     let promise = new Promise((resolve, reject) => {
-
-         setTimeout(() => {
-         alert("Promise");
-         // переведёт промис в состояние fulfilled с результатом "result"
-         resolve("result");
-        }, 1000);
-
-     });
-
-
-  
-        promise.then(function (response) {
-            next();
-        })
-        .catch(function (error) {
-            next();
-            console.log(error);
-        });
-        
-        
-     */   
-        
-        
-        
+        //CONFIRM DELETE
+        //check if prev URL was '/details-info/2', if True, don't make ajax request again, as u are back from details-info
+        beforeRouteEnter (to, from, next) { //the target Route Object being navigated to,  the current route being navigated away from., this function must be called to resolve the hook
+            alert("beforeRouteEnter " + from.path);
 
     
+            next(vm => {
+                var patternX = /details-info\/[0-9]+/g;  //RegExp
+                if (patternX.test(from.path)){ 
+                    vm.ifMakeAjax = false;
+                    alert("I'm from details. Dont do ajax!!!"); //vm.show = true;
+                } else {
+                    vm.ifMakeAjax = true;
+                    alert("From Details. Make ajax"); //vm.show = false; 
+                }
+                next();
+            });
+        }, 
+
+
+        methods: {
+            truncateText(text) {
+                if (text.length > 24) {
+                    return `${text.substr(0, 24)}...`;
+                }
+            return text;
+            },
     
-      next(vm => {
-        var patternX = /details-info\/[0-9]+/g;  //RegExp
-        if (patternX.test(from.path)){ 
-            vm.ifMakeAjax = false;
-            alert("I'm from details. Dont do ajax!!!"); //vm.show = true;
-    } else {
-        vm.ifMakeAjax = true;
-        alert("From Details. Make ajax"); //vm.show = false; 
+	        //set currentPost for viewing one article
+            viewPost(postIndex) {
+                const post = this.posts[postIndex];
+                this.currentPost = post;
+                this.postDialogVisible = true;
+            },
+    
+            //Router
+            goTodetail(prodId) {
+                let proId = prodId+1;
+                this.$router.push({name:'details-info',params:{Pidd:proId}}) //creates route like "/wpBlogVueFrameWork#/details/3"
+            }, 
+    
+
+
+
+        },
     }
-     next();
-  });
-}, 
-
-
-  methods: {
-    truncateText(text) {
-      if (text.length > 24) {
-        return `${text.substr(0, 24)}...`;
-      }
-      return text;
-    },
-    
-	//set currentPost for viewing one article
-    viewPost(postIndex) {
-      const post = this.posts[postIndex];
-      this.currentPost = post;
-      this.postDialogVisible = true;
-    },
-    
-    //Router
-    goTodetail(prodId) {
-        let proId = prodId+1;
-        this.$router.push({name:'details-info',params:{Pidd:proId}}) //creates route like "/wpBlogVueFrameWork#/details/3"
-    }, 
-    
-
-
-
-  },
-}
 
 
 </script>

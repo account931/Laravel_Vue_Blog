@@ -132,64 +132,63 @@
 import { mapActions } from 'vuex';
 import { mapState } from 'vuex';
 export default {
-  name: 'CreatePost',
-  //props: ['categorrrv'], //passed in view 
-  data () {
-    return {
-      dialogImageUrl: '',
-      dialogVisible: false, //flag
-      imageList: [],        //stores uploaded images
-      status_msg: '',
-      status: '',
-      isCreatingPost: false,//flag
-      title: '',  //form input "Title"
-      body: '',   //form input "Body"
-      selectV: '',//form input <select> 
-      componentKey: 0,
-	  tokenXX:'',
-      errroList: ['v', 'b'], //list of validations errors of server-side validator
-      categoriesList: [], //contains Categories from DB (loaded with ajax)
-    }
-  },
-  computed: {
-      //...mapState(['errroList']), 
-       booksGet () { //compute Back-end validation errors
-           return this.errroList;
-      }      
-  },
-  
-  mounted () {
-      let token = document.head.querySelector('meta[name="csrf-token"]'); //gets meta tag with csrf
-      //alert(token.content);
-	  this.tokenXX = token.content; //gets csrf token and sets it to data.tokenXX
-      
-      this.getAjaxCategories(); //get /GET all DB table categories (to build <select> in loadnew.vue)
-      
-  },
-  created(){
-  },
-  
-  methods: {
-    ...mapActions(['getAllPosts']),
-    
-    // ------ Element-UI Upload element METHODS ----------
-    
-    //on adding new image to form, do update array {this.imageList} (used to store all form uploaded images & appended to form)
-    updateImageList (file) {
-        this.imageList.push(file.raw);
-        console.log(this.imageList);
+    name: 'CreatePost',
+    //props: ['categorrrv'], //passed in view 
+    data () {
+        return {
+            dialogImageUrl: '',
+            dialogVisible: false, //flag
+            imageList: [],        //stores uploaded images
+            status_msg: '',
+            status: '',
+            isCreatingPost: false,//flag
+            title: '',  //form input "Title"
+            body: '',   //form input "Body"
+            selectV: '',//form input <select> 
+            componentKey: 0,
+	        tokenXX:'',
+            errroList: ['v', 'b'], //list of validations errors of server-side validator
+            categoriesList: [], //contains Categories from DB (loaded with ajax)
+        }
     },
+    computed: {
+        //...mapState(['errroList']), 
+        booksGet () { //compute Back-end validation errors
+            return this.errroList;
+        }      
+    },
+  
+    mounted () {
+        let token = document.head.querySelector('meta[name="csrf-token"]'); //gets meta tag with csrf
+        //alert(token.content);
+	    this.tokenXX = token.content; //gets csrf token and sets it to data.tokenXX
+        this.getAjaxCategories(); //get /GET all DB table categories (to build <select> in loadnew.vue)
+      
+    },
+    created(){
+    },
+  
+    methods: {
+        ...mapActions(['getAllPosts']),
+    
+        // =============== Start of Element-UI Upload element METHODS ============
+    
+        //on adding new image to form, do update array {this.imageList} (used to store all form uploaded images & appended to form)
+        updateImageList (file) {
+           this.imageList.push(file.raw);
+           console.log(this.imageList);
+        },
 	
-    //if u click "Preview" icon in Element-UI image Layout
-    handlePictureCardPreview (file) {
-      this.dialogImageUrl = file.url;
-      //this.imageList.push(file); //THIS WAS INCORRECT????
-      this.dialogVisible = true;//show pop-up with image
-    },
+        //if u click "Preview" icon in Element-UI image Layout
+        handlePictureCardPreview (file) {
+            this.dialogImageUrl = file.url;
+            //this.imageList.push(file); //THIS WAS INCORRECT????
+            this.dialogVisible = true;//show pop-up with image
+        },
     
-    //if u click "Delete" icon in Element-UI image Layout
-    handleRemove(file){
-        alert("Delete " + file.uid); //https://www.programmersought.com/article/73755547037/
+        //if u click "Delete" icon in Element-UI image Layout
+        handleRemove(file){
+            alert("Delete " + file.uid); //https://www.programmersought.com/article/73755547037/
         
             for(var i = 0; i < this.imageList.length; i++){
                 if(file.uid == this.imageList[i].uid){
@@ -197,262 +196,262 @@ export default {
                 }
             }
         
-        console.log(this.imageList);
-    },
+            console.log(this.imageList);
+        },
     
-    beforeRemove(file){
-        //some stuff
-        
-    },
+        beforeRemove(file){
+            //some stuff
+        },
 	
-    // ------ End Element-UI Upload element METHODS ----------
-    
-    
-    
-    //when user clicks Form submitting (create new post)
-    createPost (e) {
-      e.preventDefault();
-      if (!this.validateForm()) {
-        return false;
-      }
-	  
-	  //Form //PROBLEM HERE
-      this.isCreatingPost = true;
-      
-      //Use Formdata to bind inpts and images upload
-      var that = this; //Explaination => if you use this.data, it is incorrect, because when 'this' reference the vue-app, you could use this.data, but here (ajax success callback function), this does not reference to vue-app, instead 'this' reference to whatever who called this function(ajax call)
-      /*const*/ var formData = new FormData(); //new FormData(document.getElementById("myFormZZ"));
-      formData.append('title', this.title);
-      formData.append('body',  this.body);
-      formData.append('selectV', this.selectV);
-      
-      
-      var imagesUploaded = {};
-      $.each(this.imageList, function (key, imageV) {
-          formData.append(`imagesZZZ[${key}]`, imageV);
-          //imagesUploaded.push(`images[${key}]`, imageV);
-          //imagesUploaded.test = imageV;
-      });
-	  
-      //formData.append('imageX', imagesUploaded); //imageX my custom name
-      
-      console.log(this.imageList)
-	  console.log(formData);
-       
-	   
-	  //SENDING AJAX to create new post item
-      /* api
-        .post('/post/create_post', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        }) 
-		*/
-        //var thatX = this;
-        alert('token is ' + this.$store.state.api_tokenY);
-        
-       
-        
-        
-        //Add Bearer token to headers
-        $.ajaxSetup({
-            headers: {
-                'Authorization': 'Bearer ' + this.$store.state.api_tokenY
-            }
-        }); 
-      
-		$.ajax({
-                          
-		    url: 'api/post/create_post_vue', 
-            type: 'POST', //POST is to create a new user
-            
-            cache : false,
-            dataType    : 'json',
-            processData : false,
-            contentType: false,
-            //contentType:"application/json; charset=utf-8",						  
-            //contentType: 'application/x-www-form-urlencoded; charset=utf-8',
-            //contentType: 'multipart/form-data',
+        // =============== End  of Element-UI Upload element METHODS ============
 
-			//crossDomain: true,
-			//headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + this.$store.state.api_tokenY},
-            //headers: { 'Content-Type': 'application/json',  },
-			//contentType: false,
-			//dataType: 'json', //In Laravel causes crash!!!!!// without this it returned string(that can be alerted), now it returns object
+    
+    
+    
+       
+              
            
-			//passing the data
-         
-            
-            data: formData, //dataX//JSON.stringify(dataX)  ('#createNew').serialize()
-		    //Not used below
-            /*{   
-                _token: this.tokenXX, //csrf token	
-                title:    this.title,	
-                body:     this.body,
-                myImages: imagesToSend,	//array of images
+        /*
+        |--------------------------------------------------------------------------
+        | When user clicks Form submitting (create new post)
+        |--------------------------------------------------------------------------
+        |
+        |
+        */
+        createPost (e) {
+            e.preventDefault();
+            if (!this.validateForm()) {
+                return false;
+            }
+	  
+	        //Form //PROBLEM HERE
+            this.isCreatingPost = true;
+      
+            //Use Formdata to bind inpts and images upload
+            var that = this; //Explaination => if you use this.data, it is incorrect, because when 'this' reference the vue-app, you could use this.data, but here (ajax success callback function), this does not reference to vue-app, instead 'this' reference to whatever who called this function(ajax call)
+            var formData = new FormData(); //new FormData(document.getElementById("myFormZZ"));
+            formData.append('title', this.title);
+            formData.append('body',  this.body);
+            formData.append('selectV', this.selectV);
+      
+            var imagesUploaded = {};
+            $.each(this.imageList, function (key, imageV) {
+                formData.append(`imagesZZZ[${key}]`, imageV);
+                //imagesUploaded.push(`images[${key}]`, imageV);
+                //imagesUploaded.test = imageV;
+            });
+	        
+            console.log(this.imageList)
+	        console.log(formData);
+	   
+	        //SENDING AJAX to create new post item
+            /* api.post('/post/create_post', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            }) 
+		    */
+            alert('token is ' + this.$store.state.api_tokenY);
+        
+       
+            //Add Bearer token to headers
+            $.ajaxSetup({
+                headers: {
+                    'Authorization': 'Bearer ' + this.$store.state.api_tokenY
+                }
+            }); 
+      
+		    $.ajax({
+		        url: 'api/post/create_post_vue', 
+                type: 'POST', //POST is to create a new user
+                cache : false,
+                dataType    : 'json',
+                processData : false,
+                contentType: false,
+                //contentType:"application/json; charset=utf-8",						  
+                //contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+                //contentType: 'multipart/form-data',
+			    //crossDomain: true,
+			    //headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + this.$store.state.api_tokenY},
+                //headers: { 'Content-Type': 'application/json',  },
+			    //contentType: false,
+			    //dataType: 'json', //In Laravel causes crash!!!!!// without this it returned string(that can be alerted), now it returns object
+           
+			    //passing the data
+                data: formData, //dataX//JSON.stringify(dataX)  ('#createNew').serialize()
+		        //Not used below, reassigned to append
+                /*{   
+                    _token: this.tokenXX, //csrf token	
+                    title:    this.title,	
+                    body:     this.body,
+                    myImages: imagesToSend,	//array of images
                
-                
-			}, */
-            success: function(data) {
-                alert("success");            
-                alert("success" + JSON.stringify(data, null, 4));
-                
-                /*
-                if (data.errors) { 
-                    alert("success" + JSON.stringify(data.errors, null, 4));
-                    that.errroList = data.errors;
-                }*/
-                
-                
-                if(data.error == true ){ //if Rest API endpoint returns any predefined validation error
-                    var text = data.data;
-                    swal("Check", text, "error");
-                    
-                    //if validation errors (i.e if REST Contoller returns json ['error': true, 'data': 'Good, but validation crashes', 'validateErrors': title['Validation err text'],  body['Validation err text']])
-                    if(data.validateErrors){
-                       var tempoArray = []; //temporary array
-                       for (var key in data.validateErrors) { //Object iterate
-                           var t = data.validateErrors[key][0]; //gets validation err message, e.g validateErrors.title[0]
-                           tempoArray.push(t);
-                       }
-                       
-                       that.errroList = tempoArray; //change state errroList //{this-that} fix
-                    }
-                  
-                } else if(data.error == false){
-                    var tempoArray = []; 
-                    that.errroList = tempoArray; //clears validationn errors if any. Simple that.errroList = [] won't work
-                    swal("Good", "Bearer Token is OK", "success");
-                    swal("Good",  data.data, "success");
-                }
-			    that.isCreatingPost = false; //change button text            
-            },  //end success
-            
-			error: function (errorZ) {
-                alert("Crashed"); 
-			    alert("error" +  JSON.stringify(errorZ, null, 4));
-                console.log(errorZ.responseText);
-                console.log(errorZ);
-                
-                /*
-                if (errorZ.status == 422) {
-                    swal("Error", "Validation crashed", "error");  
-                }*/
-                
-                if(errorZ.responseJSON != null){
-                    if(errorZ.responseJSON.error == true || errorZ.responseJSON.error == "Unauthenticated."){ //if Rest endpoint returns any predefined error
-                       swal("Error: Unauthenticated", "Check Bearer Token", "error");  
-                      //alert("Unauthenticated");                  
-                    } 
-                }
-                swal("Error", "Something crashed", "error");  
+			    }, */
+                success: function(data) {
+                    alert("success");            
+                    alert("success" + JSON.stringify(data, null, 4));
 
+                    if(data.error == true ){ //if Rest API endpoint returns any predefined validation error
+                        var text = data.data;
+                        swal("Check", text, "error");
+                    
+                        //if validation errors (i.e if REST Contoller returns json ['error': true, 'data': 'Good, but validation crashes', 'validateErrors': title['Validation err text'],  body['Validation err text']])
+                        if(data.validateErrors){
+                            var tempoArray = []; //temporary array
+                            for (var key in data.validateErrors) { //Object iterate
+                                var t = data.validateErrors[key][0]; //gets validation err message, e.g validateErrors.title[0]
+                                tempoArray.push(t);
+                            }
+                       
+                            that.errroList = tempoArray; //change state errroList //{this-that} fix
+                        }
+                  
+                    } else if(data.error == false){
+                        var tempoArray = []; 
+                        that.errroList = tempoArray; //clears validationn errors if any. Simple that.errroList = [] won't work
+                        swal("Good", "Bearer Token is OK", "success");
+                        swal("Good",  data.data, "success");
+                    }
+			        that.isCreatingPost = false; //change button text            
+                },  //end success
+            
+			    error: function (errorZ) {
+                    alert("Crashed"); 
+			        alert("error" +  JSON.stringify(errorZ, null, 4));
+                    console.log(errorZ.responseText);
+                    console.log(errorZ);
                 
-                that.isCreatingPost = false; //change button text   
-			}	  
+                    /*
+                    if (errorZ.status == 422) {
+                        swal("Error", "Validation crashed", "error");  
+                    }*/
+                
+                    if(errorZ.responseJSON != null){
+                        if(errorZ.responseJSON.error == true || errorZ.responseJSON.error == "Unauthenticated."){ //if Rest endpoint returns any predefined error
+                            swal("Error: Unauthenticated", "Check Bearer Token", "error");  
+                            //alert("Unauthenticated");                  
+                        } 
+                    }
+                    swal("Error", "Something crashed", "error");  
+                
+                    that.isCreatingPost = false; //change button text   
+			    }	  
             });                             
             //END AJAXed  part 
             
-		    return false;
+		    return false; //to prevent /commnet further {fetch part}
 		
 		
-		//my fix instead of api.post. NOT ENGAGED, reassigned to ajax
-		fetch('api/post/create_post_vue', formData, { 
-              method: 'POST',
-		      
-			  //headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
-              //contentType: 'application/x-www-form-urlencoded; charset=utf-8',
-			  //data :   {//'_token': document.head.querySelector('meta[name="csrf-token"]').content,},
-		})
-        .then((res) => { 
-		  console.log(res);
-          this.title = this.body = ''
-          this.status = true
-          this.showNotification('Post Successfully Created. REWRITE function createPost(Request $request) without transactions')
-          this.isCreatingPost = false
-          this.imageList = []
-          /*
-           this.getAllPosts() can be used here as well
-           note: "that" has been assigned the value of "this" at the top
-           to avoid context related issues.
-           */
-          that.getAllPosts()
-          that.componentKey += 1
-        })
-    },
+		    //my fix instead of api.post. NOT ENGAGED, reassigned to ajax
+		    /*
+            fetch('api/post/create_post_vue', formData, { 
+                method: 'POST',
+			    //headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
+                //contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+			    //data :   {//'_token': document.head.querySelector('meta[name="csrf-token"]').content,},
+		    })
+            .then((res) => { 
+		        console.log(res);
+                this.title = this.body = ''
+                this.status = true
+                this.showNotification('Post Successfully Created. REWRITE function createPost(Request $request) without transactions')
+                this.isCreatingPost = false
+                this.imageList = []
+                
+                //this.getAllPosts() can be used here as well
+                //note: "that" has been assigned the value of "this" at the top to avoid context related issues.
+                
+                that.getAllPosts()
+                that.componentKey += 1
+            }) 
+            */
+        },
 	
-    //GET all DB table categories (to build <select> in loadnew.vue)
-	getAjaxCategories(){
-    
-        fetch('api/post/get_categories', { /*http://localhost/Laravel+Yii2_comment_widget/blog_Laravel/public/post/get_categories*/
-            method: 'get',
-            //pass Bearer token in headers ()
-            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.$store.state.api_tokenY },
-            //contentType: 'application/json',
+        
+        /*
+        |--------------------------------------------------------------------------
+        |GET all DB table categories (to build <select> in loadnew.vue)
+        |--------------------------------------------------------------------------
+        |
+        |
+        */
+	    getAjaxCategories(){
+            fetch('api/post/get_categories', { /*http://localhost/Laravel+Yii2_comment_widget/blog_Laravel/public/post/get_categories*/
+                method: 'get',
+                //pass Bearer token in headers ()
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.$store.state.api_tokenY },
+                //contentType: 'application/json',
 
-   
-        }).then(response => {
-              $('.loader-x').fadeOut(800);  //hide loader
-              return response.json();
-        }).then(dataZ => {
-            console.log("Categories => " + dataZ); 
-            if(dataZ.error == true|| dataZ.error == "Unauthenticated."){ //if Rest endpoint returns any predefined error
-                alert(dataZ.data);
-                swal("Unauthenticated", "Check Bearer Token", "error");
+            }).then(response => {
+                $('.loader-x').fadeOut(800);  //hide loader
+                return response.json();
+            }).then(dataZ => {
+                console.log("Categories => " + dataZ); 
+                if(dataZ.error == true|| dataZ.error == "Unauthenticated."){ //if Rest endpoint returns any predefined error
+                    alert(dataZ.data);
+                    swal("Unauthenticated", "Check Bearer Token", "error");
                   
-            } else if(dataZ.error == false){
-                swal("Done", "Categories are loaded.", "success");
-                this.categoriesList = dataZ.data;
-                console.log("Categ " + this.categoriesList[0].wpCategory_name);
+                } else if(dataZ.error == false){
+                    swal("Done", "Categories are loaded.", "success");
+                    this.categoriesList = dataZ.data;
+                    console.log("Categ " + this.categoriesList[0].wpCategory_name);
+                }
+            })
+	        .catch(/*err => */ function(err){
+                alert("Getting categories failed. Check if u're logged =>  " + err);
+                swal("Crashed", "You are in catch", "error");
+            }); // catch any error
+      
+        },
+    
+	
+	    /*
+        |--------------------------------------------------------------------------
+        |Client-side form validation
+        |--------------------------------------------------------------------------
+        |
+        |
+        */
+        validateForm () {
+            // no vaildation for images - it is needed
+            if (!this.title) {
+                this.status = false
+                this.showNotification('Post title cannot be empty')
+                return false
             }
-        })
-	    .catch(/*err => */ function(err){
-            alert("Getting categories failed. Check if u're logged =>  " + err);
-            swal("Crashed", "You are in catch", "error");
-        }); // catch any error
+            if (!this.body) {
+                this.status = false
+                this.showNotification('Post body cannot be empty')
+                return false
+            }
       
+            
+            if (!this.selectV) {
+                this.status = false;
+                this.showNotification('Select cannot be empty');
+                return false;
+            }
+      
+            this.showNotification(''); //clears error messages if any
+            return true
+        },
+        
+        
+        showNotification (message) {
+            this.status_msg = message;
+            setTimeout(() => {  //clears message in n seconds
+                this.status_msg = ''
+            }, 3000 * 155)
+        }
     },
-    
-	
-	
-    validateForm () {
-      // no vaildation for images - it is needed
-      if (!this.title) {
-        this.status = false
-        this.showNotification('Post title cannot be empty')
-        return false
-      }
-      if (!this.body) {
-        this.status = false
-        this.showNotification('Post body cannot be empty')
-        return false
-      }
-      
-      /*
-       if (!this.selectV) {
-        this.status = false;
-        this.showNotification('Select cannot be empty');
-        return false;
-      }*/
-      
-      this.showNotification(''); //clears error messages if any
-      return true
-    },
-    showNotification (message) {
-      this.status_msg = message;
-      setTimeout(() => {  //clears message in n seconds
-        this.status_msg = ''
-      }, 3000 * 155)
-    }
-  },
   
   
-  mutations: {
-    setErrors (state, dateX) {
-      // mutate state
-      state.errroList = dateX;
-      alert('mutated');
-    }
-  },
-    
-    
+    mutations: {
+        //not used here
+        setErrors (state, dateX) {
+            // mutate state
+            state.errroList = dateX;
+            alert('mutated');
+        }
+    },
+     
 }
 </script>

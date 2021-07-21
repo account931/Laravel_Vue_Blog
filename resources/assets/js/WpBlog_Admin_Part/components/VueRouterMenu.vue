@@ -42,7 +42,7 @@
         //before mount
         beforeMount() { 
             var dataTest = this.currentUser.api_token; //api_token is passed from php in view as <vue-router-menu-with-link-content-display v-bind:current-user='{!! Auth::user()->toJson() !!}'> 
-            this.$store.dispatch('changeVuexStoreTokenFromChild', dataTest); //working example how to change Vuex store from child component  
+            this.$store.dispatch('changeVuexStoreTokenFromChild', dataTest); //Sest api token to Vuex Store //working example how to change Vuex store from child component  
         },
     }
 </script>

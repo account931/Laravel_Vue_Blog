@@ -16,6 +16,7 @@ export default new Vuex.Store({
               //{"wpBlog_id":2,"wpBlog_title":"New", "wpBlog_text":"Store text 2"}],
       
       api_tokenY: '', //api_token is passed from php in view as <vue-router-menu-with-link-content-display v-bind:current-user='{!! Auth::user()->toJson() !!}'>  and uplifted here to this store in VueRouterMenu in beforeMount() Section
+      adm_posts_qunatity: 0,
       
 	  //products are used in Router example. NOT USED IN CLEANSED Version. Set via seeder to DB and extracted via store/index.js ajax
       /*	 
@@ -93,6 +94,11 @@ export default new Vuex.Store({
         }, 40);
       
       },
+      
+      //Fir mutation to set a quantity of found posts (in Admin Part). passedArgument is an arg passed in list_all.vue
+      setPostsQuantity ({ commit, state  }, passedArgument) {  //state is a fix
+        return commit('setQuantMutations', passedArgument ); //to store via mutation
+      },
 	  
 	  //working example how to change Vuex store from child component
 	  /*
@@ -114,11 +120,17 @@ export default new Vuex.Store({
 	    console.log('setPosts executed in store' + response);
         
     },
-    
+     
+     //mutation to set api token to STORE
      setApiToken(state, response) {   
         state.api_tokenY = response;
 	    console.log('setApiToken executed in store' + response + ' Store => ' + state.api_tokenY);
         alert('set apiToken mutation is done');
+    },
+    
+    //mutation to quantity of Blog to STORE
+    setQuantMutations(state, myPassedArg) {
+        state.adm_posts_qunatity = myPassedArg;        
     },
   },
   strict: debug

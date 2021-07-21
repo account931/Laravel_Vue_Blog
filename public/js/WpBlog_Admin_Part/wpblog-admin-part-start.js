@@ -23382,7 +23382,8 @@ var debug = "development" !== 'production';
     //posts: [{"wpBlog_id":1,"wpBlog_title":"Guadalupe Runolfsdottir", "wpBlog_text":"Store text 1", ,"wpBlog_category":4,"wpBlog_status":"1", "get_images":[{"wpImStock_id":16,"wpImStock_name":"product6.png","wpImStock_postID":1,"created_at":null,"updated_at":null}],"author_name":{"id":1,"name":"Admin","email":"admin@ukr.net","created_at":null,"updated_at":null},"category_names":{"wpCategory_id":4,"wpCategory_name":"Geeks","created_at":null,"updated_at":null}}, 
     //{"wpBlog_id":2,"wpBlog_title":"New", "wpBlog_text":"Store text 2"}],
 
-    api_tokenY: '' //api_token is passed from php in view as <vue-router-menu-with-link-content-display v-bind:current-user='{!! Auth::user()->toJson() !!}'>  and uplifted here to this store in VueRouterMenu in beforeMount() Section
+    api_tokenY: '', //api_token is passed from php in view as <vue-router-menu-with-link-content-display v-bind:current-user='{!! Auth::user()->toJson() !!}'>  and uplifted here to this store in VueRouterMenu in beforeMount() Section
+    adm_posts_qunatity: 0
 
     //products are used in Router example. NOT USED IN CLEANSED Version. Set via seeder to DB and extracted via store/index.js ajax
     /*	 
@@ -23460,6 +23461,15 @@ var debug = "development" !== 'production';
           swal("Crashed", "You are in catch", "error");
         }); // catch any error
       }, 40);
+    },
+
+
+    //Fir mutation to set a quantity of found posts (in Admin Part). passedArgument is an arg passed in list_all.vue
+    setPostsQuantity: function setPostsQuantity(_ref3, passedArgument) {
+      var commit = _ref3.commit,
+          state = _ref3.state;
+      //state is a fix
+      return commit('setQuantMutations', passedArgument); //to store via mutation
     }
   },
 
@@ -23469,10 +23479,19 @@ var debug = "development" !== 'production';
       state.posts = response.data /*.data*/;
       console.log('setPosts executed in store' + response);
     },
+
+
+    //mutation to set api token to STORE
     setApiToken: function setApiToken(state, response) {
       state.api_tokenY = response;
       console.log('setApiToken executed in store' + response + ' Store => ' + state.api_tokenY);
       alert('set apiToken mutation is done');
+    },
+
+
+    //mutation to quantity of Blog to STORE
+    setQuantMutations: function setQuantMutations(state, myPassedArg) {
+      state.adm_posts_qunatity = myPassedArg;
     }
   },
   strict: debug
@@ -78624,6 +78643,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__store_index__ = __webpack_require__(81);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_element_ui__ = __webpack_require__(82);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_element_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_element_ui__);
+//Admin Part
 //https://medium.com/js-dojo/build-a-simple-blog-with-multiple-image-upload-using-laravel-vue-5517de920796
 
 /**
@@ -78723,30 +78743,30 @@ var appMenu = new Vue({
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]);
 
 /* harmony default export */ __webpack_exports__["a"] = (new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
-  routes: [{
-    path: '/',
-    name: 'List_all',
-    component: __WEBPACK_IMPORTED_MODULE_4__components_pages_list_all___default.a
-  }, {
-    path: '/home',
-    name: 'home',
-    component: __WEBPACK_IMPORTED_MODULE_2__components_pages_home___default.a
-  }, {
-    path: '/contact',
-    name: 'contact',
-    component: __WEBPACK_IMPORTED_MODULE_3__components_pages_contact___default.a
-  }, {
-    path: '/list_all',
-    name: 'List_all',
-    component: __WEBPACK_IMPORTED_MODULE_4__components_pages_list_all___default.a
-  },
+    routes: [{
+        path: '/',
+        name: 'List_all',
+        component: __WEBPACK_IMPORTED_MODULE_4__components_pages_list_all___default.a
+    }, {
+        path: '/home',
+        name: 'home',
+        component: __WEBPACK_IMPORTED_MODULE_2__components_pages_home___default.a
+    }, {
+        path: '/contact',
+        name: 'contact',
+        component: __WEBPACK_IMPORTED_MODULE_3__components_pages_contact___default.a
+    }, {
+        path: '/list_all',
+        name: 'List_all',
+        component: __WEBPACK_IMPORTED_MODULE_4__components_pages_list_all___default.a
+    },
 
-  //Edit item Routing
-  {
-    path: '/edit-one-item/:PidMyID',
-    name: 'edit-one-item', //same as in component return section
-    component: __WEBPACK_IMPORTED_MODULE_5__components_pages_editItem___default.a //component itself
-  }]
+    //Edit one item Routing
+    {
+        path: '/edit-one-item/:PidMyID',
+        name: 'edit-one-item', //same as in component return section
+        component: __WEBPACK_IMPORTED_MODULE_5__components_pages_editItem___default.a //component itself
+    }]
 }));
 
 /***/ }),
@@ -79188,7 +79208,7 @@ exports = module.exports = __webpack_require__(7)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -79263,6 +79283,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
     methods: {
+
+        /*
+         |--------------------------------------------------------------------------
+         | Get all posts (ajax)
+         |--------------------------------------------------------------------------
+         |
+         |
+         */
         runAjaxToGetPosts: function runAjaxToGetPosts() /*{ commit, state  }*/{
 
             var that = this; //Explaination => if you use this.data, it is incorrect, because when 'this' reference the vue-app, you could use this.data, but here (ajax success callback function), this does not reference to vue-app, instead 'this' reference to whatever who called this function(ajax call)
@@ -79279,7 +79307,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             $.ajax({
                 url: 'api/post/admin_get_all_blog',
                 type: 'GET', //
-
                 cache: false,
                 dataType: 'json',
                 processData: false,
@@ -79305,10 +79332,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         var text = data.data;
                         swal("Check", text, "error");
                     } else if (data.error == false) {
+                        //if all is OK
                         that.ajaxList = data.data;
                         console.log("LISTT1: " + data.data);
                         console.log("LISTTT: " + that.ajaxList[0].wpBlog_title);
                         var tempoArray = [];
+
+                        //run a Vuex store method to set the quantity of found articles
+                        that.$store.dispatch('setPostsQuantity', data.data.length);
+
                         swal("Good", "Bearer Token is OK", "success");
                         swal("Good", data.data, "success");
                     }
@@ -79320,11 +79352,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     alert("error" + JSON.stringify(errorZ, null, 4));
                     console.log(errorZ.responseText);
                     console.log(errorZ);
-
-                    /*
-                    if (errorZ.status == 422) {
-                        swal("Error", "Validation crashed", "error");  
-                    }*/
 
                     if (errorZ.responseJSON != null) {
                         if (errorZ.responseJSON.error == true || errorZ.responseJSON.error == "Unauthenticated.") {
@@ -79347,7 +79374,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
 
 
-        //ajax to Delete one item
+        /*
+         |--------------------------------------------------------------------------
+         | Ajax to Delete one item
+         |--------------------------------------------------------------------------
+         |
+         |
+         */
         deletePost: function deletePost(item) {
             this.selectedItem = item;
             alert('Delete ' + this.selectedItem + " Implement REST API delete function");
@@ -79363,15 +79396,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                 url: 'api/post/admin_delete_item/' + this.selectedItem,
                 type: 'DELETE', //
-
                 cache: false,
                 dataType: 'json',
                 processData: false,
                 contentType: false,
-                //contentType:"application/json; charset=utf-8",						  
-                //contentType: 'application/x-www-form-urlencoded; charset=utf-8',
-                //contentType: 'multipart/form-data',
-
                 //crossDomain: true,
                 //headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + this.$store.state.api_tokenY},
                 //headers: { 'Content-Type': 'application/json',  },
@@ -79416,7 +79444,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         if (errorZ.responseJSON.error == true || errorZ.responseJSON.error == "Unauthenticated.") {
                             //if Rest endpoint returns any predefined error
                             swal("Error: Unauthenticated", "Check Bearer Token", "error");
-                            //alert("Unauthenticated");                  
                         }
                     }
                     swal("Error", "Something crashed", "error");
@@ -79426,7 +79453,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
 
 
-        //Router to view one Blog/Item
+        /*
+         |--------------------------------------------------------------------------
+         | Router action to view one Blog/Item
+         |--------------------------------------------------------------------------
+         |
+         |
+         */
         goToEditDetail: function goToEditDetail(prodId) {
             var proId = prodId;
             this.$router.push({ name: 'edit-one-item', params: { PidMyID: proId } }); //creates route like "/wpBlogVueFrameWork#/details/3"
@@ -79630,7 +79663,7 @@ exports = module.exports = __webpack_require__(7)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -80103,7 +80136,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         },
 
 
-        //GET all DB table categories (to build <select> in loadnew.vue)
+        /*
+         |--------------------------------------------------------------------------
+         | GET all DB table categories (to build <select> in loadnew.vue)
+         |--------------------------------------------------------------------------
+         |
+         |
+         */
         getAjaxCategories: function getAjaxCategories() {
             var _this = this;
 
@@ -80507,22 +80546,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'all-posts',
-  data: function data() {
-    return {
-      //postDialogVisible: false,
-    };
-  },
+    name: 'all-posts',
+    data: function data() {
+        return {
+            //postDialogVisible: false,
+        };
+    },
 
 
-  //computed property is used to declaratively describe a value that depends on other values. When you data-bind to a computed property inside the template, Vue knows when to update the DOM when any of the values depended upon by the computed property has changed.
-  computed: {},
-  beforeMount: function beforeMount() {},
+    //computed property is used to declaratively describe a value that depends on other values. When you data-bind to a computed property inside the template, Vue knows when to update the DOM when any of the values depended upon by the computed property has changed.
+    computed: {},
+    beforeMount: function beforeMount() {},
 
-  methods: {}
+    methods: {}
 });
 
 /***/ }),
@@ -80536,7 +80578,13 @@ var render = function() {
   return _c(
     "div",
     { staticClass: "col-sm-12 col-xs-12 alert alert-info borderX" },
-    [_vm._v("\n\t\tAricles found(Vue): Calc me  ")]
+    [
+      _vm._v(
+        "\n\t\tAricles found(Vuex):  " +
+          _vm._s(this.$store.state.adm_posts_qunatity) +
+          "   "
+      )
+    ]
   )
 }
 var staticRenderFns = []
@@ -80688,7 +80736,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     //before mount
     beforeMount: function beforeMount() {
         var dataTest = this.currentUser.api_token; //api_token is passed from php in view as <vue-router-menu-with-link-content-display v-bind:current-user='{!! Auth::user()->toJson() !!}'> 
-        this.$store.dispatch('changeVuexStoreTokenFromChild', dataTest); //working example how to change Vuex store from child component  
+        this.$store.dispatch('changeVuexStoreTokenFromChild', dataTest); //Sest api token to Vuex Store //working example how to change Vuex store from child component  
     }
 });
 

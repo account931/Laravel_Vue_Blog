@@ -39,8 +39,6 @@
                 <!-- End Display form validation errors var 2 -->				
 					
 						
-						
-						
                 <div class="panel-heading text-warning borderX" style="border:1px solid black;">
 				    <p>
 					    <img class="vue-logo" src="{{URL::to("/")}}/images/vue.png"  alt="a"/>
@@ -51,8 +49,8 @@
 				</div>
                 
                 <div class="alert alert-danger">
-                   <p>100% works only with Bearer token, when u send Bearer token ({User} table field {api_token}) in ajax as HEADER  => headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + state.api_tokenY } (in Vuex store) or this.$store.state.api_tokenY (in other components) ,</p>
-                   <p>FALSE=>Middleware seem to work, but have to pass api_token manually, cant get the user</p>
+                    <p>100% works only with Bearer token, when u send Bearer token ({User} table field {api_token}) in ajax as HEADER  => headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + state.api_tokenY } (in Vuex store) or this.$store.state.api_tokenY (in other components) ,</p>
+                    <p>FALSE=>Middleware seem to work, but have to pass api_token manually, cant get the user</p>
                 </div>
                 
                 <div class="panel-body">
@@ -61,41 +59,38 @@
 				 
 				 
 				 
-				<?php echo "My token is " .$myDBToken;  ?>
+		    <?php echo "My token is " .$myDBToken;  ?>
 					
 			<!----------- Vue.js Components + VUEX Store + VUE ROUTER ------------>	 
 			<div class="col-sm-12 col-xs-12" >
 
-					<!-- Show blogs quantity component -->
-					<div id="quant" class="col-sm-12 col-xs-12">
-					    <h3><b>Blog articles on Vue<b></h3>
-					    <show-quantity-of-posts/> <!-- Vue component -->
-                    </div>
+			    <!-- Show blogs quantity component -->
+			    <div id="quant" class="col-sm-12 col-xs-12">
+					<h3><b>Blog articles on Vue<b></h3>
+					<show-quantity-of-posts/> <!-- Vue component -->
+                </div>
                     
                     
-					<!-- Vue route menu -->
-					<div  id="vue-menu" class="col-sm-12 col-xs-12"> <!--  id="vue-menu" --> 
-					    <h3><b>Menu with Vue-Router</b></h3>                      
-                        <!-- My Vue component with Menu Links -->
-					    <vue-router-menu-with-link-content-display v-bind:current-user='{!! Auth::user()->toJson() !!}' > 
-                        </vue-router-menu-with-link-content-display/>
-                    </div>
+			    <!-- Vue route menu -->
+			    <div  id="vue-menu" class="col-sm-12 col-xs-12"> <!--  id="vue-menu" --> 
+					<h3><b>Menu with Vue-Router</b></h3>                      
+                    <!-- My Vue component with Menu Links -->
+					<vue-router-menu-with-link-content-display v-bind:current-user='{!! Auth::user()->toJson() !!}' > 
+                    </vue-router-menu-with-link-content-display/>
+                </div>
 					
 					
-					<!-- Form component -->
-                    <div id="createPost" class="col-md-6">
-                        <!--<create-post/>--> <!-- Vue component -->
-                    </div>
+			    <!-- Form component -->
+                <div id="createPost" class="col-md-6">
+                    <!--<create-post/>--> <!-- Vue component -->
+                </div>
 					
-					<!-- Show all posts component -->
-                    <div id="app2" class="col-md-6 posts-container" style="height: 45em; overflow-y: scroll">
-                        <all-posts /> <!-- Vue component -->
-                    </div>
+			    <!-- Show all posts component -->
+                <div id="app2" class="col-md-6 posts-container" style="height: 45em; overflow-y: scroll">
+                    <all-posts /> <!-- Vue component -->
+                </div>
                 </div>		
 				<!----------- Vue.js Componenet + VUEX ------------>	 		
-					
-					
-					
 					
                
             </div>

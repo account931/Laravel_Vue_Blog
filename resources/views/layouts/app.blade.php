@@ -127,7 +127,7 @@
 	@endif
 
     
-    <!-- (for Wpress Admin Part asset only -->
+    <!-- (for Wpress Vue Admin Part asset only -->
 	<!-- To register JS file for specific view only (In layout template) (Wpress Admin Part asset only) -->
     @if (in_array(Route::getFacadeRoot()->current()->uri(), ['adminStart'])) <!--Route::getFacadeRoot()->current()->uri()  returns testRest--> 
         <link  href="{{ asset('css/WpBlog_Admin_Part/wp_admin.css') }}" rel="stylesheet">

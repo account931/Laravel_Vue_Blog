@@ -9,39 +9,37 @@ import editItem from  '../components/pages/editItem';
 Vue.use(Router);
 
 export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'List_all',
-      component: list_all
-    },
-    {
-      path: '/home',
-      name: 'home',
-      component: home
-    },
+    routes: [
+        {
+            path: '/',
+            name: 'List_all',
+            component: list_all
+        },
+        
+        {
+            path: '/home',
+            name: 'home',
+            component: home
+        },
  
-     {
-      path: '/contact',
-      name: 'contact',
-      component: contact
-    },
+        {
+            path: '/contact',
+            name: 'contact',
+            component: contact
+        },
     
-    {
-      path: '/list_all',
-      name: 'List_all',
-      component: list_all
-    },
+        {
+            path: '/list_all',
+            name: 'List_all',
+            component: list_all
+        },
     
-     //Edit item Routing
-    {
-      path: '/edit-one-item/:PidMyID', 
-      name: 'edit-one-item', //same as in component return section
-      component: editItem //component itself
-    },
-
-
-   
+        //Edit one item Routing
+        {
+            path: '/edit-one-item/:PidMyID', 
+            name: 'edit-one-item', //same as in component return section
+            component: editItem //component itself
+        },
 	
-  ]
+    ]
 })

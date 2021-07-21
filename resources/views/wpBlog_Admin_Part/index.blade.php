@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 
 @section('content')
@@ -6,7 +5,6 @@
     <div class="row">
         <div class="col-md-11 col-md-offset-1">
             <div class="panel panel-default">
-			
 			
 			    <!-- Flash message if Success -->
 				@if(session()->has('flashMessageX'))
@@ -40,7 +38,6 @@
 					
 						
 						
-						
                 <div class="panel-heading text-warning borderX" style="border:1px solid black;">
 				    <p>
 					    <img class="vue-logo" src="{{URL::to("/")}}/images/admin.jpg"  alt="a"/>
@@ -56,40 +53,35 @@
                 
                 <div class="panel-body">
 		        </div>
+                
 		    </div>
 				 
 				 
 				 
-				<?php echo "My token is " .$myDBToken;  ?>
+		    <?php // echo "My token is " .$myDBToken;  ?>
 					
 			<!----------- Vue.js Components + VUEX Store + VUE ROUTER ------------>	 
 			<div class="col-sm-12 col-xs-12" >
 
-					<!-- Show blogs quantity component -->
-					<div id="quant" class="col-sm-12 col-xs-12">
-					    <h4><b>Blog articles on Vue found:<b></h4>
-					    <show-quantity-of-posts/> <!-- Vue component -->
-                    </div>
+			    <!-- Show blogs quantity component -->
+				<div id="quant" class="col-sm-12 col-xs-12">
+					<h4><b>Blog articles on Vue found:<b></h4>
+					<show-quantity-of-posts/> <!-- Vue component -->
+                </div>
                     
-					<!-- Vue route menu. Main -->
-					<div  id="vue-menu" class="col-sm-12 col-xs-12"> <!--  id="vue-menu" --> 
-					    <h3><b>Menu with Vue-Router</b></h3>
-                        <!-- My Vue component with Menu Links -->
-					    <vue-router-menu-with-link-content-display v-bind:current-user='{!! Auth::user()->toJson() !!}'> 
-                        </vue-router-menu-with-link-content-display/>
-                    </div>
+			    <!-- Vue route menu. Main -->
+			    <div  id="vue-menu" class="col-sm-12 col-xs-12"> <!--  id="vue-menu" --> 
+					<h3><b>Menu with Vue-Router</b></h3>
+                    <!-- My Vue component with Menu Links -->
+					<vue-router-menu-with-link-content-display v-bind:current-user='{!! Auth::user()->toJson() !!}'> 
+                    </vue-router-menu-with-link-content-display/>
+                </div>
 					
+            </div>		
+		    <!----------- Vue.js Componenet + VUEX ------------>	 		
 					
-					
-					
-                </div>		
-				<!----------- Vue.js Componenet + VUEX ------------>	 		
-					
-					
-					
-					
-               
-            </div>
+					 
+        <!--</div>-->
         </div>
     </div>
 </div>

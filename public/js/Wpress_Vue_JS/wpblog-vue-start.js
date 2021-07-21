@@ -23382,7 +23382,8 @@ var debug = "development" !== 'production';
     //posts: [{"wpBlog_id":1,"wpBlog_title":"Guadalupe Runolfsdottir", "wpBlog_text":"Store text 1", ,"wpBlog_category":4,"wpBlog_status":"1", "get_images":[{"wpImStock_id":16,"wpImStock_name":"product6.png","wpImStock_postID":1,"created_at":null,"updated_at":null}],"author_name":{"id":1,"name":"Admin","email":"admin@ukr.net","created_at":null,"updated_at":null},"category_names":{"wpCategory_id":4,"wpCategory_name":"Geeks","created_at":null,"updated_at":null}}, 
     //{"wpBlog_id":2,"wpBlog_title":"New", "wpBlog_text":"Store text 2"}],
 
-    api_tokenY: '' //api_token is passed from php in view as <vue-router-menu-with-link-content-display v-bind:current-user='{!! Auth::user()->toJson() !!}'>  and uplifted here to this store in VueRouterMenu in beforeMount() Section
+    api_tokenY: '', //api_token is passed from php in view as <vue-router-menu-with-link-content-display v-bind:current-user='{!! Auth::user()->toJson() !!}'>  and uplifted here to this store in VueRouterMenu in beforeMount() Section
+    adm_posts_qunatity: 0
 
     //products are used in Router example. NOT USED IN CLEANSED Version. Set via seeder to DB and extracted via store/index.js ajax
     /*	 
@@ -23460,6 +23461,15 @@ var debug = "development" !== 'production';
           swal("Crashed", "You are in catch", "error");
         }); // catch any error
       }, 40);
+    },
+
+
+    //Fir mutation to set a quantity of found posts (in Admin Part). passedArgument is an arg passed in list_all.vue
+    setPostsQuantity: function setPostsQuantity(_ref3, passedArgument) {
+      var commit = _ref3.commit,
+          state = _ref3.state;
+      //state is a fix
+      return commit('setQuantMutations', passedArgument); //to store via mutation
     }
   },
 
@@ -23469,10 +23479,19 @@ var debug = "development" !== 'production';
       state.posts = response.data /*.data*/;
       console.log('setPosts executed in store' + response);
     },
+
+
+    //mutation to set api token to STORE
     setApiToken: function setApiToken(state, response) {
       state.api_tokenY = response;
       console.log('setApiToken executed in store' + response + ' Store => ' + state.api_tokenY);
       alert('set apiToken mutation is done');
+    },
+
+
+    //mutation to quantity of Blog to STORE
+    setQuantMutations: function setQuantMutations(state, myPassedArg) {
+      state.adm_posts_qunatity = myPassedArg;
     }
   },
   strict: debug
@@ -79938,7 +79957,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -79986,26 +80004,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     beforeRouteEnter: function beforeRouteEnter(to, from, next) {
         //the target Route Object being navigated to,  the current route being navigated away from., this function must be called to resolve the hook
         alert("beforeRouteEnter " + from.path);
-
-        /*
-        
-        let promise = new Promise((resolve, reject) => {
-             setTimeout(() => {
-            alert("Promise");
-            // переведёт промис в состояние fulfilled с результатом "result"
-            resolve("result");
-           }, 1000);
-         });
-                promise.then(function (response) {
-               next();
-           })
-           .catch(function (error) {
-               next();
-               console.log(error);
-           });
-           
-           
-        */
 
         next(function (vm) {
             var patternX = /details-info\/[0-9]+/g; //RegExp
@@ -80898,7 +80896,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         var token = document.head.querySelector('meta[name="csrf-token"]'); //gets meta tag with csrf
         //alert(token.content);
         this.tokenXX = token.content; //gets csrf token and sets it to data.tokenXX
-
         this.getAjaxCategories(); //get /GET all DB table categories (to build <select> in loadnew.vue)
     },
     created: function created() {},
@@ -80906,7 +80903,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
     methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['getAllPosts']), {
 
-        // ------ Element-UI Upload element METHODS ----------
+        // =============== Start of Element-UI Upload element METHODS ============
 
         //on adding new image to form, do update array {this.imageList} (used to store all form uploaded images & appended to form)
         updateImageList: function updateImageList(file) {
@@ -80937,17 +80934,20 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         },
         beforeRemove: function beforeRemove(file) {
             //some stuff
-
         },
 
 
-        // ------ End Element-UI Upload element METHODS ----------
+        // =============== End  of Element-UI Upload element METHODS ============
 
 
-        //when user clicks Form submitting (create new post)
+        /*
+        |--------------------------------------------------------------------------
+        | When user clicks Form submitting (create new post)
+        |--------------------------------------------------------------------------
+        |
+        |
+        */
         createPost: function createPost(e) {
-            var _this = this;
-
             e.preventDefault();
             if (!this.validateForm()) {
                 return false;
@@ -80958,7 +80958,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
             //Use Formdata to bind inpts and images upload
             var that = this; //Explaination => if you use this.data, it is incorrect, because when 'this' reference the vue-app, you could use this.data, but here (ajax success callback function), this does not reference to vue-app, instead 'this' reference to whatever who called this function(ajax call)
-            /*const*/var formData = new FormData(); //new FormData(document.getElementById("myFormZZ"));
+            var formData = new FormData(); //new FormData(document.getElementById("myFormZZ"));
             formData.append('title', this.title);
             formData.append('body', this.body);
             formData.append('selectV', this.selectV);
@@ -80970,18 +80970,14 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 //imagesUploaded.test = imageV;
             });
 
-            //formData.append('imageX', imagesUploaded); //imageX my custom name
-
             console.log(this.imageList);
             console.log(formData);
 
             //SENDING AJAX to create new post item
-            /* api
-              .post('/post/create_post', formData, {
+            /* api.post('/post/create_post', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
-              }) 
+            }) 
             */
-            //var thatX = this;
             alert('token is ' + this.$store.state.api_tokenY);
 
             //Add Bearer token to headers
@@ -80992,10 +80988,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             });
 
             $.ajax({
-
                 url: 'api/post/create_post_vue',
                 type: 'POST', //POST is to create a new user
-
                 cache: false,
                 dataType: 'json',
                 processData: false,
@@ -81003,7 +80997,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 //contentType:"application/json; charset=utf-8",						  
                 //contentType: 'application/x-www-form-urlencoded; charset=utf-8',
                 //contentType: 'multipart/form-data',
-
                 //crossDomain: true,
                 //headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + this.$store.state.api_tokenY},
                 //headers: { 'Content-Type': 'application/json',  },
@@ -81011,27 +81004,18 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 //dataType: 'json', //In Laravel causes crash!!!!!// without this it returned string(that can be alerted), now it returns object
 
                 //passing the data
-
-
                 data: formData, //dataX//JSON.stringify(dataX)  ('#createNew').serialize()
-                //Not used below
+                //Not used below, reassigned to append
                 /*{   
                     _token: this.tokenXX, //csrf token	
                     title:    this.title,	
                     body:     this.body,
                     myImages: imagesToSend,	//array of images
-                   
-                    
+                
                 }, */
                 success: function success(data) {
                     alert("success");
                     alert("success" + JSON.stringify(data, null, 4));
-
-                    /*
-                    if (data.errors) { 
-                        alert("success" + JSON.stringify(data.errors, null, 4));
-                        that.errroList = data.errors;
-                    }*/
 
                     if (data.error == true) {
                         //if Rest API endpoint returns any predefined validation error
@@ -81083,43 +81067,50 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             });
             //END AJAXed  part 
 
-            return false;
+            return false; //to prevent /commnet further {fetch part}
+
 
             //my fix instead of api.post. NOT ENGAGED, reassigned to ajax
-            fetch('api/post/create_post_vue', formData, {
-                method: 'POST'
-
-                //headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
-                //contentType: 'application/x-www-form-urlencoded; charset=utf-8',
-                //data :   {//'_token': document.head.querySelector('meta[name="csrf-token"]').content,},
-            }).then(function (res) {
+            /*
+                  fetch('api/post/create_post_vue', formData, { 
+                      method: 'POST',
+             //headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
+                      //contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+             //data :   {//'_token': document.head.querySelector('meta[name="csrf-token"]').content,},
+            })
+                  .then((res) => { 
                 console.log(res);
-                _this.title = _this.body = '';
-                _this.status = true;
-                _this.showNotification('Post Successfully Created. REWRITE function createPost(Request $request) without transactions');
-                _this.isCreatingPost = false;
-                _this.imageList = [];
-                /*
-                 this.getAllPosts() can be used here as well
-                 note: "that" has been assigned the value of "this" at the top
-                 to avoid context related issues.
-                 */
-                that.getAllPosts();
-                that.componentKey += 1;
-            });
+                      this.title = this.body = ''
+                      this.status = true
+                      this.showNotification('Post Successfully Created. REWRITE function createPost(Request $request) without transactions')
+                      this.isCreatingPost = false
+                      this.imageList = []
+                      
+                      //this.getAllPosts() can be used here as well
+                      //note: "that" has been assigned the value of "this" at the top to avoid context related issues.
+                      
+                      that.getAllPosts()
+                      that.componentKey += 1
+                  }) 
+                  */
         },
 
 
-        //GET all DB table categories (to build <select> in loadnew.vue)
+        /*
+        |--------------------------------------------------------------------------
+        |GET all DB table categories (to build <select> in loadnew.vue)
+        |--------------------------------------------------------------------------
+        |
+        |
+        */
         getAjaxCategories: function getAjaxCategories() {
-            var _this2 = this;
+            var _this = this;
 
             fetch('api/post/get_categories', { /*http://localhost/Laravel+Yii2_comment_widget/blog_Laravel/public/post/get_categories*/
                 method: 'get',
                 //pass Bearer token in headers ()
                 headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.$store.state.api_tokenY }
                 //contentType: 'application/json',
-
 
             }).then(function (response) {
                 $('.loader-x').fadeOut(800); //hide loader
@@ -81132,14 +81123,23 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                     swal("Unauthenticated", "Check Bearer Token", "error");
                 } else if (dataZ.error == false) {
                     swal("Done", "Categories are loaded.", "success");
-                    _this2.categoriesList = dataZ.data;
-                    console.log("Categ " + _this2.categoriesList[0].wpCategory_name);
+                    _this.categoriesList = dataZ.data;
+                    console.log("Categ " + _this.categoriesList[0].wpCategory_name);
                 }
             }).catch( /*err => */function (err) {
                 alert("Getting categories failed. Check if u're logged =>  " + err);
                 swal("Crashed", "You are in catch", "error");
             }); // catch any error
         },
+
+
+        /*
+           |--------------------------------------------------------------------------
+           |Client-side form validation
+           |--------------------------------------------------------------------------
+           |
+           |
+           */
         validateForm: function validateForm() {
             // no vaildation for images - it is needed
             if (!this.title) {
@@ -81153,28 +81153,28 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 return false;
             }
 
-            /*
-             if (!this.selectV) {
-              this.status = false;
-              this.showNotification('Select cannot be empty');
-              return false;
-            }*/
+            if (!this.selectV) {
+                this.status = false;
+                this.showNotification('Select cannot be empty');
+                return false;
+            }
 
             this.showNotification(''); //clears error messages if any
             return true;
         },
         showNotification: function showNotification(message) {
-            var _this3 = this;
+            var _this2 = this;
 
             this.status_msg = message;
             setTimeout(function () {
                 //clears message in n seconds
-                _this3.status_msg = '';
+                _this2.status_msg = '';
             }, 3000 * 155);
         }
     }),
 
     mutations: {
+        //not used here
         setErrors: function setErrors(state, dateX) {
             // mutate state
             state.errroList = dateX;

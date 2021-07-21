@@ -62,8 +62,15 @@
         
         
         methods: {
+              
+           /*
+            |--------------------------------------------------------------------------
+            | Get all posts (ajax)
+            |--------------------------------------------------------------------------
+            |
+            |
+            */
             runAjaxToGetPosts(/*{ commit, state  }*/) {
-               
                
                 var that = this; //Explaination => if you use this.data, it is incorrect, because when 'this' reference the vue-app, you could use this.data, but here (ajax success callback function), this does not reference to vue-app, instead 'this' reference to whatever who called this function(ajax call)
                 alert('go');
@@ -79,7 +86,6 @@
 		        $.ajax({
 		            url: 'api/post/admin_get_all_blog', 
                     type: 'GET', //
-            
                     cache : false,
                     dataType    : 'json',
                     processData : false,
@@ -93,52 +99,50 @@
 			        //contentType: false,
 			        //dataType: 'json', //In Laravel causes crash!!!!!// without this it returned string(that can be alerted), now it returns object
            
-			//passing the data
-            data: {  _token: this.tokenXX, }, //csrf token, though here is not required
+			        //passing the data
+                    data: {  _token: this.tokenXX, }, //csrf token, though here is not required
 		    
-            success: function(data) {
-                alert("success");            
-                alert("success" + JSON.stringify(data, null, 4));
+                    success: function(data) {
+                        alert("success");            
+                        alert("success" + JSON.stringify(data, null, 4));
                 
-                if(data.error == true ){ //if Rest endpoint returns any predefined error
-                    var text = data.data;
-                    swal("Check", text, "error");
-              
+                        if(data.error == true ){ //if Rest endpoint returns any predefined error
+                            var text = data.data;
+                            swal("Check", text, "error");
                   
-                } else if(data.error == false){
-                    that.ajaxList = data.data; 
-                    console.log("LISTT1: " + data.data);
-                    console.log("LISTTT: " + that.ajaxList[0].wpBlog_title);
-                    var tempoArray = []; 
-                    swal("Good", "Bearer Token is OK", "success");
-                    swal("Good",  data.data, "success");
-                }
-                $('.loader-x').fadeOut(800); //show loader
-            },  //end success
+                        } else if(data.error == false){ //if all is OK
+                            that.ajaxList = data.data; 
+                            console.log("LISTT1: " + data.data);
+                            console.log("LISTTT: " + that.ajaxList[0].wpBlog_title);
+                            var tempoArray = []; 
+                    
+                            //run a Vuex store method to set the quantity of found articles
+                            that.$store.dispatch('setPostsQuantity', data.data.length); 
+                    
+                            swal("Good", "Bearer Token is OK", "success");
+                            swal("Good",  data.data, "success");
+                        }
+                        $('.loader-x').fadeOut(800); //show loader
+                    },  //end success
             
-			error: function (errorZ) {
-                alert("Crashed"); 
-			    alert("error" +  JSON.stringify(errorZ, null, 4));
-                console.log(errorZ.responseText);
-                console.log(errorZ);
+			        error: function (errorZ) {
+                        alert("Crashed"); 
+			            alert("error" +  JSON.stringify(errorZ, null, 4));
+                        console.log(errorZ.responseText);
+                        console.log(errorZ);
+
+                        if(errorZ.responseJSON != null){
+                            if(errorZ.responseJSON.error == true || errorZ.responseJSON.error == "Unauthenticated."){ //if Rest endpoint returns any predefined error
+                                swal("Error: Unauthenticated", "Check Bearer Token", "error");  
+                                //alert("Unauthenticated");                  
+                            } 
+                        }
+                        swal("Error", "Something crashed", "error");  
+                        $('.loader-x').fadeOut(800); //show loader
                 
-                /*
-                if (errorZ.status == 422) {
-                    swal("Error", "Validation crashed", "error");  
-                }*/
-                
-                if(errorZ.responseJSON != null){
-                    if(errorZ.responseJSON.error == true || errorZ.responseJSON.error == "Unauthenticated."){ //if Rest endpoint returns any predefined error
-                       swal("Error: Unauthenticated", "Check Bearer Token", "error");  
-                      //alert("Unauthenticated");                  
-                    } 
-                }
-                swal("Error", "Something crashed", "error");  
-                $('.loader-x').fadeOut(800); //show loader
-                
-			}	  
-            });                             
-            //END AJAXed  part
+			        }	  
+                });                             
+                //END AJAXed  part
             
             },
             
@@ -150,7 +154,14 @@
                 return text;
             },
             
-            //ajax to Delete one item
+            
+           /*
+            |--------------------------------------------------------------------------
+            | Ajax to Delete one item
+            |--------------------------------------------------------------------------
+            |
+            |
+            */
             deletePost(item){
                 this.selectedItem = item;
                 alert('Delete ' + this.selectedItem + " Implement REST API delete function");
@@ -164,78 +175,74 @@
       
 		        $.ajax({
                           
-		           url: 'api/post/admin_delete_item/' + this.selectedItem, 
-                   type: 'DELETE', //
-            
-            cache : false,
-            dataType    : 'json',
-            processData : false,
-            contentType: false,
-            //contentType:"application/json; charset=utf-8",						  
-            //contentType: 'application/x-www-form-urlencoded; charset=utf-8',
-            //contentType: 'multipart/form-data',
-
-			//crossDomain: true,
-			//headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + this.$store.state.api_tokenY},
-            //headers: { 'Content-Type': 'application/json',  },
-			//contentType: false,
-			//dataType: 'json', //In Laravel causes crash!!!!!// without this it returned string(that can be alerted), now it returns object
+		            url: 'api/post/admin_delete_item/' + this.selectedItem, 
+                    type: 'DELETE', //
+                    cache : false,
+                    dataType    : 'json',
+                    processData : false,
+                    contentType: false,
+			        //crossDomain: true,
+			        //headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + this.$store.state.api_tokenY},
+                    //headers: { 'Content-Type': 'application/json',  },
+			        //contentType: false,
+			        //dataType: 'json', //In Laravel causes crash!!!!!// without this it returned string(that can be alerted), now it returns object
            
-			//passing the data
-            data: {},
+			        //passing the data
+                    data: {},
 		    
-            success: function(data) {
-                alert("success");            
-                alert("success" + JSON.stringify(data, null, 4));
+                    success: function(data) {
+                        alert("success");            
+                        alert("success" + JSON.stringify(data, null, 4));
                 
-             
-                if(data.error == true ){ //if Rest endpoint returns any predefined error
-                    var text = data.data;
-                    swal("Check", text, "error");
+                        if(data.error == true ){ //if Rest endpoint returns any predefined error
+                            var text = data.data;
+                            swal("Check", text, "error");
                     
-                    //if validation errors (i.e if REST Contoller returns json ['error': true, 'data': 'Good, but validation crashes', 'validateErrors': title['Validation err text'],  body['Validation err text']])
-                    if(data.validateErrors){
-                       var tempoArray = []; //temporary array
-                       for (var key in data.validateErrors) { //Object iterate
-                           var t = data.validateErrors[key][0]; //gets validation err message, e.g validateErrors.title[0]
-                           tempoArray.push(t);
-                       }
-                       
-                    }
-                //if REST endpoint returns OK  
-                } else if(data.error == false){
-                    swal("Good", "Bearer Token is OK", "success");
-                    swal("Good",  data.data, "success");
-                }
-            },  //end success
+                            //if validation errors (i.e if REST Contoller returns json ['error': true, 'data': 'Good, but validation crashes', 'validateErrors': title['Validation err text'],  body['Validation err text']])
+                            if(data.validateErrors){
+                                var tempoArray = []; //temporary array
+                                for (var key in data.validateErrors) { //Object iterate
+                                    var t = data.validateErrors[key][0]; //gets validation err message, e.g validateErrors.title[0]
+                                    tempoArray.push(t);
+                                }
+                            }
+                        //if REST endpoint returns OK  
+                        } else if(data.error == false){
+                            swal("Good", "Bearer Token is OK", "success");
+                            swal("Good",  data.data, "success");
+                        }
+                    },  //end success
             
-			error: function (errorZ) {
-                alert("Crashed"); 
-			    alert("error" +  JSON.stringify(errorZ, null, 4));
-                console.log(errorZ.responseText);
-                console.log(errorZ);
+			        error: function (errorZ) {
+                        alert("Crashed"); 
+			            alert("error" +  JSON.stringify(errorZ, null, 4));
+                        console.log(errorZ.responseText);
+                        console.log(errorZ);
                 
-                
-                if(errorZ.responseJSON != null){
-                    if(errorZ.responseJSON.error == true || errorZ.responseJSON.error == "Unauthenticated."){ //if Rest endpoint returns any predefined error
-                       swal("Error: Unauthenticated", "Check Bearer Token", "error");  
-                      //alert("Unauthenticated");                  
-                    } 
-                }
-                swal("Error", "Something crashed", "error");  
+                        if(errorZ.responseJSON != null){
+                            if(errorZ.responseJSON.error == true || errorZ.responseJSON.error == "Unauthenticated."){ //if Rest endpoint returns any predefined error
+                               swal("Error: Unauthenticated", "Check Bearer Token", "error");  
+                            } 
+                        }
+                        swal("Error", "Something crashed", "error");  
 
-			}	  
-            });                             
-            //END AJAXed  part 
+			        }	  
+                });                             
+                //END AJAXed  part 
                 
             },
             
+
             
             
-            
-            
-            
-            //Router to view one Blog/Item
+           
+           /*
+            |--------------------------------------------------------------------------
+            | Router action to view one Blog/Item
+            |--------------------------------------------------------------------------
+            |
+            |
+            */
             goToEditDetail(prodId) {
                 let proId = prodId;
                 this.$router.push({name:'edit-one-item',params:{PidMyID:proId}}) //creates route like "/wpBlogVueFrameWork#/details/3"
