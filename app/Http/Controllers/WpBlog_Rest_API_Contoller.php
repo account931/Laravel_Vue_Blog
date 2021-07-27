@@ -178,10 +178,10 @@ class WpBlog_Rest_API_Contoller extends Controller
 
 	    try{
 			$ticket = new Wpress_images_Posts();
-			if($b = $ticket->saveFields($data, $imagesData, $userX->id)){
-			   return response()->json(['error' => false, 'data' => 'Saved successfully ' . $b]);
+			if($b = $ticket->saveFields($data, $imagesData, $userX->id)){ //$b = 'image1.jpg, image2.jpg'
+			   return response()->json(['error' => false, 'data' => 'Post was saved successfully with connected images: ' . $b]);
             } else {
-                return response()->json(['error' => true, 'data' => 'Saving failed1']);
+                return response()->json(['error' => true, 'data' => 'Saving failed']);
             }
 			
 		} catch(Exception $e){

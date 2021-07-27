@@ -8,25 +8,24 @@ use Illuminate\Support\Facades\File;
 
 class Wpress_images_Posts extends Model
 {
-	//CAUSES hasMany Crash
-   /*
-   public $wpBlog_id;
-   public $wpBlog_title;
-   public $wpBlog_text;
-   public $wpBlog_author;
-   public $wpBlog_category;
-   */
+    //CAUSES hasMany Crash
+    /*
+    public $wpBlog_id;
+    public $wpBlog_title;
+    public $wpBlog_text;
+    public $wpBlog_author;
+    public $wpBlog_category;
+    */
 
-  /**
-   * Connected DB table name.
-   *
-   * @var string
-   */
-  protected $table = 'wpressimages_blog_post';
-
-  
-  protected $fillable = ['wpBlog_author', 'wpBlog_title', 'wpBlog_text', 'wpBlog_category', 'wpBlog_created_at'];  //????? protected $fillable = ['wpBlog_author', 'wpBlog_text', 'wpBlog_author', 'wpBlog_category',  'updated_at', 'created_at'];
-  public $timestamps = false; //to override Error "Unknown Column 'updated_at'" that fires when saving new entry
+    /**
+     * Connected DB table name.
+     *
+     * @var string
+     */
+    protected $table = 'wpressimages_blog_post';
+    protected $fillable = ['wpBlog_author', 'wpBlog_title', 'wpBlog_text', 'wpBlog_category', 'wpBlog_created_at'];  //????? protected $fillable = ['wpBlog_author', 'wpBlog_text', 'wpBlog_author', 'wpBlog_category',  'updated_at', 'created_at'];
+    public $timestamps = false; //to override Error "Unknown Column 'updated_at'" that fires when saving new entry
+    protected $primaryKey = 'wpBlog_id'; //to show Laravel what id column is 'wpBlog_id' not 'id'        // override in model autoincrement id column name
 
   
   
@@ -128,7 +127,8 @@ class Wpress_images_Posts extends Model
     *
     * @param array $data, contains all form input 
 	* @param array $imagesData, contains all form images
-    * @return 
+    * @param int $userZ
+    * @return string $imagesList
     */
 	public function saveFields($data, $imagesData, $userZ)
     {
@@ -142,14 +142,15 @@ class Wpress_images_Posts extends Model
 		$this->wpBlog_category   = $data[2];
 		$this->wpBlog_created_at = date('Y-m-d H:i:s');
 		$this->save();
-		$idX = $this->id;
+		$idX = $this->wpBlog_id; //id of a new saved post, db 'wpressimages_blog_post'
 		
 		if($this->save()){ 
-		    
+		    $imagesList = '';
 		    foreach ($imagesData as $fileImageX){
 			
 			    //getting Image info for Flash Message
 		        $imageName = time(). '_' . $fileImageX->getClientOriginalName();
+                $imagesList.=  $imageName . ' ,';
 		        //$sizeInByte =     $fileImageX->getSize() . ' byte';
 		        //$sizeInKiloByte = round( ($fileImageX->getSize() / 1024), 2 ). ' kilobyte'; //round 10.55364364 to 10.5
 		        //$fileExtens =     $fileImageX->getClientOriginalExtension();
@@ -166,7 +167,7 @@ class Wpress_images_Posts extends Model
 				$model->save();
 			
 		    } 
-            return $imageName; // true;
+            return $imagesList; // true;
 		}
 	}
     
@@ -182,12 +183,16 @@ class Wpress_images_Posts extends Model
     * Updates one post/item in DB 'wpressimages_blog_post'
     * @param array $request, example of request => [ "title" => "TTTTTTTTT", "body" => "JavaScript Tutorial", "selectV" => "3", "imageToDelete" => "66", "_method" => "PUT", "imagesZZZ" => array:1 [0 => UploadedFile {#1172, -originalName: "2254.png", -mimeType: "image/png", -size: 30871} ] ]
 	* @param int $idX, id of edited post item
-    * @return 
+    * @return string
     */
 	public function updatePostItem($idX, $request)
     {
         self::where('wpBlog_id', $idX)->update([  'wpBlog_text' => $request->title, 'wpBlog_title' => $request->body, 'wpBlog_category' => $request->selectV  ]);
-        return $request->title . ' ' . $request->body . ' Category: ' . $request->selectV . ' ';
+        
+        //return string to construct an informational response
+        return '</br> Title: <i> '   . $request->title   . '.</i> ' .
+               '</br> Body: <i> '    . $request->body    . '.</i> ' .
+               '</br> Category: <i>' . $request->selectV . '.</i> ';
         
     }
     
@@ -224,7 +229,7 @@ class Wpress_images_Posts extends Model
 		    }
         }
             
-        //Below is just for testing  ----  
+        //Below is just for testing (to construct an informational response)  ----  
         //New images uploaded by User (while editing)
         $imagesNew = ' User Uploaded new Images: '; 
         
@@ -234,7 +239,7 @@ class Wpress_images_Posts extends Model
                 $imagesNew.= " " . $d;    
             }
         } else {
-            $imagesNew = 'User did not loaded new images ';
+            $imagesNew = 'User did not loaded new images. ';
         }
         return $imagesNew;
         
@@ -270,8 +275,8 @@ class Wpress_images_Posts extends Model
             }
         }
         
-        //Below is just for testing  ----  
-        $imageToDelete = ' User while updating requested to delete Images: '; 
+        //Below is just for testing (to construct an informational response)  ----  
+        $imageToDelete = '. While updating a user requested to delete Images: '; 
         
         if ($request->has('imageToDelete')){
             //convert string {$request->imageToDelete} to array
@@ -280,7 +285,7 @@ class Wpress_images_Posts extends Model
                 $imageToDelete.= $d;    
             }
         } else {
-            $imageToDelete = ' User did not opted to delete any old images ';
+            $imageToDelete = ' User did not opted to delete any old images. ';
         }
         return $imageToDelete;
         

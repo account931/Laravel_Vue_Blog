@@ -53,6 +53,7 @@
                         <p> <i class="fa fa-check-circle-o" style="font-size:24px"></i> Laravel Rest Api Blog on Vue + Vuex Store + Vue Router + Bearer token Header Authentication (middleware 'auth:api'). </p>
                         <p> <i class="fa fa-check-circle-o" style="font-size:24px"></i> Uses UI Toolkit Element-UI, Vue 2.0 based component library. </p>
                         <p> <i class="fa fa-check-circle-o" style="font-size:24px"></i> Login/password auth via session, REST API auth via Bearer token . </p>
+                        <p> <i class="fa fa-check-circle-o" style="font-size:24px"></i>Rest Api uses middleware 'myJsonForce' to return JSON</p>
                         <p> <i class="fa fa-check-circle-o" style="font-size:24px"></i> Token is User's table 'api_token' field. </p>
                         <p> <i class="fa fa-check-circle-o" style="font-size:24px"></i> Blog with images </p>
                         <p> <i class="fa fa-check-circle-o" style="font-size:24px"></i> Loaded via ajax, Rest Api Endpoints </p>

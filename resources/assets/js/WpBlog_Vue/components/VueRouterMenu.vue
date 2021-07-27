@@ -29,17 +29,17 @@
                         </li>
                         <li class="nav-item">
                             <router-link class="nav-link" to="/services">Services</router-link>
-                                </li>
-                            <li class="nav-item">
-                                <router-link class="nav-link" to="/contact">Contact</router-link>
-                            </li>
-                            <li class="nav-item">
-                                <router-link class="nav-link" to="/New_2021">Blog_2021</router-link>
-                            </li>
-                             <li class="nav-item">
-                                <router-link class="nav-link" to="/loadNew">Load new- </router-link>
-                                <!--<router-link class="nav-link" :to="{name: 'load-New', params: { categorrrv: "IICCC" }  }"> Load new </router-link>-->
-                            </li>
+                        </li>
+                        <li class="nav-item">
+                            <router-link class="nav-link" to="/contact">Contact</router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link class="nav-link" to="/New_2021">Blog_2021</router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link class="nav-link" to="/loadNew">Load new- </router-link>
+                            <!--<router-link class="nav-link" :to="{name: 'load-New', params: { categorrrv: "IICCC" }  }"> Load new </router-link>-->
+                        </li>
                     </ul>
                 </div> <!-- end  id="navbarResponsive" -->
 		
@@ -77,11 +77,25 @@
                                 </li>
                                 <!--<li><a href="#">Page Not-Used</a></li>-->
 		
+        
 		                        <!-- Vue routert links -->
-                                <li class="nav-item"> <router-link class="nav-link" to="/home">Home</router-link> </li>
-	                            <li class="nav-item"> <router-link class="nav-link" to="/blog">Blog</router-link> </li>
-                                <li class="nav-item"> <router-link class="nav-link" to="/services">Services</router-link> </li>
-                                <li class="nav-item"><router-link class="nav-link" to="/contact">Contact</router-link> </li>
+                                <li class="nav-item">
+                                    <router-link class="nav-link" to="/blog">Blog</router-link>
+                                </li>
+                                <li class="nav-item">
+                                    <router-link class="nav-link" to="/services">Services</router-link>
+                                </li>
+                                <li class="nav-item">
+                                    <router-link class="nav-link" to="/contact">Contact</router-link>
+                                </li>
+                                <li class="nav-item">
+                                    <router-link class="nav-link" to="/New_2021">Blog_2021</router-link>
+                                </li>
+                                <li class="nav-item">
+                                    <router-link class="nav-link" to="/loadNew">Load new- </router-link>
+                                    <!--<router-link class="nav-link" :to="{name: 'load-New', params: { categorrrv: "IICCC" }  }"> Load new </router-link>-->
+                                </li>
+                        
 		
                             </ul>
                             <ul class="nav navbar-nav navbar-right">
@@ -94,14 +108,29 @@
                 <!--- End Menu Variant 2 --->
 
 
+
+
+
                 <!--- Menu Variant 3 --->
                 <nav class="navbar navbar-inverse fix-for-non-working-click-in-mobile"> <!-- .fix-for-non-working-click-in-mobile is a fix for non-working click in mobile -->
 
                     <ul class="nav navbar-nav">
-                        <li class="nav-item"> <router-link class="nav-link" to="/home">Home</router-link> </li>
-	                    <li class="nav-item"> <router-link class="nav-link" to="/blog">Blog</router-link> </li>
-                        <li class="nav-item"> <router-link class="nav-link" to="/services">Services</router-link> </li>
-                        <li class="nav-item"><router-link class="nav-link" to="/contact">Contact</router-link> </li>
+                        <li class="nav-item">
+                            <router-link class="nav-link" to="/blog">Blog</router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link class="nav-link" to="/services">Services</router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link class="nav-link" to="/contact">Contact</router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link class="nav-link" to="/New_2021">Blog_2021</router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link class="nav-link" to="/loadNew">Load new- </router-link>
+                            <!--<router-link class="nav-link" :to="{name: 'load-New', params: { categorrrv: "IICCC" }  }"> Load new </router-link>-->
+                        </li>
                     </ul>
                 </nav>
 	            <!--- End Menu Variant 3 --->

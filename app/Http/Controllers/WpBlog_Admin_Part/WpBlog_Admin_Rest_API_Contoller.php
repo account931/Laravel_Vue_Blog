@@ -10,6 +10,7 @@ use Storage;
 use Illuminate\Support\Facades\DB;
 use App\models\wpBlogImages\Wpress_images_Posts;    //model for all posts
 use App\models\wpBlogImages\Wpress_images_Category; //model for all Wpress_images_Category
+use App\models\wpBlogImages\Wpress_ImagesStock; //table for images
 use App\User; 
 //use App\Http\Requests\SaveNewArticleRequest;
 use App\Http\Requests\UpdateExistingArticleRequest; //Validation Request Class
@@ -125,12 +126,12 @@ class WpBlog_Admin_Rest_API_Contoller extends Controller
         $deleteOldImg = $model ->deleteOldImages($idX, $request);
         
         
-          return response()->json([
+        return response()->json([
             'error' => false, 
-            'data' => 'Model methods says: ' . 
-                      $updatePost   . ' / ' .
-                      $uploadNewImg . ' / ' .
-                      $deleteOldImg
+            'data' => 'Successfully updated. </br>' . 
+                    $updatePost   . ' </br> ' .  //Title: 'xxx', body: 'xxx', category: 'xxx'
+                    $uploadNewImg . ' </br> ' .  //'User Uploaded new Images' || 'User did not loaded new images'
+                    $deleteOldImg                //'While updating a user requested to delete Images' || 'User did not opted to delete any old images'
         ]);
         
     }
@@ -142,33 +143,65 @@ class WpBlog_Admin_Rest_API_Contoller extends Controller
     
 	
     /**
-     * Admin REST API endpoint to /DELETE one item
+     * Admin REST API endpoint to /DELETE one item (one post in DB {Wpress_images_Posts} and realtive images in DB {Wpress_ImagesStock})
      * Ajax Requst for Delete comes from ........../resources/assets/js/WpBlog_Admin_Part/components/pages/list_all.vue
      * Triggered by click
      * @return json
      */
 	public function deleteOneItem($idN) //http://localhost/Laravel+Yii2_comment_widget/blog_Laravel/public/post/admin_delete_item/{id}
     {
-        return response()->json(['error' => false, 'data' => "Implement Deleting for  " . $idN ]); 
+        
+        $data = Wpress_images_Posts::with('getImages')->findOrFail($idN);
+        //$data = Wpress_images_Posts::with('getImages', 'authorName', 'categoryNames')->where('wpBlog_id', $idN)->orderBy('wpBlog_created_at', 'desc')->get(); //->with('getImages', 'authorName', 'categoryNames') => hasMany/belongTo Eager Loading
 
         /*
-        $data = Abz_Employees::findOrFail($id);
-        $info = $data;
+        //version for $db->get(), i.e returns array of objects
+        $text = "";
+        foreach($data as $b){
+            if ($b->getImages->isEmpty()){
+                $text.= 'Screw ';
+            } else {
+                foreach($b->getImages as $f){
+                    $text.= " Id to delete: " . $f->wpImStock_id . " ";
+                }
+                
+            }
+           
+        }
+        */
         
-        //reassign a new superior to deleted user's subordinates. Upon deleting this employee, find this employee subordinates (whose who has this deleted emplyee's ID as in their 'superior_id' column and assign them other superior with the same rank)
-		$model = new Abz_Employees();
-		$v = $model->reassignSuperior($info);
+        //version for $db->findOrFail($idN), i.e if it  returns one object
+        $text = "";
+        if ($data->getImages->isEmpty()){
+            $text.= ' No images connected to post found. ';
+        } else {
+            foreach($data->getImages as $f){
+                $text.= " Id to delete: " . $f->wpImStock_id . " ";
+                
+                
+                //Delete relevant images from folder 'images/wpressImages/'
+                if(file_exists(public_path('images/wpressImages/' .  $f->wpImStock_name))){
+		            \Illuminate\Support\Facades\File::delete('images/wpressImages/' . $f->wpImStock_name);
+		        }
+                
+                //Delete relevant images from DB table {Wpress_ImagesStock} (images connected to post blog)
+                $img = Wpress_ImagesStock::findOrFail($f->wpImStock_id); 
+                $img->delete();
+                
+            }
+                
+        }
         
-        //delete the image from folder '/images/employees/'
-		//$product = Abz_Employees::where('id', $id)->first(); //found image 
-		if(file_exists(public_path('images/employees/' . $data->image))){
-		    \Illuminate\Support\Facades\File::delete('images/employees/' . $data->image);
-		}
+        $data->delete(); //delete the Post itself from DB  {Wpress_images_Posts}       
         
-		$data->delete(); //delete the user
-		
-		return response()->json(['result' => $v]);
-        */        
+        
+        
+        
+        return response()->json([
+            'error' => false, 
+            'data'  => 'Successfully deleted Post ID: ' . $idN . '. </br> ' .
+                       'Relevant images connected to post were deleted from Wpress_ImagesStock with IDs: ' . $text
+        ]);         
     }
 	
 }

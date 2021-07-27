@@ -23371,130 +23371,131 @@ module.exports = function listToStyles (parentId, list) {
 
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */]);
-
 var debug = "development" !== 'production';
 
 //Vuex store itself
 /* harmony default export */ __webpack_exports__["a"] = (new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
-  state: {
-    //posts used in Vue blog
-    posts: [],
-    //posts: [{"wpBlog_id":1,"wpBlog_title":"Guadalupe Runolfsdottir", "wpBlog_text":"Store text 1", ,"wpBlog_category":4,"wpBlog_status":"1", "get_images":[{"wpImStock_id":16,"wpImStock_name":"product6.png","wpImStock_postID":1,"created_at":null,"updated_at":null}],"author_name":{"id":1,"name":"Admin","email":"admin@ukr.net","created_at":null,"updated_at":null},"category_names":{"wpCategory_id":4,"wpCategory_name":"Geeks","created_at":null,"updated_at":null}}, 
-    //{"wpBlog_id":2,"wpBlog_title":"New", "wpBlog_text":"Store text 2"}],
+    state: {
+        //posts used in Vue blog
+        posts: [], //posts: [{"wpBlog_id":1,"wpBlog_title":"Guadalupe Runolfsdottir", "wpBlog_text":"Store text 1", ,"wpBlog_category":4,"wpBlog_status":"1", "get_images":[{"wpImStock_id":16,"wpImStock_name":"product6.png","wpImStock_postID":1,"created_at":null,"updated_at":null}],"author_name":{"id":1,"name":"Admin","email":"admin@ukr.net","created_at":null,"updated_at":null},"category_names":{"wpCategory_id":4,"wpCategory_name":"Geeks","created_at":null,"updated_at":null}}, {"wpBlog_id":2,"wpBlog_title":"New", "wpBlog_text":"Store text 2"}],
+        api_tokenY: '', //api_token is passed from php in view as <vue-router-menu-with-link-content-display v-bind:current-user='{!! Auth::user()->toJson() !!}'>  and uplifted here to this store in VueRouterMenu in beforeMount() Section
+        adm_posts_qunatity: 0 //quantity of posts found
 
-    api_tokenY: '', //api_token is passed from php in view as <vue-router-menu-with-link-content-display v-bind:current-user='{!! Auth::user()->toJson() !!}'>  and uplifted here to this store in VueRouterMenu in beforeMount() Section
-    adm_posts_qunatity: 0
-
-    //products are used in Router example. NOT USED IN CLEANSED Version. Set via seeder to DB and extracted via store/index.js ajax
-    /*	 
-    products:[
-     {productTitle:"ABCN", image: 'product1.png', productId:1},
-        {productTitle:"KARMA",image: 'product2.png', productId:2},
-        {productTitle:"Tino", image: 'product3.png', productId:3},
-        {productTitle:"EFG",  image: 'product4.png', productId:4},
-        {productTitle:"MLI",  image: 'product5.png', productId:5},
-        {productTitle:"Banan",image: 'product6.png', productId:6}
-      ],
-      */
-  },
-
-  computed: {
-    BASE_URL: function BASE_URL() {
-      return this.$store.state.api_tokenY;
-    }
-  },
-
-  actions: {
-    /*
-       async getAllPosts({ commit }) { 
-         return commit('setPosts', await fetch('http://localhost/Laravel+Yii2_comment_widget/blog_Laravel/public/post/get_all') )
-            //return commit('setPosts', await api.get('/post/get_all'))
-        }, */
-
-    //working example how to change Vuex store from child component //Catch a passed api token from VueRouterMenu, triggered in beforeMount()
-    changeVuexStoreTokenFromChild: function changeVuexStoreTokenFromChild(_ref, dataTestX) {
-      var commit = _ref.commit;
-
-      //var dataTest = {"error":false,"data":[{"wpBlog_id":1,"wpBlog_title":"Dima", "wpBlog_text":"Store 1", "get_images":[]}, {"wpBlog_id":2,"wpBlog_title":"Dima 2", "wpBlog_text":"Store 2", "get_images":[]}]};
-      console.log('store token ' + dataTestX);
-      return commit('setApiToken', dataTestX); //sets dataTestX to store via mutation
+        //products are used in Router example. NOT USED IN CLEANSED Version. Set via seeder to DB and extracted via store/index.js ajax
+        /*	 
+        products:[
+         {productTitle:"ABCN", image: 'product1.png', productId:1},
+            {productTitle:"KARMA",image: 'product2.png', productId:2},
+            {productTitle:"Tino", image: 'product3.png', productId:3},
+            {productTitle:"EFG",  image: 'product4.png', productId:4},
+            {productTitle:"MLI",  image: 'product5.png', productId:5},
+            {productTitle:"Banan",image: 'product6.png', productId:6}
+        ],
+        */
     },
 
-
-    //ajax request, get REST API located at => WpBlog_VueContoller/ function getAllPosts()
-    getAllPosts: function getAllPosts(_ref2) {
-      var commit = _ref2.commit,
-          state = _ref2.state;
-      //state is a fix
-      $('.loader-x').fadeIn(800); //show loader
-
-      setTimeout(function () {
-        //dont need
-        alert('start (True) Disable 2nd alert in AllPosts beforeMount');
-        alert("store1 " + state.api_tokenY);
-        //alert( "store2 "  + this.BASE_URL() );
-        fetch('api/post/get_all' /*?token=' + state.api_tokenY*/, { //http://localhost/Laravel+Yii2_comment_widget/blog_Laravel/public/post/get_all
-          method: 'get',
-          //pass Bearer token in headers ()
-          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + state.api_tokenY }
-          //contentType: 'application/json',
-
-
-        }).then(function (response) {
-          $('.loader-x').fadeOut(800); //hide loader
-          return response.json();
-        }).then(function (dataZ) {
-          console.log("Here STORE => " + dataZ);
-          //core rewritten async getAllPosts, trigger mutation setPosts()
-
-          if (dataZ.error == true || dataZ.error == "Unauthenticated.") {
-            //if Rest endpoint returns any predefined error
-            alert(dataZ.data);
-            swal("Unauthenticated", "Check Bearer Token", "error");
-          } else if (dataZ.error == false) {
-
-            swal("Done", "Articles are loaded.", "success");
-            return commit('setPosts', dataZ); //sets ajax results to store via mutation
-          }
-        }).catch( /*err => */function (err) {
-          alert("Getting articles failed ( in store/index.js). Check if ure logged =>  " + err);
-          swal("Crashed", "You are in catch", "error");
-        }); // catch any error
-      }, 40);
+    computed: {
+        //not used here
+        BASE_URL: function BASE_URL() {
+            return this.$store.state.api_tokenY;
+        }
     },
 
+    actions: {
+        /*
+           async getAllPosts({ commit }) { 
+               return commit('setPosts', await fetch('http://localhost/Laravel+Yii2_comment_widget/blog_Laravel/public/post/get_all') )
+                  //return commit('setPosts', await api.get('/post/get_all'))
+              }, */
 
-    //Fir mutation to set a quantity of found posts (in Admin Part). passedArgument is an arg passed in list_all.vue
-    setPostsQuantity: function setPostsQuantity(_ref3, passedArgument) {
-      var commit = _ref3.commit,
-          state = _ref3.state;
-      //state is a fix
-      return commit('setQuantMutations', passedArgument); //to store via mutation
-    }
-  },
+        //working example how to change Vuex store from child component //Catch a passed api token from VueRouterMenu, triggered in beforeMount()
+        changeVuexStoreTokenFromChild: function changeVuexStoreTokenFromChild(_ref, dataTestX) {
+            var commit = _ref.commit;
 
-  mutations: {
-    setPosts: function setPosts(state, response) {
-      alert('Set posts mutation successfully');
-      state.posts = response.data /*.data*/;
-      console.log('setPosts executed in store' + response);
+            //var dataTest = {"error":false,"data":[{"wpBlog_id":1,"wpBlog_title":"Dima", "wpBlog_text":"Store 1", "get_images":[]}, {"wpBlog_id":2,"wpBlog_title":"Dima 2", "wpBlog_text":"Store 2", "get_images":[]}]};
+            console.log('store token ' + dataTestX);
+            return commit('setApiToken', dataTestX); //sets dataTestX to store via mutation
+        },
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Ajax request, get REST API located at => WpBlog_VueContoller/ function getAllPosts()
+        |--------------------------------------------------------------------------
+        |
+        |
+        */
+        getAllPosts: function getAllPosts(_ref2) {
+            var commit = _ref2.commit,
+                state = _ref2.state;
+            //state is a fix
+            $('.loader-x').fadeIn(800); //show loader
+            //setTimeout(function(){ //dont need
+            alert('start (True) Disable 2nd alert in AllPosts beforeMount');
+            alert("store1 " + state.api_tokenY);
+            //alert( "store2 "  + this.BASE_URL() );
+            fetch('api/post/get_all' /*?token=' + state.api_tokenY*/, { //http://localhost/Laravel+Yii2_comment_widget/blog_Laravel/public/post/get_all
+                method: 'get',
+                //pass Bearer token in headers ()
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + state.api_tokenY }
+                //contentType: 'application/json',
+
+            }).then(function (response) {
+                $('.loader-x').fadeOut(800); //hide loader
+                return response.json();
+            }).then(function (dataZ) {
+                console.log("Here STORE => " + dataZ);
+                //core rewritten async getAllPosts, trigger mutation setPosts()
+
+                if (dataZ.error == true || dataZ.error == "Unauthenticated.") {
+                    //if Rest endpoint returns any predefined error
+                    console.log(dataZ.data);
+                    swal("Unauthenticated", "Check Bearer Token", "error");
+                } else if (dataZ.error == false) {
+
+                    swal("Done", "Articles are loaded.", "success");
+                    return commit('setPosts', dataZ); //sets ajax results to store via mutation
+                }
+            }).catch( /*err => */function (err) {
+                console.log("Getting articles failed ( in store/index.js). Check if ure logged =>  " + err);
+                swal("Crashed", "You are in catch", "error");
+            }); // catch any error
+
+            //}, 40);
+        },
+
+
+        //For mutation to set a quantity of found posts(in Admin Part). Fired in list_all. passedArgument is an arg passed in list_all.vue
+        setPostsQuantity: function setPostsQuantity(_ref3, passedArgument) {
+            var commit = _ref3.commit,
+                state = _ref3.state;
+            //state is a fix
+            return commit('setQuantMutations', passedArgument); //to store via mutation
+        }
     },
 
+    mutations: {
+        setPosts: function setPosts(state, response) {
+            console.log('Set posts mutation successfully');
+            state.posts = response.data /*.data*/;
+            console.log('setPosts executed in store' + response);
+        },
 
-    //mutation to set api token to STORE
-    setApiToken: function setApiToken(state, response) {
-      state.api_tokenY = response;
-      console.log('setApiToken executed in store' + response + ' Store => ' + state.api_tokenY);
-      alert('set apiToken mutation is done');
+
+        //mutation to set api token to STORE
+        setApiToken: function setApiToken(state, response) {
+            state.api_tokenY = response;
+            console.log('setApiToken executed in store' + response + ' Store => ' + state.api_tokenY);
+            console.log('set apiToken mutation is done');
+        },
+
+
+        //mutation to quantity of Blog to STORE
+        setQuantMutations: function setQuantMutations(state, myPassedArg) {
+            state.adm_posts_qunatity = myPassedArg;
+        }
     },
-
-
-    //mutation to quantity of Blog to STORE
-    setQuantMutations: function setQuantMutations(state, myPassedArg) {
-      state.adm_posts_qunatity = myPassedArg;
-    }
-  },
-  strict: debug
+    strict: debug
 }));
 
 /***/ }),
@@ -78724,7 +78725,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_
     path: '/New_2021',
     name: 'new_2021', //same as in component return section
     component: __WEBPACK_IMPORTED_MODULE_7__components_pages_blog_2021___default.a, //component itself
-    props: { tokenZZ: 'i am set in router/index.js' }
+    props: { tokenZZ: 'I am set as tokenZZ in router/index.js' }
   },
 
   //Blog 2021 Routing
@@ -79978,7 +79979,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
         //mine test, not must-have, CONFIRM DELETE?????
         checkStore: function checkStore() {
-            alert('Go');
+            console.log('Go');
             console.log("This => ".this.$store.state.posts);
             return this.$store.state.posts;
             //return [{"wpBlog_id":1,"wpBlog_title":"Article 1", "wpBlog_text":"Text 1"}, {"wpBlog_id":2,"wpBlog_title":"Article 2", "wpBlog_text":"Text 2"}]
@@ -79987,14 +79988,14 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
     //before mount
     beforeMount: function beforeMount() {
-        alert("beforeMount");
+        console.log("beforeMount");
         //if(this.ifMakeAjax === true /*!this.$store.state.posts*/){
         if (Object.keys(this.$store.state.posts).length < 1) {
             //run ajax in Vuex store
-            alert('BeforeMount: Makinf ajax is authorized');
+            console.log('BeforeMount: Makinf ajax is authorized');
             this.$store.dispatch('getAllPosts'); //trigger ajax function getAllPosts(), which is executed in Vuex store to REST Endpoint => /public/post/get_all
         } else {
-            alert("BeforeMount: Alreday loaded");
+            console.log("BeforeMount: Alreday loaded");
         }
     },
 
@@ -80003,16 +80004,16 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     //check if prev URL was '/details-info/2', if True, don't make ajax request again, as u are back from details-info
     beforeRouteEnter: function beforeRouteEnter(to, from, next) {
         //the target Route Object being navigated to,  the current route being navigated away from., this function must be called to resolve the hook
-        alert("beforeRouteEnter " + from.path);
+        console.log("beforeRouteEnter " + from.path);
 
         next(function (vm) {
             var patternX = /details-info\/[0-9]+/g; //RegExp
             if (patternX.test(from.path)) {
                 vm.ifMakeAjax = false;
-                alert("I'm from details. Dont do ajax!!!"); //vm.show = true;
+                console.log("I'm from details. Dont do ajax!!!"); //vm.show = true;
             } else {
                 vm.ifMakeAjax = true;
-                alert("From Details. Make ajax"); //vm.show = false; 
+                console.log("From Details. Make ajax"); //vm.show = false; 
             }
             next();
         });
@@ -80060,13 +80061,14 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "contact" }, [
         _c("h3", [
-          _vm._v(
-            " Blog Vue  " +
-              _vm._s(_vm.tokenZZ) +
-              " STORE: " +
-              _vm._s(this.$store.state.api_tokenY) +
-              " "
-          )
+          _vm._v(" Blog Vue,  "),
+          _c("b", [_vm._v(" " + _vm._s(_vm.tokenZZ))]),
+          _vm._v(" "),
+          _c("p", [
+            _vm._v(
+              "Token (from Vuex STORE): " + _vm._s(this.$store.state.api_tokenY)
+            )
+          ])
         ]),
         _vm._v(" "),
         _c("p", [_vm._v(_vm._s(this.ifMakeAjax))])
@@ -80437,36 +80439,35 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'details-info',
-  data: function data() {
-    return {
-      //postDialogVisible: false,
-      currentDetailID: 1
-    };
-  },
+    name: 'details-info',
+    data: function data() {
+        return {
+            //postDialogVisible: false,
+            currentDetailID: 1
+        };
+    },
 
 
-  //computed property is used to declaratively describe a value that depends on other values. When you data-bind to a computed property inside the template, Vue knows when to update the DOM when any of the values depended upon by the computed property has changed.
-  computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapState */])(['posts']), {
-    //works without it???? => FALSE.//is needed for Vuex store, after it u may address Vuex Store value as {products} instead of {this.$store.state.products}
+    //computed property is used to declaratively describe a value that depends on other values. When you data-bind to a computed property inside the template, Vue knows when to update the DOM when any of the values depended upon by the computed property has changed.
+    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapState */])(['posts']), {
+        //is needed for Vuex store, after it u may address Vuex Store value as {products} instead of {this.$store.state.products}
 
 
-    //mine test
-    checkStore: function checkStore() {
-      console.log(this.$store.state.posts); //Gets values from Vuex store in "/store/index.js" 
-      return this.$store.state.posts;
+        //mine test
+        checkStore: function checkStore() {
+            console.log(this.$store.state.posts); //Gets values from Vuex store in "/store/index.js" 
+            return this.$store.state.posts;
+        }
+    }),
+
+    //before mount
+    beforeMount: function beforeMount() {
+        console.log(this.$store.state.posts);
+        //getting route ID => e.g "wpBlogVueFrameWork#/details/2", gets 2. {Pid} is set in 'pages/home' in => this.$router.push({name:'details',params:{Pid:proId}})
+        var ID = this.$route.params.Pidd; //gets 2
+        ID = ID - 1; //to comply with Vuex Store array, that starts with 0
+        this.currentDetailID = ID; //set to this.state
     }
-  }),
-
-  //before mount
-  beforeMount: function beforeMount() {
-    console.log(this.$store.state.posts);
-
-    //getting route ID => e.g "wpBlogVueFrameWork#/details/2", gets 2. {Pid} is set in 'pages/home' in => this.$router.push({name:'details',params:{Pid:proId}})
-    var ID = this.$route.params.Pidd; //gets 2
-    ID = ID - 1; //to comply with Vuex Store array, that starts with 0
-    this.currentDetailID = ID; //set to this.state
-  }
 });
 
 /***/ }),
@@ -80860,6 +80861,14 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -80879,7 +80888,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             selectV: '', //form input <select> 
             componentKey: 0,
             tokenXX: '',
-            errroList: ['v', 'b'], //list of validations errors of server-side validator
+            errroList: ['no validation error1', 'no validation error2'], //list of validations errors of server-side validator
             categoriesList: [] //contains Categories from DB (loaded with ajax)
         };
     },
@@ -81033,11 +81042,16 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
                             that.errroList = tempoArray; //change state errroList //{this-that} fix
                         }
+
+                        //if load new is OK
                     } else if (data.error == false) {
                         var tempoArray = [];
                         that.errroList = tempoArray; //clears validationn errors if any. Simple that.errroList = [] won't work
                         swal("Good", "Bearer Token is OK", "success");
                         swal("Good", data.data, "success");
+
+                        //clear the form fields after successfull saving
+                        that.clearInputFieldsAndFiles();
                     }
                     that.isCreatingPost = false; //change button text            
                 }, //end success
@@ -81170,6 +81184,16 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 //clears message in n seconds
                 _this2.status_msg = '';
             }, 3000 * 155);
+        },
+
+
+        //clears inputs including uploaded files
+        clearInputFieldsAndFiles: function clearInputFieldsAndFiles() {
+            this.title = '';
+            this.body = '';
+            this.selectV = '';
+            this.imageList = '';
+            this.$refs.upload.clearFiles(); //clears the <el-upload> uploaded files <el-upload> must contain {ref="upload"}
         }
     }),
 
@@ -81286,7 +81310,12 @@ var render = function() {
                 }
               ],
               staticClass: "form-control",
-              attrs: { id: "post-content", rows: "3", required: "" },
+              attrs: {
+                id: "post-content",
+                rows: "3",
+                placeholder: "Body Title",
+                required: ""
+              },
               domProps: { value: _vm.body },
               on: {
                 input: function($event) {
@@ -81359,6 +81388,7 @@ var render = function() {
               _c(
                 "el-upload",
                 {
+                  ref: "upload",
                   attrs: {
                     action: "https://jsonplaceholder.typicode.com/posts/",
                     "list-type": "picture-card",
@@ -81411,6 +81441,16 @@ var render = function() {
               "\n      "
           )
         ]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-success",
+          attrs: { type: "button" },
+          on: { click: _vm.clearInputFieldsAndFiles }
+        },
+        [_vm._v("\n        Clear\n      ")]
       )
     ])
   ])
@@ -82503,7 +82543,7 @@ exports = module.exports = __webpack_require__(7)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/* mine */\n.nav-item   {margin-left:2em;\n}\n.nav-item a {color:black;\n}\n.navbar-brand {color:black\n}\n#appDemo {\r\n  font-family: 'Avenir', Helvetica, Arial, sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n  text-align: center;\r\n  color: #2c3e50;\r\n  margin-top: 20px;\n}\n.moveInUp-enter-active{\r\n  -webkit-animation: fadeIn 2s ease-in;\r\n          animation: fadeIn 2s ease-in;\n}\n@-webkit-keyframes fadeIn{\n0%{\r\n    opacity: 0;\n}\n50%{\r\n    opacity: 0.5;\n}\n100%{\r\n    opacity: 1;\n}\n}\n@keyframes fadeIn{\n0%{\r\n    opacity: 0;\n}\n50%{\r\n    opacity: 0.5;\n}\n100%{\r\n    opacity: 1;\n}\n}\n.moveInUp-leave-active{\r\n  -webkit-animation: moveInUp .3s ease-in;\r\n          animation: moveInUp .3s ease-in;\n}\n@-webkit-keyframes moveInUp{\n0%{\r\n  -webkit-transform: translateY(0);\r\n          transform: translateY(0);\n}\n100%{\r\n  -webkit-transform: translateY(-400px);\r\n          transform: translateY(-400px);\n}\n}\n@keyframes moveInUp{\n0%{\r\n  -webkit-transform: translateY(0);\r\n          transform: translateY(0);\n}\n100%{\r\n  -webkit-transform: translateY(-400px);\r\n          transform: translateY(-400px);\n}\n}\r\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/* mine */\n.nav-item   {margin-left:2em;\n}\n.nav-item a {color:black;\n}\n.navbar-brand {color:black\n}\n#appDemo {\r\n  font-family: 'Avenir', Helvetica, Arial, sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n  text-align: center;\r\n  color: #2c3e50;\r\n  margin-top: 20px;\n}\n.moveInUp-enter-active{\r\n  -webkit-animation: fadeIn 2s ease-in;\r\n          animation: fadeIn 2s ease-in;\n}\n@-webkit-keyframes fadeIn{\n0%{\r\n    opacity: 0;\n}\n50%{\r\n    opacity: 0.5;\n}\n100%{\r\n    opacity: 1;\n}\n}\n@keyframes fadeIn{\n0%{\r\n    opacity: 0;\n}\n50%{\r\n    opacity: 0.5;\n}\n100%{\r\n    opacity: 1;\n}\n}\n.moveInUp-leave-active{\r\n  -webkit-animation: moveInUp .3s ease-in;\r\n          animation: moveInUp .3s ease-in;\n}\n@-webkit-keyframes moveInUp{\n0%{\r\n  -webkit-transform: translateY(0);\r\n          transform: translateY(0);\n}\n100%{\r\n  -webkit-transform: translateY(-400px);\r\n          transform: translateY(-400px);\n}\n}\n@keyframes moveInUp{\n0%{\r\n  -webkit-transform: translateY(0);\r\n          transform: translateY(0);\n}\n100%{\r\n  -webkit-transform: translateY(-400px);\r\n          transform: translateY(-400px);\n}\n}\r\n", ""]);
 
 // exports
 
@@ -82514,6 +82554,35 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -82792,19 +82861,6 @@ var render = function() {
                   [
                     _c(
                       "router-link",
-                      { staticClass: "nav-link", attrs: { to: "/home" } },
-                      [_vm._v("Home")]
-                    )
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "li",
-                  { staticClass: "nav-item" },
-                  [
-                    _c(
-                      "router-link",
                       { staticClass: "nav-link", attrs: { to: "/blog" } },
                       [_vm._v("Blog")]
                     )
@@ -82836,6 +82892,32 @@ var render = function() {
                     )
                   ],
                   1
+                ),
+                _vm._v(" "),
+                _c(
+                  "li",
+                  { staticClass: "nav-item" },
+                  [
+                    _c(
+                      "router-link",
+                      { staticClass: "nav-link", attrs: { to: "/New_2021" } },
+                      [_vm._v("Blog_2021")]
+                    )
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "li",
+                  { staticClass: "nav-item" },
+                  [
+                    _c(
+                      "router-link",
+                      { staticClass: "nav-link", attrs: { to: "/loadNew" } },
+                      [_vm._v("Load new- ")]
+                    )
+                  ],
+                  1
                 )
               ]),
               _vm._v(" "),
@@ -82853,19 +82935,6 @@ var render = function() {
       },
       [
         _c("ul", { staticClass: "nav navbar-nav" }, [
-          _c(
-            "li",
-            { staticClass: "nav-item" },
-            [
-              _c(
-                "router-link",
-                { staticClass: "nav-link", attrs: { to: "/home" } },
-                [_vm._v("Home")]
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
           _c(
             "li",
             { staticClass: "nav-item" },
@@ -82900,6 +82969,32 @@ var render = function() {
                 "router-link",
                 { staticClass: "nav-link", attrs: { to: "/contact" } },
                 [_vm._v("Contact")]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "li",
+            { staticClass: "nav-item" },
+            [
+              _c(
+                "router-link",
+                { staticClass: "nav-link", attrs: { to: "/New_2021" } },
+                [_vm._v("Blog_2021")]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "li",
+            { staticClass: "nav-item" },
+            [
+              _c(
+                "router-link",
+                { staticClass: "nav-link", attrs: { to: "/loadNew" } },
+                [_vm._v("Load new- ")]
               )
             ],
             1

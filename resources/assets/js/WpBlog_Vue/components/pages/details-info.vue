@@ -63,37 +63,35 @@
 <script>
 import { mapState } from 'vuex';
 export default {
-  name: 'details-info',
-  data() {
-    return {
-      //postDialogVisible: false,
-	  currentDetailID: 1, 
-    };
-  },
+    name: 'details-info',
+    data() {
+        return {
+            //postDialogVisible: false,
+	        currentDetailID: 1, 
+        };
+    },
   
-  //computed property is used to declaratively describe a value that depends on other values. When you data-bind to a computed property inside the template, Vue knows when to update the DOM when any of the values depended upon by the computed property has changed.
-  computed: {
-	 ...mapState(['posts']), //works without it???? => FALSE.//is needed for Vuex store, after it u may address Vuex Store value as {products} instead of {this.$store.state.products}
+    //computed property is used to declaratively describe a value that depends on other values. When you data-bind to a computed property inside the template, Vue knows when to update the DOM when any of the values depended upon by the computed property has changed.
+    computed: {
+	    ...mapState(['posts']), //is needed for Vuex store, after it u may address Vuex Store value as {products} instead of {this.$store.state.products}
 
 	 
-	//mine test
-	checkStore() {
-        console.log(this.$store.state.posts); //Gets values from Vuex store in "/store/index.js" 
-		return this.$store.state.posts;
-      },
-	//mine  
-  },
+	    //mine test
+	    checkStore() {
+            console.log(this.$store.state.posts); //Gets values from Vuex store in "/store/index.js" 
+		    return this.$store.state.posts;
+        },
+    },
   
-  //before mount
-  beforeMount() {
-     console.log(this.$store.state.posts);
-	 
-	 //getting route ID => e.g "wpBlogVueFrameWork#/details/2", gets 2. {Pid} is set in 'pages/home' in => this.$router.push({name:'details',params:{Pid:proId}})
-	 var ID = this.$route.params.Pidd; //gets 2
-	 ID = ID - 1; //to comply with Vuex Store array, that starts with 0
-	 this.currentDetailID = ID; //set to this.state
-   },
-   }
+    //before mount
+    beforeMount() {
+         console.log(this.$store.state.posts);
+	    //getting route ID => e.g "wpBlogVueFrameWork#/details/2", gets 2. {Pid} is set in 'pages/home' in => this.$router.push({name:'details',params:{Pid:proId}})
+	    var ID = this.$route.params.Pidd; //gets 2
+	    ID = ID - 1; //to comply with Vuex Store array, that starts with 0
+	    this.currentDetailID = ID; //set to this.state
+    },
+}
 </script>
 
 <style scoped>

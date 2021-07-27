@@ -48,7 +48,7 @@
         <!-- Post Body -->
         <div class="form-group">
           <label for="exampleFormControlTextarea1">Post Content</label>
-          <textarea id="post-content" v-model="body" class="form-control" rows="3" required />
+          <textarea id="post-content" v-model="body" class="form-control" rows="3" placeholder="Body Title" required />
         </div>
         
         
@@ -67,10 +67,12 @@
 
         
                                 
-        <div class>
-          <!-- Element-UI Upload element -->
+        <div class>  
+          <!-- Element-UI Upload element (contains "+" button to add new image and contains thumbnails views of loaded images) -->
+          <!--ref="upload" is used to fire  clearFiles() in <el-upload> on ajax success -->
           <el-upload
             action="https://jsonplaceholder.typicode.com/posts/"
+            ref="upload"
             list-type="picture-card"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
@@ -81,7 +83,7 @@
             <i class="el-icon-plus" />
           </el-upload>
           
-          <!-- Element-UI Preview Uploaded element -->
+          <!-- Element-UI Preview Uploaded element (if u hover over it, there appears "+"/"delete" icons, if u click "+" icon the full-screen image pop-up'll emerge, pop-up is hidden by dafault) -->
           <el-dialog :visible.sync="dialogVisible">
             <img width="100%" :src="dialogImageUrl" alt>
           </el-dialog>
@@ -89,14 +91,20 @@
         </div>
       </form>
     </div>
+    
     <div class="card-footer">
-      <button
-        type="button"
-        class="btn btn-success"
+      <!--Button to submit -->
+      <button type="button" class="btn btn-success"
         @click="createPost"
       >
         {{ isCreatingPost ? "Posting..." : "Create Post" }}
       </button>
+      
+      <!--Button to clear the fields -->
+      <button type="button" class="btn btn-success" @click="clearInputFieldsAndFiles">
+        Clear
+      </button>
+      
     </div>
   </div>
 </template>
@@ -147,7 +155,7 @@ export default {
             selectV: '',//form input <select> 
             componentKey: 0,
 	        tokenXX:'',
-            errroList: ['v', 'b'], //list of validations errors of server-side validator
+            errroList: ['no validation error1', 'no validation error2'], //list of validations errors of server-side validator
             categoriesList: [], //contains Categories from DB (loaded with ajax)
         }
     },
@@ -170,6 +178,8 @@ export default {
   
     methods: {
         ...mapActions(['getAllPosts']),
+    
+    
     
         // =============== Start of Element-UI Upload element METHODS ============
     
@@ -304,11 +314,16 @@ export default {
                             that.errroList = tempoArray; //change state errroList //{this-that} fix
                         }
                   
+                    //if load new is OK
                     } else if(data.error == false){
                         var tempoArray = []; 
                         that.errroList = tempoArray; //clears validationn errors if any. Simple that.errroList = [] won't work
                         swal("Good", "Bearer Token is OK", "success");
                         swal("Good",  data.data, "success");
+                        
+                        //clear the form fields after successfull saving
+                        that.clearInputFieldsAndFiles();
+                        
                     }
 			        that.isCreatingPost = false; //change button text            
                 },  //end success
@@ -440,6 +455,16 @@ export default {
             setTimeout(() => {  //clears message in n seconds
                 this.status_msg = ''
             }, 3000 * 155)
+        },
+        
+        //clears inputs including uploaded files
+        clearInputFieldsAndFiles(){
+            this.title    = '';
+            this.body     = '';
+            this.selectV  = '';
+            this.imageList = '';
+            this.$refs.upload.clearFiles(); //clears the <el-upload> uploaded files <el-upload> must contain {ref="upload"}
+                        
         }
     },
   

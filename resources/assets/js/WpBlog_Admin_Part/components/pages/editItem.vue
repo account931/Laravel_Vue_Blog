@@ -1,3 +1,4 @@
+<!-- Edit an article (in SAdmin section) -->
 <template>
 
 	<div class="services">
@@ -73,21 +74,23 @@
         
         
         <div class>
-          
-          <!-- Element-UI Upload element -->
+           
+          <!-- Element-UI Upload element (contains "+" button to add new image and contains thumbnails views of loaded images) -->
+          <!--ref="upload" is used to fire  clearFiles() in <el-upload> on ajax success -->
           <el-upload
-            action="https://jsonplaceholder.typicode.com/posts/"
-            list-type="picture-card"
-            :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove"
-            :before-remove="beforeRemove"
-            :on-change="updateImageList"
-            :auto-upload="false"
+              action="https://jsonplaceholder.typicode.com/posts/"
+              ref="upload" 
+              list-type="picture-card"
+              :on-preview="handlePictureCardPreview"
+              :on-remove="handleRemove"
+              :before-remove="beforeRemove"
+              :on-change="updateImageList"
+              :auto-upload="false"
           >
-            <i class="el-icon-plus" />
+              <i class="el-icon-plus" />
           </el-upload>
           
-          <!-- Element-UI Preview Uploaded element -->
+          <!-- Element-UI Preview Uploaded element (if u hover over it, there appears "+"/"delete" icons, if u click "+" icon the full-screen image pop-up'll emerge, pop-up is hidden by dafault) -->
           <el-dialog :visible.sync="dialogVisible">
             <img width="100%" :src="dialogImageUrl" alt>
           </el-dialog>
@@ -96,13 +99,21 @@
       </form>
     </div>
     <div class="card-footer">
+    
+      <!--Button to submit -->
       <button
         type="button"
         class="btn btn-success"
         @click="editOnePost"
       >
-        {{ isCreatingPost ? "Updating..." : "Start Post Edit " }}
+        {{ isCreatingPost ? "Updating..." : "Start Post Updating " }}
       </button>
+      
+      <!--Button to clear the fields -->
+      <button type="button" class="btn btn-success" @click="clearInputFieldsAndFiles">
+        Clear
+      </button>
+      
     </div>
   </div>
   
@@ -169,7 +180,7 @@
             //getting route ID => e.g "wpBlogVueFrameWork#/details/2", gets 2. {Pid} is set in 'pages/home' in => this.$router.push({name:'details',params:{Pid:proId}})
 	        var ID = this.$route.params.PidMyID; //gets 2
 	        this.currentDetailID = ID; // 
-            alert(this.currentDetailID);
+            console.log("Editing ID is " + this.currentDetailID);
             
             //get the csrf token
             let token = document.head.querySelector('meta[name="csrf-token"]'); //gets meta tag with csrf
@@ -259,8 +270,8 @@
             |
             */
             runAjaxToGetOneItem(idZ) {     
-                var that = this;
-                alert('start one');
+                var that = this; //to fix context issue
+                console.log('start one');
                 $('.loader-x').fadeIn(800); //show loader
                
                 //Add Bearer token to headers
@@ -287,8 +298,8 @@
                     //data: {  _token: this.tokenXX, }, //csrf token, though here is not required
 		    
                     success: function(data) {
-                        alert("success");            
-                        alert("success" + JSON.stringify(data, null, 4));
+                        console.log("Successfully loaded data for edited article");            
+                        console.log("Loaded Edited data is: " + JSON.stringify(data, null, 4));
                 
                         if(data.error == true ){ //if Rest endpoint returns any predefined error
                             var text = data.data;
@@ -298,9 +309,9 @@
                         } else if(data.error == false){
                             //return commit('setPosts', data ); //sets ajax results to store via mutation
                             that.ajaxOneItem = data.data; 
-                            that.inputTitleValue = data.data[0].wpBlog_title;     //gets blog title
-                            that.inputBodyValue  = data.data[0].wpBlog_text;      //gets blog text
-                            that.inputSelectV    = data.data[0].wpBlog_category;  //gets blog category <select>
+                            that.inputTitleValue = data.data[0].wpBlog_title;     //gets and sets DB blog title to input
+                            that.inputBodyValue  = data.data[0].wpBlog_text;      //gets and sets DB blog text to input
+                            that.inputSelectV    = data.data[0].wpBlog_category;  //gets and sets DB blog category to <select>
                             
                             //adding images loaded from DB
                             $.each(data.data[0].get_images, function (key, imageV) {
@@ -316,7 +327,7 @@
                             console.log("LISTT1: " + data.data);
                             var tempoArray = []; 
                             swal("Good", "Bearer Token is OK", "success");
-                            swal("Good",  data.data, "success");
+                            swal("Good", "Data for Article " + data.data[0].wpBlog_id +  " is loaded" /*data.data*/, "success");
                         }
                         $('.loader-x').fadeOut(800); //show loader
                     },  //end success
@@ -356,7 +367,11 @@
             |
             |
             */
-            editOnePost(){
+            editOnePost(e){
+                e.preventDefault();
+                if (!this.validateForm()) {
+                    return false;
+                }
                 
                 //alert("Updating " + this.currentDetailID);
                 
@@ -418,20 +433,22 @@
                                 thatX.errroList = tempoArray; //change state errroList //{this-that} fix
                             }
                   
-                        
+                        //if Update is OK
                         } else if(data.error == false){
                             //return commit('setPosts', data ); //sets ajax results to store via mutation
-                            
-                   
                             swal("Good", "Bearer Token is OK", "success");
-                            swal("Good",  data.data, "success");
+                            swal({html:true, title: "Success", text: data.data, type: "success"});
+                            thatX.showNotification('Updated successfully Artcicle ' + thatX.currentDetailID);
+                            // Clears inputs including uploaded files
+                            //thatX.clearInputFieldsAndFiles(); //don't need to clear fileds for Update
+
                         }
-                        $('.loader-x').fadeOut(800); //show loader
+                        $('.loader-x').fadeOut(800); //hide loader
                         thatX.isCreatingPost = false; //flag for button text
                     },  //end success
             
 			        error: function (errorZ) {
-                        alert("Crashed"); 
+                        swal("Error", "Crashed", "error"); 
 			            alert("error" +  JSON.stringify(errorZ, null, 4));
                         console.log(errorZ.responseText);
                         console.log(errorZ);
@@ -494,6 +511,64 @@
                 }); // catch any error
       
             },
+            
+            
+            
+	        /*
+            |--------------------------------------------------------------------------
+            |Client-side form validation
+            |--------------------------------------------------------------------------
+            |
+            |
+            */
+            validateForm () {
+                // no vaildation for images - it is needed
+                if (!this.inputTitleValue) {
+                    this.status = false
+                    this.showNotification('Post title cannot be empty')
+                    return false
+                }
+                if (!this.inputBodyValue) {
+                    this.status = false
+                    this.showNotification('Post body cannot be empty')
+                    return false
+                }
+      
+            
+                if (!this.inputSelectV) {
+                    this.status = false;
+                    this.showNotification('Select cannot be empty');
+                    return false;
+                }
+      
+                this.showNotification(''); //clears error messages if any
+                return true;
+            },
+        
+        
+            showNotification (message) {
+                this.status_msg = message;
+                setTimeout(() => {  //clears message in n seconds
+                    this.status_msg = ''
+                }, 3000 * 155)
+            },
+        
+            
+            /*
+            |--------------------------------------------------------------------------
+            | Clears inputs including uploaded files
+            |--------------------------------------------------------------------------
+            |
+            |
+            */
+            clearInputFieldsAndFiles(){
+                this.inputTitleValue    = '';
+                this.inputBodyValue     = '';
+                this.inputSelectV  = '';
+                this.imageList= '';
+                this.$refs.upload.clearFiles(); //clears the <el-upload> uploaded files <el-upload> must contain {ref="upload"}
+                        
+            }
     
         },
         

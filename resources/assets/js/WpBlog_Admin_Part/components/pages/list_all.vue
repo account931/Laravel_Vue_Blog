@@ -73,7 +73,7 @@
             runAjaxToGetPosts(/*{ commit, state  }*/) {
                
                 var that = this; //Explaination => if you use this.data, it is incorrect, because when 'this' reference the vue-app, you could use this.data, but here (ajax success callback function), this does not reference to vue-app, instead 'this' reference to whatever who called this function(ajax call)
-                alert('go');
+                console.log('start getting articles for admin section');
                 $('.loader-x').fadeIn(800); //show loader
                
                 //Add Bearer token to headers
@@ -103,8 +103,8 @@
                     data: {  _token: this.tokenXX, }, //csrf token, though here is not required
 		    
                     success: function(data) {
-                        alert("success");            
-                        alert("success" + JSON.stringify(data, null, 4));
+                        console.log("articles are successfully fetched");            
+                        console.log("success" + JSON.stringify(data, null, 4));
                 
                         if(data.error == true ){ //if Rest endpoint returns any predefined error
                             var text = data.data;
@@ -112,15 +112,15 @@
                   
                         } else if(data.error == false){ //if all is OK
                             that.ajaxList = data.data; 
-                            console.log("LISTT1: " + data.data);
-                            console.log("LISTTT: " + that.ajaxList[0].wpBlog_title);
+                            console.log("all articles: " + data.data);
+                            console.log("1st artcile: " + that.ajaxList[0].wpBlog_title);
                             var tempoArray = []; 
                     
                             //run a Vuex store method to set the quantity of found articles
                             that.$store.dispatch('setPostsQuantity', data.data.length); 
                     
                             swal("Good", "Bearer Token is OK", "success");
-                            swal("Good",  data.data, "success");
+                            swal("Good",  "All articles are loaded"/*data.data*/, "success");
                         }
                         $('.loader-x').fadeOut(800); //show loader
                     },  //end success
@@ -163,6 +163,12 @@
             |
             */
             deletePost(item){
+            
+                if(!confirm('Sure to delete Post ' + item + '?')){
+                    return false;
+                }
+                
+                var that = this; //to fix context issue
                 this.selectedItem = item;
                 alert('Delete ' + this.selectedItem + " Implement REST API delete function");
                 
@@ -209,7 +215,8 @@
                         //if REST endpoint returns OK  
                         } else if(data.error == false){
                             swal("Good", "Bearer Token is OK", "success");
-                            swal("Good",  data.data, "success");
+                            swal({html:true, title: "Deletion was OK", text: data.data, type: "success"});
+                            that.runAjaxToGetPosts(); //renew the list
                         }
                     },  //end success
             

@@ -1,10 +1,10 @@
-<!-- Most up-to-date version -->
+<!-- Most up-to-date version (CLEANSED Version) -->
 <template>
 	<div class="contact">
 		<h1> {{title}} </h1>
 		
 		<div class="contact">
-		    <h3> Blog Vue  {{tokenZZ}} STORE: {{this.$store.state.api_tokenY}} </h3>
+		    <h3> Blog Vue,  <b> {{tokenZZ}}</b> <p>Token (from Vuex STORE): {{this.$store.state.api_tokenY}}</p> </h3>
             <p>{{this.ifMakeAjax}}</p>
 		</div>
          
@@ -101,7 +101,7 @@
 	
 	        //mine test, not must-have, CONFIRM DELETE?????
 	        checkStore() {
-                alert('Go');
+                console.log('Go');
                 console.log("This => " .this.$store.state.posts);
 		        return this.$store.state.posts;
 		        //return [{"wpBlog_id":1,"wpBlog_title":"Article 1", "wpBlog_text":"Text 1"}, {"wpBlog_id":2,"wpBlog_title":"Article 2", "wpBlog_text":"Text 2"}]
@@ -111,14 +111,14 @@
   
         //before mount
         beforeMount() {
-            alert("beforeMount");
+            console.log("beforeMount");
             //if(this.ifMakeAjax === true /*!this.$store.state.posts*/){
             if(Object.keys(this.$store.state.posts).length < 1){
                //run ajax in Vuex store
-                alert('BeforeMount: Makinf ajax is authorized');
+                console.log('BeforeMount: Makinf ajax is authorized');
                 this.$store.dispatch('getAllPosts'); //trigger ajax function getAllPosts(), which is executed in Vuex store to REST Endpoint => /public/post/get_all
 	        } else{
-                alert("BeforeMount: Alreday loaded");
+                console.log("BeforeMount: Alreday loaded");
             }
             
         },
@@ -128,17 +128,17 @@
         //CONFIRM DELETE
         //check if prev URL was '/details-info/2', if True, don't make ajax request again, as u are back from details-info
         beforeRouteEnter (to, from, next) { //the target Route Object being navigated to,  the current route being navigated away from., this function must be called to resolve the hook
-            alert("beforeRouteEnter " + from.path);
+            console.log("beforeRouteEnter " + from.path);
 
     
             next(vm => {
                 var patternX = /details-info\/[0-9]+/g;  //RegExp
                 if (patternX.test(from.path)){ 
                     vm.ifMakeAjax = false;
-                    alert("I'm from details. Dont do ajax!!!"); //vm.show = true;
+                    console.log("I'm from details. Dont do ajax!!!"); //vm.show = true;
                 } else {
                     vm.ifMakeAjax = true;
-                    alert("From Details. Make ajax"); //vm.show = false; 
+                    console.log("From Details. Make ajax"); //vm.show = false; 
                 }
                 next();
             });

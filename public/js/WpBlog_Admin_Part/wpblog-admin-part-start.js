@@ -23371,130 +23371,131 @@ module.exports = function listToStyles (parentId, list) {
 
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */]);
-
 var debug = "development" !== 'production';
 
 //Vuex store itself
 /* harmony default export */ __webpack_exports__["a"] = (new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
-  state: {
-    //posts used in Vue blog
-    posts: [],
-    //posts: [{"wpBlog_id":1,"wpBlog_title":"Guadalupe Runolfsdottir", "wpBlog_text":"Store text 1", ,"wpBlog_category":4,"wpBlog_status":"1", "get_images":[{"wpImStock_id":16,"wpImStock_name":"product6.png","wpImStock_postID":1,"created_at":null,"updated_at":null}],"author_name":{"id":1,"name":"Admin","email":"admin@ukr.net","created_at":null,"updated_at":null},"category_names":{"wpCategory_id":4,"wpCategory_name":"Geeks","created_at":null,"updated_at":null}}, 
-    //{"wpBlog_id":2,"wpBlog_title":"New", "wpBlog_text":"Store text 2"}],
+    state: {
+        //posts used in Vue blog
+        posts: [], //posts: [{"wpBlog_id":1,"wpBlog_title":"Guadalupe Runolfsdottir", "wpBlog_text":"Store text 1", ,"wpBlog_category":4,"wpBlog_status":"1", "get_images":[{"wpImStock_id":16,"wpImStock_name":"product6.png","wpImStock_postID":1,"created_at":null,"updated_at":null}],"author_name":{"id":1,"name":"Admin","email":"admin@ukr.net","created_at":null,"updated_at":null},"category_names":{"wpCategory_id":4,"wpCategory_name":"Geeks","created_at":null,"updated_at":null}}, {"wpBlog_id":2,"wpBlog_title":"New", "wpBlog_text":"Store text 2"}],
+        api_tokenY: '', //api_token is passed from php in view as <vue-router-menu-with-link-content-display v-bind:current-user='{!! Auth::user()->toJson() !!}'>  and uplifted here to this store in VueRouterMenu in beforeMount() Section
+        adm_posts_qunatity: 0 //quantity of posts found
 
-    api_tokenY: '', //api_token is passed from php in view as <vue-router-menu-with-link-content-display v-bind:current-user='{!! Auth::user()->toJson() !!}'>  and uplifted here to this store in VueRouterMenu in beforeMount() Section
-    adm_posts_qunatity: 0
-
-    //products are used in Router example. NOT USED IN CLEANSED Version. Set via seeder to DB and extracted via store/index.js ajax
-    /*	 
-    products:[
-     {productTitle:"ABCN", image: 'product1.png', productId:1},
-        {productTitle:"KARMA",image: 'product2.png', productId:2},
-        {productTitle:"Tino", image: 'product3.png', productId:3},
-        {productTitle:"EFG",  image: 'product4.png', productId:4},
-        {productTitle:"MLI",  image: 'product5.png', productId:5},
-        {productTitle:"Banan",image: 'product6.png', productId:6}
-      ],
-      */
-  },
-
-  computed: {
-    BASE_URL: function BASE_URL() {
-      return this.$store.state.api_tokenY;
-    }
-  },
-
-  actions: {
-    /*
-       async getAllPosts({ commit }) { 
-         return commit('setPosts', await fetch('http://localhost/Laravel+Yii2_comment_widget/blog_Laravel/public/post/get_all') )
-            //return commit('setPosts', await api.get('/post/get_all'))
-        }, */
-
-    //working example how to change Vuex store from child component //Catch a passed api token from VueRouterMenu, triggered in beforeMount()
-    changeVuexStoreTokenFromChild: function changeVuexStoreTokenFromChild(_ref, dataTestX) {
-      var commit = _ref.commit;
-
-      //var dataTest = {"error":false,"data":[{"wpBlog_id":1,"wpBlog_title":"Dima", "wpBlog_text":"Store 1", "get_images":[]}, {"wpBlog_id":2,"wpBlog_title":"Dima 2", "wpBlog_text":"Store 2", "get_images":[]}]};
-      console.log('store token ' + dataTestX);
-      return commit('setApiToken', dataTestX); //sets dataTestX to store via mutation
+        //products are used in Router example. NOT USED IN CLEANSED Version. Set via seeder to DB and extracted via store/index.js ajax
+        /*	 
+        products:[
+         {productTitle:"ABCN", image: 'product1.png', productId:1},
+            {productTitle:"KARMA",image: 'product2.png', productId:2},
+            {productTitle:"Tino", image: 'product3.png', productId:3},
+            {productTitle:"EFG",  image: 'product4.png', productId:4},
+            {productTitle:"MLI",  image: 'product5.png', productId:5},
+            {productTitle:"Banan",image: 'product6.png', productId:6}
+        ],
+        */
     },
 
-
-    //ajax request, get REST API located at => WpBlog_VueContoller/ function getAllPosts()
-    getAllPosts: function getAllPosts(_ref2) {
-      var commit = _ref2.commit,
-          state = _ref2.state;
-      //state is a fix
-      $('.loader-x').fadeIn(800); //show loader
-
-      setTimeout(function () {
-        //dont need
-        alert('start (True) Disable 2nd alert in AllPosts beforeMount');
-        alert("store1 " + state.api_tokenY);
-        //alert( "store2 "  + this.BASE_URL() );
-        fetch('api/post/get_all' /*?token=' + state.api_tokenY*/, { //http://localhost/Laravel+Yii2_comment_widget/blog_Laravel/public/post/get_all
-          method: 'get',
-          //pass Bearer token in headers ()
-          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + state.api_tokenY }
-          //contentType: 'application/json',
-
-
-        }).then(function (response) {
-          $('.loader-x').fadeOut(800); //hide loader
-          return response.json();
-        }).then(function (dataZ) {
-          console.log("Here STORE => " + dataZ);
-          //core rewritten async getAllPosts, trigger mutation setPosts()
-
-          if (dataZ.error == true || dataZ.error == "Unauthenticated.") {
-            //if Rest endpoint returns any predefined error
-            alert(dataZ.data);
-            swal("Unauthenticated", "Check Bearer Token", "error");
-          } else if (dataZ.error == false) {
-
-            swal("Done", "Articles are loaded.", "success");
-            return commit('setPosts', dataZ); //sets ajax results to store via mutation
-          }
-        }).catch( /*err => */function (err) {
-          alert("Getting articles failed ( in store/index.js). Check if ure logged =>  " + err);
-          swal("Crashed", "You are in catch", "error");
-        }); // catch any error
-      }, 40);
+    computed: {
+        //not used here
+        BASE_URL: function BASE_URL() {
+            return this.$store.state.api_tokenY;
+        }
     },
 
+    actions: {
+        /*
+           async getAllPosts({ commit }) { 
+               return commit('setPosts', await fetch('http://localhost/Laravel+Yii2_comment_widget/blog_Laravel/public/post/get_all') )
+                  //return commit('setPosts', await api.get('/post/get_all'))
+              }, */
 
-    //Fir mutation to set a quantity of found posts (in Admin Part). passedArgument is an arg passed in list_all.vue
-    setPostsQuantity: function setPostsQuantity(_ref3, passedArgument) {
-      var commit = _ref3.commit,
-          state = _ref3.state;
-      //state is a fix
-      return commit('setQuantMutations', passedArgument); //to store via mutation
-    }
-  },
+        //working example how to change Vuex store from child component //Catch a passed api token from VueRouterMenu, triggered in beforeMount()
+        changeVuexStoreTokenFromChild: function changeVuexStoreTokenFromChild(_ref, dataTestX) {
+            var commit = _ref.commit;
 
-  mutations: {
-    setPosts: function setPosts(state, response) {
-      alert('Set posts mutation successfully');
-      state.posts = response.data /*.data*/;
-      console.log('setPosts executed in store' + response);
+            //var dataTest = {"error":false,"data":[{"wpBlog_id":1,"wpBlog_title":"Dima", "wpBlog_text":"Store 1", "get_images":[]}, {"wpBlog_id":2,"wpBlog_title":"Dima 2", "wpBlog_text":"Store 2", "get_images":[]}]};
+            console.log('store token ' + dataTestX);
+            return commit('setApiToken', dataTestX); //sets dataTestX to store via mutation
+        },
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Ajax request, get REST API located at => WpBlog_VueContoller/ function getAllPosts()
+        |--------------------------------------------------------------------------
+        |
+        |
+        */
+        getAllPosts: function getAllPosts(_ref2) {
+            var commit = _ref2.commit,
+                state = _ref2.state;
+            //state is a fix
+            $('.loader-x').fadeIn(800); //show loader
+            //setTimeout(function(){ //dont need
+            alert('start (True) Disable 2nd alert in AllPosts beforeMount');
+            alert("store1 " + state.api_tokenY);
+            //alert( "store2 "  + this.BASE_URL() );
+            fetch('api/post/get_all' /*?token=' + state.api_tokenY*/, { //http://localhost/Laravel+Yii2_comment_widget/blog_Laravel/public/post/get_all
+                method: 'get',
+                //pass Bearer token in headers ()
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + state.api_tokenY }
+                //contentType: 'application/json',
+
+            }).then(function (response) {
+                $('.loader-x').fadeOut(800); //hide loader
+                return response.json();
+            }).then(function (dataZ) {
+                console.log("Here STORE => " + dataZ);
+                //core rewritten async getAllPosts, trigger mutation setPosts()
+
+                if (dataZ.error == true || dataZ.error == "Unauthenticated.") {
+                    //if Rest endpoint returns any predefined error
+                    console.log(dataZ.data);
+                    swal("Unauthenticated", "Check Bearer Token", "error");
+                } else if (dataZ.error == false) {
+
+                    swal("Done", "Articles are loaded.", "success");
+                    return commit('setPosts', dataZ); //sets ajax results to store via mutation
+                }
+            }).catch( /*err => */function (err) {
+                console.log("Getting articles failed ( in store/index.js). Check if ure logged =>  " + err);
+                swal("Crashed", "You are in catch", "error");
+            }); // catch any error
+
+            //}, 40);
+        },
+
+
+        //For mutation to set a quantity of found posts(in Admin Part). Fired in list_all. passedArgument is an arg passed in list_all.vue
+        setPostsQuantity: function setPostsQuantity(_ref3, passedArgument) {
+            var commit = _ref3.commit,
+                state = _ref3.state;
+            //state is a fix
+            return commit('setQuantMutations', passedArgument); //to store via mutation
+        }
     },
 
+    mutations: {
+        setPosts: function setPosts(state, response) {
+            console.log('Set posts mutation successfully');
+            state.posts = response.data /*.data*/;
+            console.log('setPosts executed in store' + response);
+        },
 
-    //mutation to set api token to STORE
-    setApiToken: function setApiToken(state, response) {
-      state.api_tokenY = response;
-      console.log('setApiToken executed in store' + response + ' Store => ' + state.api_tokenY);
-      alert('set apiToken mutation is done');
+
+        //mutation to set api token to STORE
+        setApiToken: function setApiToken(state, response) {
+            state.api_tokenY = response;
+            console.log('setApiToken executed in store' + response + ' Store => ' + state.api_tokenY);
+            console.log('set apiToken mutation is done');
+        },
+
+
+        //mutation to quantity of Blog to STORE
+        setQuantMutations: function setQuantMutations(state, myPassedArg) {
+            state.adm_posts_qunatity = myPassedArg;
+        }
     },
-
-
-    //mutation to quantity of Blog to STORE
-    setQuantMutations: function setQuantMutations(state, myPassedArg) {
-      state.adm_posts_qunatity = myPassedArg;
-    }
-  },
-  strict: debug
+    strict: debug
 }));
 
 /***/ }),
@@ -79208,7 +79209,7 @@ exports = module.exports = __webpack_require__(7)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -79294,7 +79295,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         runAjaxToGetPosts: function runAjaxToGetPosts() /*{ commit, state  }*/{
 
             var that = this; //Explaination => if you use this.data, it is incorrect, because when 'this' reference the vue-app, you could use this.data, but here (ajax success callback function), this does not reference to vue-app, instead 'this' reference to whatever who called this function(ajax call)
-            alert('go');
+            console.log('start getting articles for admin section');
             $('.loader-x').fadeIn(800); //show loader
 
             //Add Bearer token to headers
@@ -79324,8 +79325,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 data: { _token: this.tokenXX }, //csrf token, though here is not required
 
                 success: function success(data) {
-                    alert("success");
-                    alert("success" + JSON.stringify(data, null, 4));
+                    console.log("articles are successfully fetched");
+                    console.log("success" + JSON.stringify(data, null, 4));
 
                     if (data.error == true) {
                         //if Rest endpoint returns any predefined error
@@ -79334,15 +79335,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     } else if (data.error == false) {
                         //if all is OK
                         that.ajaxList = data.data;
-                        console.log("LISTT1: " + data.data);
-                        console.log("LISTTT: " + that.ajaxList[0].wpBlog_title);
+                        console.log("all articles: " + data.data);
+                        console.log("1st artcile: " + that.ajaxList[0].wpBlog_title);
                         var tempoArray = [];
 
                         //run a Vuex store method to set the quantity of found articles
                         that.$store.dispatch('setPostsQuantity', data.data.length);
 
                         swal("Good", "Bearer Token is OK", "success");
-                        swal("Good", data.data, "success");
+                        swal("Good", "All articles are loaded" /*data.data*/, "success");
                     }
                     $('.loader-x').fadeOut(800); //show loader
                 }, //end success
@@ -79382,6 +79383,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
          |
          */
         deletePost: function deletePost(item) {
+
+            if (!confirm('Sure to delete Post ' + item + '?')) {
+                return false;
+            }
+
+            var that = this; //to fix context issue
             this.selectedItem = item;
             alert('Delete ' + this.selectedItem + " Implement REST API delete function");
 
@@ -79430,7 +79437,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         //if REST endpoint returns OK  
                     } else if (data.error == false) {
                         swal("Good", "Bearer Token is OK", "success");
-                        swal("Good", data.data, "success");
+                        swal({ html: true, title: "Deletion was OK", text: data.data, type: "success" });
+                        that.runAjaxToGetPosts(); //renew the list
                     }
                 }, //end success
 
@@ -79663,7 +79671,7 @@ exports = module.exports = __webpack_require__(7)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -79677,6 +79685,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(17);
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -79852,7 +79871,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         //getting route ID => e.g "wpBlogVueFrameWork#/details/2", gets 2. {Pid} is set in 'pages/home' in => this.$router.push({name:'details',params:{Pid:proId}})
         var ID = this.$route.params.PidMyID; //gets 2
         this.currentDetailID = ID; // 
-        alert(this.currentDetailID);
+        console.log("Editing ID is " + this.currentDetailID);
 
         //get the csrf token
         var token = document.head.querySelector('meta[name="csrf-token"]'); //gets meta tag with csrf
@@ -79942,8 +79961,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         |
         */
         runAjaxToGetOneItem: function runAjaxToGetOneItem(idZ) {
-            var that = this;
-            alert('start one');
+            var that = this; //to fix context issue
+            console.log('start one');
             $('.loader-x').fadeIn(800); //show loader
 
             //Add Bearer token to headers
@@ -79970,8 +79989,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 //data: {  _token: this.tokenXX, }, //csrf token, though here is not required
 
                 success: function success(data) {
-                    alert("success");
-                    alert("success" + JSON.stringify(data, null, 4));
+                    console.log("Successfully loaded data for edited article");
+                    console.log("Loaded Edited data is: " + JSON.stringify(data, null, 4));
 
                     if (data.error == true) {
                         //if Rest endpoint returns any predefined error
@@ -79982,9 +80001,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     } else if (data.error == false) {
                         //return commit('setPosts', data ); //sets ajax results to store via mutation
                         that.ajaxOneItem = data.data;
-                        that.inputTitleValue = data.data[0].wpBlog_title; //gets blog title
-                        that.inputBodyValue = data.data[0].wpBlog_text; //gets blog text
-                        that.inputSelectV = data.data[0].wpBlog_category; //gets blog category <select>
+                        that.inputTitleValue = data.data[0].wpBlog_title; //gets and sets DB blog title to input
+                        that.inputBodyValue = data.data[0].wpBlog_text; //gets and sets DB blog text to input
+                        that.inputSelectV = data.data[0].wpBlog_category; //gets and sets DB blog category to <select>
 
                         //adding images loaded from DB
                         $.each(data.data[0].get_images, function (key, imageV) {
@@ -80000,7 +80019,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                         console.log("LISTT1: " + data.data);
                         var tempoArray = [];
                         swal("Good", "Bearer Token is OK", "success");
-                        swal("Good", data.data, "success");
+                        swal("Good", "Data for Article " + data.data[0].wpBlog_id + " is loaded" /*data.data*/, "success");
                     }
                     $('.loader-x').fadeOut(800); //show loader
                 }, //end success
@@ -80037,7 +80056,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         |
         |
         */
-        editOnePost: function editOnePost() {
+        editOnePost: function editOnePost(e) {
+            e.preventDefault();
+            if (!this.validateForm()) {
+                return false;
+            }
 
             //alert("Updating " + this.currentDetailID);
 
@@ -80099,19 +80122,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
                             thatX.errroList = tempoArray; //change state errroList //{this-that} fix
                         }
+
+                        //if Update is OK
                     } else if (data.error == false) {
                         //return commit('setPosts', data ); //sets ajax results to store via mutation
-
-
                         swal("Good", "Bearer Token is OK", "success");
-                        swal("Good", data.data, "success");
+                        swal({ html: true, title: "Success", text: data.data, type: "success" });
+                        thatX.showNotification('Updated successfully Artcicle ' + thatX.currentDetailID);
+                        // Clears inputs including uploaded files
+                        //thatX.clearInputFieldsAndFiles(); //don't need to clear fileds for Update
                     }
-                    $('.loader-x').fadeOut(800); //show loader
+                    $('.loader-x').fadeOut(800); //hide loader
                     thatX.isCreatingPost = false; //flag for button text
                 }, //end success
 
                 error: function error(errorZ) {
-                    alert("Crashed");
+                    swal("Error", "Crashed", "error");
                     alert("error" + JSON.stringify(errorZ, null, 4));
                     console.log(errorZ.responseText);
                     console.log(errorZ);
@@ -80171,6 +80197,62 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 alert("Getting categories failed. Check if u're logged =>  " + err);
                 swal("Crashed to get categories", "You are in catch", "error");
             }); // catch any error
+        },
+
+
+        /*
+           |--------------------------------------------------------------------------
+           |Client-side form validation
+           |--------------------------------------------------------------------------
+           |
+           |
+           */
+        validateForm: function validateForm() {
+            // no vaildation for images - it is needed
+            if (!this.inputTitleValue) {
+                this.status = false;
+                this.showNotification('Post title cannot be empty');
+                return false;
+            }
+            if (!this.inputBodyValue) {
+                this.status = false;
+                this.showNotification('Post body cannot be empty');
+                return false;
+            }
+
+            if (!this.inputSelectV) {
+                this.status = false;
+                this.showNotification('Select cannot be empty');
+                return false;
+            }
+
+            this.showNotification(''); //clears error messages if any
+            return true;
+        },
+        showNotification: function showNotification(message) {
+            var _this2 = this;
+
+            this.status_msg = message;
+            setTimeout(function () {
+                //clears message in n seconds
+                _this2.status_msg = '';
+            }, 3000 * 155);
+        },
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Clears inputs including uploaded files
+        |--------------------------------------------------------------------------
+        |
+        |
+        */
+        clearInputFieldsAndFiles: function clearInputFieldsAndFiles() {
+            this.inputTitleValue = '';
+            this.inputBodyValue = '';
+            this.inputSelectV = '';
+            this.imageList = '';
+            this.$refs.upload.clearFiles(); //clears the <el-upload> uploaded files <el-upload> must contain {ref="upload"}
         }
     },
 
@@ -80415,6 +80497,7 @@ var render = function() {
                 _c(
                   "el-upload",
                   {
+                    ref: "upload",
                     attrs: {
                       action: "https://jsonplaceholder.typicode.com/posts/",
                       "list-type": "picture-card",
@@ -80464,11 +80547,21 @@ var render = function() {
             _vm._v(
               "\n        " +
                 _vm._s(
-                  _vm.isCreatingPost ? "Updating..." : "Start Post Edit "
+                  _vm.isCreatingPost ? "Updating..." : "Start Post Updating "
                 ) +
                 "\n      "
             )
           ]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-success",
+            attrs: { type: "button" },
+            on: { click: _vm.clearInputFieldsAndFiles }
+          },
+          [_vm._v("\n        Clear\n      ")]
         )
       ])
     ],
