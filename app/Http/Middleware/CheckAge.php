@@ -1,5 +1,5 @@
 <?php
-//Test middleware
+//Test middleware. Not used here
 namespace App\Http\Middleware;
 
 use Closure;

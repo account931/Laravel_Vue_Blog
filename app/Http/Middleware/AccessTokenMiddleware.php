@@ -1,5 +1,5 @@
 <?php
-//my middelware to send acces token in headers, works only with manual Token input
+//my middelware to send acces token in headers, works only with manual Token input. Curently not used. Cuttently Token is sent in headers in ajax(vue)
 namespace App\Http\Middleware;
 
 use Closure;

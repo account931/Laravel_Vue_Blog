@@ -15,12 +15,15 @@ class CreateApiClientsTable extends Migration
      */
     public function up()
     {
+        /*
         if (!Schema::hasTable('api_clients')) { //my fix for migration
 
             Schema::create('api_clients', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('api_token')->unique();
-            });   
+            });  
+        }
+        */        
     }
 
     /**
@@ -30,6 +33,6 @@ class CreateApiClientsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('api_clients');
+        //Schema::dropIfExists('api_clients');
     }
 }

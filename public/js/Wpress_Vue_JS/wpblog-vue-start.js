@@ -23430,10 +23430,8 @@ var debug = "development" !== 'production';
                 state = _ref2.state;
             //state is a fix
             $('.loader-x').fadeIn(800); //show loader
-            //setTimeout(function(){ //dont need
             alert('start (True) Disable 2nd alert in AllPosts beforeMount');
             alert("store1 " + state.api_tokenY);
-            //alert( "store2 "  + this.BASE_URL() );
             fetch('api/post/get_all' /*?token=' + state.api_tokenY*/, { //http://localhost/Laravel+Yii2_comment_widget/blog_Laravel/public/post/get_all
                 method: 'get',
                 //pass Bearer token in headers ()
@@ -23445,7 +23443,7 @@ var debug = "development" !== 'production';
                 return response.json();
             }).then(function (dataZ) {
                 console.log("Here STORE => " + dataZ);
-                //core rewritten async getAllPosts, trigger mutation setPosts()
+                //core rewritten, async getAllPosts, trigger mutation setPosts()
 
                 if (dataZ.error == true || dataZ.error == "Unauthenticated.") {
                     //if Rest endpoint returns any predefined error
@@ -23453,7 +23451,7 @@ var debug = "development" !== 'production';
                     swal("Unauthenticated", "Check Bearer Token", "error");
                 } else if (dataZ.error == false) {
 
-                    swal("Done", "Articles are loaded.", "success");
+                    swal("Done", "Articles are loaded (Vuex store).", "success");
                     return commit('setPosts', dataZ); //sets ajax results to store via mutation
                 }
             }).catch( /*err => */function (err) {
@@ -23461,7 +23459,6 @@ var debug = "development" !== 'production';
                 swal("Crashed", "You are in catch", "error");
             }); // catch any error
 
-            //}, 40);
         },
 
 
@@ -79991,8 +79988,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         console.log("beforeMount");
         //if(this.ifMakeAjax === true /*!this.$store.state.posts*/){
         if (Object.keys(this.$store.state.posts).length < 1) {
+            //if {posts} already exists in Vuex Store
             //run ajax in Vuex store
-            console.log('BeforeMount: Makinf ajax is authorized');
+            console.log('BeforeMount: Making ajax is authorized');
             this.$store.dispatch('getAllPosts'); //trigger ajax function getAllPosts(), which is executed in Vuex store to REST Endpoint => /public/post/get_all
         } else {
             console.log("BeforeMount: Alreday loaded");

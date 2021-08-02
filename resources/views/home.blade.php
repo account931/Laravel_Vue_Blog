@@ -55,6 +55,8 @@
                         <p> <i class="fa fa-check-circle-o" style="font-size:24px"></i> Login/password auth via session, REST API auth via Bearer token . </p>
                         <p> <i class="fa fa-check-circle-o" style="font-size:24px"></i>Rest Api uses middleware 'myJsonForce' to return JSON</p>
                         <p> <i class="fa fa-check-circle-o" style="font-size:24px"></i> Token is User's table 'api_token' field. </p>
+                        <p> <i class="fa fa-check-circle-o" style="font-size:24px"></i> Admin Part is protected with Zizaco/Entrust JSON middleware and available for users with Admin rights only </p>
+
                         <p> <i class="fa fa-check-circle-o" style="font-size:24px"></i> Blog with images </p>
                         <p> <i class="fa fa-check-circle-o" style="font-size:24px"></i> Loaded via ajax, Rest Api Endpoints </p>
                         <p> <i class="fa fa-check-circle-o" style="font-size:24px"></i> Uses Vuex Store </p>

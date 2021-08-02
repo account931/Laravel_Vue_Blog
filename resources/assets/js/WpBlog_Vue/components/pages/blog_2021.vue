@@ -11,7 +11,7 @@
         
         <div class="row">
         
-            <!-- Original -->
+            <!-- Original part, Displays post articles from Vuex Store /store/index.js -->
             <div v-for="(post, i) in posts" :key=i> <!-- or this.$store.state.posts -->
                 
                 <!-- is rendered only if i % 2 == 0 -->
@@ -113,9 +113,9 @@
         beforeMount() {
             console.log("beforeMount");
             //if(this.ifMakeAjax === true /*!this.$store.state.posts*/){
-            if(Object.keys(this.$store.state.posts).length < 1){
+            if(Object.keys(this.$store.state.posts).length < 1){ //if {posts} already exists in Vuex Store
                //run ajax in Vuex store
-                console.log('BeforeMount: Makinf ajax is authorized');
+                console.log('BeforeMount: Making ajax is authorized');
                 this.$store.dispatch('getAllPosts'); //trigger ajax function getAllPosts(), which is executed in Vuex store to REST Endpoint => /public/post/get_all
 	        } else{
                 console.log("BeforeMount: Alreday loaded");

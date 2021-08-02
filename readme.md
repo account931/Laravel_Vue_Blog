@@ -48,15 +48,21 @@
 
 ![Screenshot](public/images/Screenshots/8.png)
 
-## Admin Part
+## Admin Part with option to Edit/Delete
 
 ![Screenshot](public/images/Screenshots/10.png)
 
 ## Admin Part -> Edit a Post
 
+![Screenshot](public/images/Screenshots/10.1.png)
+
 ![Screenshot](public/images/Screenshots/11.png)
 
-## Admin Part -> If Validation Fails
+## Client-side validation
+
+![Screenshot](public/images/Screenshots/11.1.png)
+
+## Server-side validation
 
 ![Screenshot](public/images/Screenshots/12.png)
 
@@ -66,11 +72,18 @@
 
 ![Screenshot](public/images/Screenshots/14.png)
 
+## Admin Part ->  Delete a Post
+
 ![Screenshot](public/images/Screenshots/15.png)
+
+![Screenshot](public/images/Screenshots/16.png)
 
 [Watch video presentation on Youtube](  )
  
- 
+## Admin Part is protected with Zizaco/Entrust JSON middleware and available for users with Admin rights only
+
+
+![Screenshot](public/images/Screenshots/16.png)
 
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>

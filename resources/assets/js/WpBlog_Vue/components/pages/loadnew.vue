@@ -296,14 +296,14 @@ export default {
                
 			    }, */
                 success: function(data) {
-                    alert("success");            
-                    alert("success" + JSON.stringify(data, null, 4));
+                    console.log("success");            
+                    console.log("success" + JSON.stringify(data, null, 4));
 
                     if(data.error == true ){ //if Rest API endpoint returns any predefined validation error
                         var text = data.data;
                         swal("Check", text, "error");
                     
-                        //if validation errors (i.e if REST Contoller returns json ['error': true, 'data': 'Good, but validation crashes', 'validateErrors': title['Validation err text'],  body['Validation err text']])
+                        //if any validation errors (i.e if REST Contoller returns json ['error': true, 'data': 'Good, but validation crashes', 'validateErrors': title['Validation err text'],  body['Validation err text']])
                         if(data.validateErrors){
                             var tempoArray = []; //temporary array
                             for (var key in data.validateErrors) { //Object iterate
@@ -324,13 +324,16 @@ export default {
                         //clear the form fields after successfull saving
                         that.clearInputFieldsAndFiles();
                         
+                        //re-new Vuex store!!!!!!!
+                        
                     }
 			        that.isCreatingPost = false; //change button text            
                 },  //end success
             
 			    error: function (errorZ) {
-                    alert("Crashed"); 
-			        alert("error" +  JSON.stringify(errorZ, null, 4));
+                    swal("Error happened",  "Crashed", "error");
+                    swal("Error happened",  JSON.stringify(errorZ, null, 4), "error");                     
+			        console.log("error" +  JSON.stringify(errorZ, null, 4));
                     console.log(errorZ.responseText);
                     console.log(errorZ);
                 

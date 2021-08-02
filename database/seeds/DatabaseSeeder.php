@@ -16,19 +16,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-		//specify whta data to run
+		//specify what data to run
         // $this->call(UsersTableSeeder::class);
-		
-		 $this->call('Users_Seeder');  //fill DB table {users} with data
-		 $this->call('Roles_Seeder');  //fill DB table {roles} with data {4 roles}
-		 $this->call('RoleUsers_Seeder');  //fill DB table {role_user} with data {assign admin to Dima}
-	
-		 $this->call('Wpressimage_category_Seeder');      //fill DB table { wpressimage_category} with data
-		 $this->call('WpressImages_blog_Post_Seeder');    //fill DB table {	wpressimages_blog_post} with data
-         $this->call('WpressImages_ImagesStock_Seeder');  //fill DB table {	wpressimage_imagesstock} with data
+		$this->call('Users_Seeder');  //fill DB table {users} with data
+		$this->call('Roles_Seeder');  //fill DB table {roles} with data {4 roles}
+		$this->call('RoleUsers_Seeder');  //fill DB table {role_user} with data {assign admin to Dima}
+		$this->call('Wpressimage_category_Seeder');      //fill DB table { wpressimage_category} with data
+		$this->call('WpressImages_blog_Post_Seeder');    //fill DB table {	wpressimages_blog_post} with data
+        $this->call('WpressImages_ImagesStock_Seeder');  //fill DB table {	wpressimage_imagesstock} with data
 		 
-		 
-		 $this->command->info('Seedering action was successful!');
+		$this->command->info('Seedering action was successful!');
     }
 	
 	
@@ -42,43 +39,43 @@ class DatabaseSeeder extends Seeder
 //fill DB table {users} with data 
 class Users_Seeder extends Seeder {
 
-  public function run()
-  {
-    DB::table('users')->delete();  //whether to Delete old materials
+    public function run()
+    {
+        DB::table('users')->delete();  //whether to Delete old materials
 
-    //User::create(['email' => 'foo@bar.com']);
-    DB::table('users')->insert(['id' => 1, 'name' => 'Admin', 'email' => 'admin@ukr.net', 'password' => bcrypt('adminadmin') ]);
-	DB::table('users')->insert(['id' => 2, 'name' => 'Dima', 'email' => 'dimmm931@gmail.com', 'password' => bcrypt('dimadima') ]);
-	DB::table('users')->insert(['id' => 3, 'name' => 'Olya', 'email' => 'olya@gmail.com', 'password' => bcrypt('olyaolya') ]);
+        //User::create(['email' => 'foo@bar.com']);
+        DB::table('users')->insert(['id' => 1, 'name' => 'Admin', 'email' => 'admin@ukr.net', 'password' => bcrypt('adminadmin') ]);
+	    DB::table('users')->insert(['id' => 2, 'name' => 'Dima', 'email' => 'dimmm931@gmail.com', 'password' => bcrypt('dimadima') ]);
+	    DB::table('users')->insert(['id' => 3, 'name' => 'Olya', 'email' => 'olya@gmail.com', 'password' => bcrypt('olyaolya') ]);
 
-  }
+    }
 }
 
 
 //fill DB table {roles} with data (create 4 roles)
 class Roles_Seeder extends Seeder {
-  public function run()
-  {
-    DB::table('roles')->delete();  //whether to Delete old materials
+    public function run()
+    {
+        DB::table('roles')->delete();  //whether to Delete old materials
 
-    //User::create(['email' => 'foo@bar.com']);
-    DB::table('roles')->insert(['id' => 12, 'name' => 'owner', 'display_name' => 'Project Owner', 'description' => 'User is the owner of a given project', 'created_at' => date('Y-m-d H:i:s') ]);
-	DB::table('roles')->insert(['id' => 13, 'name' => 'admin', 'display_name' => 'User Administrator', 'description' => 'User is allowed to manage and edit other users', 'created_at' =>  date('Y-m-d H:i:s') ]);
-    DB::table('roles')->insert(['id' => 14, 'name' => 'manager', 'display_name' => 'Company Manager', 'description' => 'User is a manager of a Department', 'created_at' =>  date('Y-m-d H:i:s') ]);
-    DB::table('roles')->insert(['id' => 15, 'name' => 'commander', 'display_name' => 'custom role', 'description' => 'Wing Commander', 'created_at' => date('Y-m-d H:i:s') ]);
-  }
+        //User::create(['email' => 'foo@bar.com']);
+        DB::table('roles')->insert(['id' => 12, 'name' => 'owner', 'display_name' => 'Project Owner', 'description' => 'User is the owner of a given project', 'created_at' => date('Y-m-d H:i:s') ]);
+	    DB::table('roles')->insert(['id' => 13, 'name' => 'admin', 'display_name' => 'User Administrator', 'description' => 'User is allowed to manage and edit other users', 'created_at' =>  date('Y-m-d H:i:s') ]);
+        DB::table('roles')->insert(['id' => 14, 'name' => 'manager', 'display_name' => 'Company Manager', 'description' => 'User is a manager of a Department', 'created_at' =>  date('Y-m-d H:i:s') ]);
+        DB::table('roles')->insert(['id' => 15, 'name' => 'commander', 'display_name' => 'custom role', 'description' => 'Wing Commander', 'created_at' => date('Y-m-d H:i:s') ]);
+    }
 }
 
 
 
 //fill DB table {role_user} with data 
 class RoleUsers_Seeder extends Seeder {
-  public function run()
-  {
-    DB::table('role_user')->delete();  //whether to Delete old materials
+    public function run()
+    {
+        DB::table('role_user')->delete();  //whether to Delete old materials
 
-    DB::table('role_user')->insert(['user_id' => 2, 'role_id' => 13 ]);
-  }
+        DB::table('role_user')->insert(['user_id' => 2, 'role_id' => 13 ]);
+    }
 }
 
 
@@ -92,8 +89,8 @@ class RoleUsers_Seeder extends Seeder {
 //fill DB table {wpressimage_category} with data.
 
 class Wpressimage_category_Seeder extends Seeder {
-  public function run()
-  {
+    public function run()
+    {
     
 	    DB::table('wpressimage_category')->delete();  //whether to Delete old materials
 		
@@ -105,7 +102,7 @@ class Wpressimage_category_Seeder extends Seeder {
 		
         
 
-  } 
+    } 
 } 
 
 
@@ -115,8 +112,8 @@ class Wpressimage_category_Seeder extends Seeder {
 
 //fill DB table {	wpressimages_blog_post} with data.
 class WpressImages_blog_Post_Seeder extends Seeder {
-  public function run()
-  {
+    public function run()
+    {
     
 	    //DB::table('wpressimages_blog_post')->delete();  //whether to Delete old materials
 		DB::statement('SET FOREIGN_KEY_CHECKS=0');       //way to set auto increment back to 1 before seeding a table (instead of ->delete())
@@ -139,15 +136,15 @@ class WpressImages_blog_Post_Seeder extends Seeder {
 
             ]);
         }   
-  } 
+    } 
 }
 
 
 //REWORK!!!!!!!!!!!!!!!!!!!!
 //fill DB table {wpressimage_imagesstock} with data.
 class WpressImages_ImagesStock_Seeder extends Seeder {
-  public function run()
-  {
+    public function run()
+    {
     
 	    DB::table('wpressimage_imagesstock')->delete();  //whether to Delete old materials
         
@@ -178,7 +175,7 @@ class WpressImages_ImagesStock_Seeder extends Seeder {
         DB::table('wpressimage_imagesstock')->insert(['wpImStock_postID' => 9,  'wpImStock_name' => 'product9.jpg' ]);
         DB::table('wpressimage_imagesstock')->insert(['wpImStock_postID' => 10, 'wpImStock_name' => 'product10.jpg' ]);
         
-        //Working Seeder, just reassing from random images to preloaded(for better UI -))))
+        //Working Seeder, just reassigned it from random images to preloaded(for better UI -))))
         /*
     	foreach (range(1,20) as $index) {
 		
@@ -194,5 +191,5 @@ class WpressImages_ImagesStock_Seeder extends Seeder {
             ]);
         } 
         */        
-  } 
+    } 
 }

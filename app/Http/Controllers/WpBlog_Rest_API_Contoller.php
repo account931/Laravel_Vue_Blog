@@ -152,7 +152,7 @@ class WpBlog_Rest_API_Contoller extends Controller
 	    */
        
         //find User Id by his sent token
-        $userX = User::where('api_token', '=', $request->bearerToken())->first(); 
+        $userX = User::where('api_token', '=', $request->bearerToken())->first(); //$request->bearerToken() is an access token sent in headers in ajax
         
 		//return response()->json(['error' => false, 'data' => 'Too Good, but process back-end validation : ' . $request->title .  ' / ' .  $request->body . '/UserID:' . $userX->id  . '/' . $request->bearerToken()]);
 	    //return response()->json(['error' => false, 'data' => 'Too Good, but process back-end validation : ' . $request->bearerToken()]);

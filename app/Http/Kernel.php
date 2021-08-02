@@ -78,6 +78,7 @@ class Kernel extends HttpKernel
         'sendTokenMyX'       => \App\Http\Middleware\AccessTokenMiddleware::class,
         'checkX'             => \App\Http\Middleware\CheckAge::class, //just test, Delete later
         'myJsonForce'        => \App\Http\Middleware\MyForceJsonResponse::class, //Force json response on every api request
+        'myRbacCheck'         => \App\Http\Middleware\RbacMiddle::class, //Force Rbac check on api request
 
     ];
     
