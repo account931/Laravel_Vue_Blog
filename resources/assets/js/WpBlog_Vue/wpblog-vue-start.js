@@ -70,7 +70,7 @@ const app2 = new Vue({
 
   
   
-//Component => Div with Vue route menu and area to dispaly selected menu    
+//Component => Div with Vue route menu and area to display selected menu    
 const appMenu = new Vue({
 	store, //connect Vuex store, must-have
 	router, //must-have for Vue routing

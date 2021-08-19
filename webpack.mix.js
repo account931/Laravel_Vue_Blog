@@ -12,7 +12,7 @@ let mix = require('laravel-mix');
  */
 
 mix.js('resources/assets/js/app.js',                           'public/js')  //Vue.js; Source-> Destination
-   .js('resources/assets/js/login/login.js',                   'public/js/login')  
+   .js('resources/assets/js/login/login.js',                   'public/js/login')  //is used for password eye toggle
    .js('resources/assets/js/WpBlog_Vue/wpblog-vue-start.js',   'public/js/Wpress_Vue_JS')  //Vue.js; Source-> Destination
    
    //Admin Part
